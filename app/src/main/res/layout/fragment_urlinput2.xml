@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="utf-8"?><!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/backgroundView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.mozilla.focus.widget.ResizableKeyboardLinearLayout
+        android:id="@+id/keyboardLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/urlinput_height"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:weightSum="1"
+        app:animate="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="@string/app_name"
+            android:focusable="false"
+            android:paddingBottom="16dp"
+            android:src="@drawable/wordmark" />
+
+
+        <TextView
+            android:id="@+id/homeViewTipsLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:gravity="center"
+            android:lineSpacingExtra="7sp"
+            android:text="@string/teaser"
+            android:textColor="#eeeeee"
+            android:textSize="14sp" />
+        <!--
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/topSites"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="0.9"
+                    android:paddingEnd="24dp"
+                    android:paddingStart="24dp"
+                    android:contentDescription="@string/app_name"
+                    android:focusable="false"
+                    android:src="@drawable/wordmark2" />
+
+        <org.mozilla.focus.tips.TipsHorizontalCarousel
+            android:id="@+id/home_tips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        -->
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="440dp">
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.25"
+                android:weightSum="1">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.33">
+
+
+                    <ImageView
+                        android:id="@+id/img_mark_kbs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/ic_main_kbs" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img_mark_kbs"
+                        android:gravity="center"
+                        android:singleLine="false"
+                        android:text="KBS"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:id="@+id/mark_kbs"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/right_buttom_btn_line" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.34">
+
+                    <Button
+                        android:id="@+id/mark_mbc"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/right_buttom_btn_line" />
+
+                    <ImageView
+                        android:id="@+id/img_mark_mbc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/ic_main_mbc" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img_mark_mbc"
+                        android:gravity="center"
+                        android:singleLine="false"
+                        android:text="MBC"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.33">
+
+                    <Button
+                        android:id="@+id/mark_sbs"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/right_buttom_btn_line" />
+
+                    <ImageView
+                        android:id="@+id/img_mark_sbs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/ic_main_sbs" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img_mark_sbs"
+                        android:gravity="center"
+                        android:singleLine="false"
+                        android:text="SBS"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.25"
+                android:weightSum="1">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.33">
+
+                    <Button
+                        android:id="@+id/mark_ytn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/right_buttom_btn_line" />
+
+                    <ImageView
+                        android:id="@+id/img_mark_ytn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/ic_main_ytn" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img_mark_ytn"
+                        android:gravity="center"
+                        android:singleLine="false"
+                        android:text="YTN"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.34">
+
+                    <Button
+                        android:id="@+id/mark_yeonhap"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/right_buttom_btn_line" />
+
+                    <ImageView
+                        android:id="@+id/img_mark_yeonhap"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/ic_main_yeonhap" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img_mark_yeonhap"
+                        android:gravity="center"
+                        android:singleLine="false"
+                        android:text="연합뉴스TV"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.33">
+
+                    <Button
+                        android:id="@+id/mark_jtbc"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/right_buttom_btn_line" />
+
+                    <ImageView
+                        android:id="@+id/img_mark_jtbc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/ic_main_jtbc" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img_mark_jtbc"
+                        android:gravity="center"
+                        android:singleLine="false"
+                        android:text="JTBC"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.25"
+                android:weightSum="1">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.33">
+
+                    <Button
+                        android:id="@+id/mark_mbn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/right_buttom_btn_line" />
+
+                    <ImageView
+                        android:id="@+id/img_mark_mbn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/ic_main_mbn" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img_mark_mbn"
+                        android:gravity="center"
+                        android:singleLine="false"
+                        android:text="MBN"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.34">
+
+                    <Button
+                        android:id="@+id/mark_youtube"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/right_buttom_btn_line" />
+
+                    <ImageView
+                        android:id="@+id/img_mark_youtube"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/ic_main_youtube" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img_mark_youtube"
+                        android:gravity="center"
+                        android:singleLine="false"
+                        android:text="YouTube"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.33">
+
+                    <Button
+                        android:id="@+id/mark_naver"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/right_buttom_btn_line" />
+
+                    <ImageView
+                        android:id="@+id/img_mark_navertv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/ic_main_navertv" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img_mark_navertv"
+                        android:gravity="center"
+                        android:singleLine="false"
+                        android:text="Naver TV"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.25"
+                android:weightSum="1">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.33"
+                    android:visibility="invisible">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/right_buttom_btn_line"
+                        android:gravity="center|bottom"
+
+                        android:text="tvN"
+                        android:textAllCaps="false"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/icon_tvn_selector" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.34">
+
+                    <Button
+                        android:id="@+id/mark_bookmark"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/right_buttom_btn_line" />
+
+                    <ImageView
+                        android:id="@+id/img_mark_bookmark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/ic_main_bookmark" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img_mark_bookmark"
+                        android:gravity="center"
+                        android:singleLine="false"
+                        android:text="북마크 바로가기"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+            </TableRow>
+
+        </TableLayout>
+    </org.mozilla.focus.widget.ResizableKeyboardLinearLayout>
+
+    <FrameLayout
+        android:id="@+id/urlInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/urlinput_height"
+        android:clickable="true"
+        android:clipChildren="false"
+        android:elevation="4dp"
+        android:focusable="true"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/toolbarBackgroundView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/toolbar_color" />
+
+        <View
+            android:id="@+id/toolbarBottomBorder"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:alpha="0.20"
+            android:background="@color/divider" />
+
+        <FrameLayout
+            android:id="@+id/urlInputContainerView"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom"
+            android:layout_margin="0dp"
+            android:clipChildren="false">
+
+            <View
+                android:id="@+id/urlInputBackgroundView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:orientation="horizontal">
+
+                <mozilla.components.browser.toolbar.BrowserToolbar
+                    android:id="@+id/browserToolbar"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1" />
+
+                <org.mozilla.focus.widget.IndicatorMenuButton
+                    android:id="@+id/menuView"
+                    android:layout_width="40dp"
+                    android:layout_height="56dp"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/indicator_content_description_menu"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </FrameLayout>
+
+    <View
+        android:id="@+id/dismissView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorOverlay"
+        android:contentDescription="@string/content_description_dismiss_input" />
+
+    <FrameLayout
+        android:id="@+id/searchViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/urlinput_height"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/img_banner"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom"
+        android:layout_margin="20dp"
+        android:src="@drawable/img_banner2" />
+
+</FrameLayout>

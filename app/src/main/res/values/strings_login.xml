@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <string name="kakao_app_key" translatable="false">c1bf53091cdf07a71c4a4e8167fbc58b</string>
+    <string name="kakao_app_key_for_manifest" translatable="false">kakaoc1bf53091cdf07a71c4a4e8167fbc58b</string>
+
+    <string name="naver_client_id" translatable="false">818m4FSrrywxHmbGKjaJ</string>
+    <string name="naver_client_secret" translatable="false">eoiw3UEXdh</string>
+    <string name="naver_client_name" translatable="false">jinune</string>
+
+    <string name="facebook_app_id" translatable="false">1800718190107388</string>
+
+    <string name="fb_login_protocol_scheme" translatable="false">fb1800718190107388</string>
+
+</resources>
+
