@@ -57,6 +57,18 @@ class IntroFragment : BaseFragment<FragmentIntroBinding>(FragmentIntroBinding::i
     override fun initViewModelObserver() {
         observe(viewModel.appVersion, ::handleAppVersion)
         observe(viewModel.validAppVersion, ::handleValidSettings)
+        observe(viewModel.isValidLogin, ::handleValidLogin)
+    }
+
+    private fun handleValidLogin(isValid: Boolean) {
+        when(isValid) {
+            true -> {
+
+            }
+            false -> {
+
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -65,38 +77,35 @@ class IntroFragment : BaseFragment<FragmentIntroBinding>(FragmentIntroBinding::i
     }
 
     private fun handleValidSettings(isValid: IntroCode) {
-
         when(isValid) {
             IntroCode.LOADING -> {
-
                 // TODO -> nothing happen
-
             }
 
             IntroCode.NEED_APP_UPDATE -> {
-
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle(getString(R.string.txt_app_update))
-                    .setMessage(getString(R.string.txt_app_update_need))
-                    .setPositiveButton(getString(R.string.txt_app_update)) { _: DialogInterface?, _: Int ->
-                        val marketLaunch = Intent(Intent.ACTION_VIEW)
-                        marketLaunch.data =
-                            Uri.parse("https://play.google.com/store/apps/details?id=${requireContext().packageName}")
-                        startActivity(marketLaunch)
-                        activity?.finish()
-                    }
-                    .setNegativeButton(getString(R.string.action_cancel)) { _: DialogInterface?, _: Int -> activity?.finish() }
-                val alertDialog = builder.create()
-                alertDialog.show()
-
+                showAppUpdateDialog()
             }
 
             IntroCode.GOTO_MAIN -> {
-
                 viewModel.checkLoginInfo()
-
             }
         }
+    }
+
+    private fun showAppUpdateDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(getString(R.string.txt_app_update))
+            .setMessage(getString(R.string.txt_app_update_need))
+            .setPositiveButton(getString(R.string.txt_app_update)) { _: DialogInterface?, _: Int ->
+                val marketLaunch = Intent(Intent.ACTION_VIEW)
+                marketLaunch.data =
+                    Uri.parse("https://play.google.com/store/apps/details?id=${requireContext().packageName}")
+                startActivity(marketLaunch)
+                activity?.finish()
+            }
+            .setNegativeButton(getString(R.string.action_cancel)) { _: DialogInterface?, _: Int -> activity?.finish() }
+        val alertDialog = builder.create()
+        alertDialog.show()
     }
 }
 

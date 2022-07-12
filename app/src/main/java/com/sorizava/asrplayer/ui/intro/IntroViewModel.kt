@@ -25,7 +25,10 @@ class IntroViewModel(application: Application) : ViewModel() {
     val validAppVersion: LiveData<IntroCode> = validAppVersionPrivate
 
     private val appVersionPrivate = MutableLiveData<String>()
-    val appVersion: LiveData<String> get() = appVersionPrivate
+    val appVersion: LiveData<String> = appVersionPrivate
+
+    private val isValidLoginPrivate = MutableLiveData<Boolean>()
+    val isValidLogin: LiveData<Boolean> = isValidLoginPrivate
 
     init {
         appVersionPrivate.value = application.getVersion()
