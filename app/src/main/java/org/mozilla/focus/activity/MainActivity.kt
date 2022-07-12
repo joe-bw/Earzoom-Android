@@ -20,6 +20,33 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.user.UserApiClient
 import com.nhn.android.naverlogin.OAuthLogin
+import com.sorizava.asrplayer.config.LoginManager
+import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_JTBC
+import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_KBS
+import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_MBC
+import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_MBN
+import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_NAVER
+import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_SBS
+import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_YNA
+import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_YOUTUBE
+import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_YTN
+import com.sorizava.asrplayer.config.StatisticsConstants.URL_ETC
+import com.sorizava.asrplayer.config.StatisticsConstants.URL_JTBC
+import com.sorizava.asrplayer.config.StatisticsConstants.URL_KBS
+import com.sorizava.asrplayer.config.StatisticsConstants.URL_MBC
+import com.sorizava.asrplayer.config.StatisticsConstants.URL_MBN
+import com.sorizava.asrplayer.config.StatisticsConstants.URL_NAVER
+import com.sorizava.asrplayer.config.StatisticsConstants.URL_SBS
+import com.sorizava.asrplayer.config.StatisticsConstants.URL_YNA
+import com.sorizava.asrplayer.config.StatisticsConstants.URL_YOUTUBE
+import com.sorizava.asrplayer.config.StatisticsConstants.URL_YTN
+import com.sorizava.asrplayer.data.dto.StartStatisticsDataVO
+import com.sorizava.asrplayer.data.vo.EndStatisticsRequest
+import com.sorizava.asrplayer.data.vo.LoginDataVO
+import com.sorizava.asrplayer.data.vo.LogoutRequest
+import com.sorizava.asrplayer.data.vo.StartStatisticsRequest
+import com.sorizava.asrplayer.network.AppApiClient
+import com.sorizava.asrplayer.network.AppApiResponse
 import kr.co.sorizava.asrplayer.AppConfig
 import kr.co.sorizava.asrplayer.ZerothDefine
 import kr.co.sorizava.asrplayer.websocket.WsManager
@@ -34,31 +61,6 @@ import org.mozilla.focus.ext.components
 import org.mozilla.focus.fragment.BrowserFragment
 import org.mozilla.focus.fragment.UrlInputFragment
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
-import org.mozilla.focus.login.data.*
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.CASE_URL_JTBC
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.CASE_URL_KBS
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.CASE_URL_MBC
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.CASE_URL_MBN
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.CASE_URL_NAVER
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.CASE_URL_SBS
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.CASE_URL_YNA
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.CASE_URL_YOUTUBE
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.CASE_URL_YTN
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.URL_ETC
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.URL_JTBC
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.URL_KBS
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.URL_MBC
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.URL_MBN
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.URL_NAVER
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.URL_SBS
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.URL_YNA
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.URL_YOUTUBE
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants.URL_YTN
-import org.mozilla.focus.login.ui.login.*
-import org.mozilla.focus.login.ui.statistics.DataResultVO
-import org.mozilla.focus.login.ui.statistics.EndStatisticsRequest
-import org.mozilla.focus.login.ui.statistics.StartStatisticsDataVO
-import org.mozilla.focus.login.ui.statistics.StartStatisticsRequest
 import org.mozilla.focus.navigation.MainActivityNavigation
 import org.mozilla.focus.navigation.Navigator
 import org.mozilla.focus.session.IntentProcessor
@@ -417,7 +419,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
         var caseUrl = checkCategoryOrEtc(url)
 
-        val id = LoginManager.getInstance().prefUserId ?: return
+        val id = LoginManager.instance?.prefUserId ?: return
 
         val currentTime = Calendar.getInstance().time
 
@@ -426,11 +428,16 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
         Log.d("TEST", "stTime: $stTime")
 
-        val request = StartStatisticsRequest(id, connDate, stTime, caseUrl)
+        val request = StartStatisticsRequest(
+            id,
+            connDate,
+            stTime,
+            caseUrl
+        )
 
-        val call = AppApiClient.getApiService().requestStartStatistics(request)
-        call.enqueue(object : Callback<AppApiResponse<StartStatisticsDataVO?>> {
-            override fun onResponse(call: Call<AppApiResponse<StartStatisticsDataVO?>>, response: Response<AppApiResponse<StartStatisticsDataVO?>>) {
+        val call = AppApiClient.apiService.requestStartStatistics(request)
+        call?.enqueue(object : Callback<AppApiResponse<StartStatisticsDataVO?>?> {
+            override fun onResponse(call: Call<AppApiResponse<StartStatisticsDataVO?>?>, response: Response<AppApiResponse<StartStatisticsDataVO?>?>) {
                 Log.d(TAG, "callStartTime - response.code(): " + response.code())
                 if (response.isSuccessful) {
                     Log.d(TAG, "callStartTime - isSuccessful")
@@ -451,7 +458,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<StartStatisticsDataVO?>>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<StartStatisticsDataVO?>?>, t: Throwable) {
                 Log.d(TAG, "callStartTime - onFailure - result: " + t.message)
             }
         })
@@ -472,11 +479,14 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
         val endTime = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(currentTime)
 
-        val request = EndStatisticsRequest(statisticsSeq, endTime)
+        val request = EndStatisticsRequest(
+            statisticsSeq,
+            endTime
+        )
 
-        val call = AppApiClient.getApiService().requestEndStatistics(request)
-        call.enqueue(object : Callback<AppApiResponse<Int?>> {
-            override fun onResponse(call: Call<AppApiResponse<Int?>>, response: Response<AppApiResponse<Int?>>) {
+        val call = AppApiClient.apiService.requestEndStatistics(request)
+        call?.enqueue(object : Callback<AppApiResponse<Int?>?> {
+            override fun onResponse(call: Call<AppApiResponse<Int?>?>, response: Response<AppApiResponse<Int?>?>) {
                 Log.d(TAG, "callEndAndStartTime - response.code(): " + response.code())
                 if (response.isSuccessful) {
                     Log.d(TAG, "callEndAndStartTime - isSuccessful")
@@ -491,7 +501,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<Int?>>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<Int?>?>, t: Throwable) {
                 Log.d(TAG, "callEndAndStartTime - onFailure - result: " + t.message)
             }
         })
@@ -505,11 +515,14 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
         val endTime = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(currentTime)
 
-        val request = EndStatisticsRequest(statisticsSeq, endTime)
+        val request = EndStatisticsRequest(
+            statisticsSeq,
+            endTime
+        )
 
-        val call = AppApiClient.getApiService().requestEndStatistics(request)
-        call.enqueue(object : Callback<AppApiResponse<Int?>> {
-            override fun onResponse(call: Call<AppApiResponse<Int?>>, response: Response<AppApiResponse<Int?>>) {
+        val call = AppApiClient.apiService.requestEndStatistics(request)
+        call?.enqueue(object : Callback<AppApiResponse<Int?>?> {
+            override fun onResponse(call: Call<AppApiResponse<Int?>?>, response: Response<AppApiResponse<Int?>?>) {
                 Log.d(TAG, "callEndTime - response.code(): " + response.code())
                 if (response.isSuccessful) {
                     Log.d(TAG, "callEndTime - isSuccessful")
@@ -522,7 +535,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<Int?>>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<Int?>?>, t: Throwable) {
                 Log.d(TAG, "callEndTime - onFailure - result: " + t.message)
             }
         })
@@ -536,11 +549,14 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
         val endTime = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(currentTime)
 
-        val request = EndStatisticsRequest(statisticsSeq, endTime)
+        val request = EndStatisticsRequest(
+            statisticsSeq,
+            endTime
+        )
 
-        val call = AppApiClient.getApiService().requestEndStatistics(request)
-        call.enqueue(object : Callback<AppApiResponse<Int?>> {
-            override fun onResponse(call: Call<AppApiResponse<Int?>>, response: Response<AppApiResponse<Int?>>) {
+        val call = AppApiClient.apiService.requestEndStatistics(request)
+        call?.enqueue(object : Callback<AppApiResponse<Int?>?> {
+            override fun onResponse(call: Call<AppApiResponse<Int?>?>, response: Response<AppApiResponse<Int?>?>) {
                 Log.d(TAG, "callInitEndTime - response.code(): " + response.code())
                 if (response.isSuccessful) {
                     Log.d(TAG, "callInitEndTime - isSuccessful")
@@ -553,7 +569,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<Int?>>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<Int?>?>, t: Throwable) {
                 Log.d(TAG, "callInitEndTime - onFailure - result: " + t.message)
             }
         })
@@ -608,15 +624,15 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
     private fun callLogout() {
 
-        val userID = LoginManager.getInstance().prefUserId
+        val userID = LoginManager.instance?.prefUserId
 
-        val request = LogoutRequest(userID)
+        val request = userID?.let { LogoutRequest(it) }
 
-        val call = AppApiClient.getApiService().requestLogout(request)
-        call.enqueue(object : Callback<AppApiResponse<LoginDataVO?>> {
+        val call = AppApiClient.apiService.requestLogout(request)
+        call?.enqueue(object : Callback<AppApiResponse<LoginDataVO?>?> {
             override fun onResponse(
-                call: Call<AppApiResponse<LoginDataVO?>>,
-                response: Response<AppApiResponse<LoginDataVO?>>
+                call: Call<AppApiResponse<LoginDataVO?>?>,
+                response: Response<AppApiResponse<LoginDataVO?>?>
             ) {
                 Log.d(TAG, "response.code(): " + response.code())
                 Log.d(TAG, "response.body(): " + response.body())
@@ -628,19 +644,19 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                     /** FCM 구독 설정 해제 */
                     FirebaseMessaging.getInstance().unsubscribeFromTopic(ZerothDefine.FCM_SUBSCRIBE_NAME)
 
-                    onSNSLogout(LoginManager.getInstance().userSNSType)
+                    LoginManager.instance?.userSNSType?.let { onSNSLogout(it) }
 
-                    LoginManager.getInstance().clear()
+                    LoginManager.instance?.clear()
 
-                    startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                    finish()
+//                    startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+//                    finish()
 
                 } else {
                     Log.d(TAG, "fail")
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<LoginDataVO?>>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<LoginDataVO?>?>, t: Throwable) {
                 Log.d(TAG, "onFailure - result: " + t.message)
             }
         })

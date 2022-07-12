@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightgray"
-    tools:context=".login.ui.signup.Signup2Activity">
+    tools:context="com.sorizava.asrplayer.ui.signup.Signup2Activity">
 
     <WebView
         android:id="@+id/webView"
