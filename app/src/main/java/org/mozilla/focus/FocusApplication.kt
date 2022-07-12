@@ -6,6 +6,7 @@
 package org.mozilla.focus
 
 //import org.mozilla.focus.utils.AdjustHelper
+import android.content.pm.PackageManager
 import android.os.StrictMode
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.preference.PreferenceManager
@@ -15,7 +16,11 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.common.KakaoSdk
-import kotlinx.coroutines.*
+import com.sorizava.asrplayer.application.FBRemoteConfigManager
+import com.sorizava.asrplayer.config.LoginManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kr.co.sorizava.asrplayer.AppConfig
 import kr.co.sorizava.asrplayer.ZerothDefine
 import mozilla.components.browser.state.state.SessionState
@@ -27,7 +32,6 @@ import mozilla.components.support.webextensions.WebExtensionSupport
 import org.mozilla.focus.activity.AudioMonitorThread
 import org.mozilla.focus.biometrics.LockObserver
 import org.mozilla.focus.locale.LocaleAwareApplication
-import org.mozilla.focus.login.data.LoginManager
 import org.mozilla.focus.navigation.StoreLink
 import org.mozilla.focus.session.VisibilityLifeCycleCallback
 import org.mozilla.focus.telemetry.FactsProcessor
@@ -54,6 +58,10 @@ open class FocusApplication : LocaleAwareApplication(), CoroutineScope {
     private var audioMonitorThread: AudioMonitorThread? = null
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+
+    private lateinit var appVersion: String
+
+    private val fbRemoteConfigManager = FBRemoteConfigManager()
 
     override fun onCreate() {
         super.onCreate()
@@ -91,6 +99,16 @@ open class FocusApplication : LocaleAwareApplication(), CoroutineScope {
 
             ProcessLifecycleOwner.get().lifecycle.addObserver(lockObserver)
 
+
+            //////////// 추가 개발 건 //////////
+
+            // 버전 네임 확인
+            getAppVersionName()
+
+            // Firebase Remote 확인
+            getFbRemoteConfig()
+
+
             // jhong - kakao init
             KakaoSdk.init(this, getString(R.string.kakao_app_key))
 
@@ -106,6 +124,23 @@ open class FocusApplication : LocaleAwareApplication(), CoroutineScope {
 
             firebaseAnalytics = Firebase.analytics
         }
+    }
+
+    private fun getFbRemoteConfig() {
+        fbRemoteConfigManager.init()
+    }
+
+    private fun getAppVersionName() {
+        appVersion = try {
+            packageManager.getPackageInfo(packageName, 0).versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+            "0.0.0"
+        }
+    }
+
+    fun isLatestVersion() : Boolean {
+        return appVersion == fbRemoteConfigManager.getString(FBRemoteConfigManager.LATEST_VERSION_CODE)
     }
 
     fun setFCMSubscribe() {

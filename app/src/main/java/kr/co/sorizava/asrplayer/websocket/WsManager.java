@@ -300,8 +300,10 @@ public class WsManager implements IWsManager {
 
         cancelReconnect();
 
-        /** 2021.12.23 */
-        // fixme EOS not request for TEST
+        /** 2021.12.23
+         * EOS not request 
+         * 서버 개발자(?)의 요청에 따라 주석 처리
+         */
 //        stopEOS();
 
         if (mOkHttpClient != null) {

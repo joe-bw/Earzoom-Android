@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightgray"
-    tools:context=".login.ui.notice.NoticeActivity">
+    tools:context="com.sorizava.asrplayer.ui.notice.NoticeActivity">
 
     <WebView
         android:id="@+id/webViewNotice"

@@ -14,9 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.TextUtilsCompat;
 import androidx.core.view.ViewCompat;
 
-import org.mozilla.focus.login.ui.banner.BannerActivity;
-import org.mozilla.focus.login.ui.notice.NoticeActivity;
-import org.mozilla.focus.login.ui.privacy.PrivacyPolicyActivity;
+import com.sorizava.asrplayer.ui.banner.BannerActivity;
+import com.sorizava.asrplayer.ui.notice.NoticeActivity;
+import com.sorizava.asrplayer.ui.privacy.PrivacyPolicyActivity;
 import org.mozilla.focus.utils.Settings;
 
 import java.util.Locale;

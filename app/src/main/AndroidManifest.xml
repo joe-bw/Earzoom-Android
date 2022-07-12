@@ -32,17 +32,41 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:appComponentFactory"
         tools:targetApi="p">
+
+        <!-- 4차 사업 내용 -->
+        <activity android:name="com.sorizava.asrplayer.StartActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
-            android:name=".login.ui.banner.BannerActivity"
+            android:name="com.sorizava.asrplayer.ui.intro.IntroActivity"
+            android:exported="false" />
+
+
+        <!-- 4차 사업 내용 -->
+
+
+
+        <activity
+            android:name="com.sorizava.asrplayer.ui.main.SampleMainActivity"
             android:exported="false" />
         <activity
-            android:name=".login.ui.privacy.PrivacyPolicyActivity"
+            android:name="com.sorizava.asrplayer.ui.banner.BannerActivity"
             android:exported="false" />
-        <activity android:name=".login.ui.signup.Signup2Activity" />
-        <activity android:name=".login.ui.notice.NoticeActivity" />
         <activity
-            android:name=".login.ui.login.LoginActivity"
-            android:label="@string/title_activity_login" /> <!-- 카카오 -->
+            android:name="com.sorizava.asrplayer.ui.privacy.PrivacyPolicyActivity"
+            android:exported="false" />
+        <activity android:name="com.sorizava.asrplayer.ui.signup.Signup2Activity" />
+        <activity android:name="com.sorizava.asrplayer.ui.notice.NoticeActivity" />
+<!--        <activity-->
+<!--            android:name="com.sorizava.asrplayer.ui.login.LoginActivity"-->
+<!--            android:label="@string/title_activity_login" /> -->
+
+        <!-- 카카오 -->
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -109,17 +133,6 @@
                 <action android:name="android.intent.action.ASSIST" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".login.IntroActivity"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
-        <activity android:name=".login.StartActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -225,7 +238,7 @@
             android:authorities="org.mozilla.sorizava.focus.bookmark"
             android:exported="false" /> <!-- FCM -->
         <service
-            android:name=".login.FCMService"
+            android:name="com.sorizava.asrplayer.FCMService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

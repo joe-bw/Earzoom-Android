@@ -42,7 +42,7 @@ import org.mozilla.focus.ext.isSearch
 import org.mozilla.focus.ext.requireComponents
 import org.mozilla.focus.input.InputToolbarIntegration
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
-import org.mozilla.focus.login.ui.statistics.StatisticsConstants
+import com.sorizava.asrplayer.config.StatisticsConstants
 import org.mozilla.focus.menu.home.HomeMenu
 import org.mozilla.focus.searchsuggestions.SearchSuggestionsViewModel
 import org.mozilla.focus.searchsuggestions.ui.SearchSuggestionsFragment
