@@ -20,19 +20,19 @@ class FBRemoteConfigManager {
         remoteConfig!!.setConfigSettingsAsync(configSettings)
         remoteConfig!!.fetch().addOnCompleteListener {
             remoteConfig!!.activate().addOnCompleteListener {
-                Log.i(
+                Log.e(
                     FBRemoteConfigManager::class.java.simpleName,
-                    "$LATEST_VERSION_CODE : " + remoteConfig!!.getString(LATEST_VERSION_CODE)
+                    "$AOS_APP_VERSION_NAME : " + remoteConfig!!.getString(AOS_APP_VERSION_NAME)
                 )
             }
         }
     }
 
-    fun getString(key: String?): String {
-        return remoteConfig!!.getString(key!!)
+    fun getString(key: String): String {
+        return remoteConfig!!.getString(key)
     }
 
     companion object {
-        const val LATEST_VERSION_CODE = "latest_version_code"
+        const val AOS_APP_VERSION_NAME = "aosAppVersionName"
     }
 }

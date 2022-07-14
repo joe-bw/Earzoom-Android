@@ -22,6 +22,7 @@ object AppApiClient {
     //    private static final String BASE_URL = "http://211.248.153.107:1969/";
     //    private static final String BASE_URL = "http://45.115.152.130:8090/";
     private val gson = GsonBuilder().setLenient().create()
+
     @JvmStatic
     val apiService: AppApiService
         get() = instance.create(AppApiService::class.java)
@@ -29,24 +30,24 @@ object AppApiClient {
     private val instance: Retrofit = Retrofit.Builder()
             .baseUrl(ZerothDefine.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
-//            .client(getProvideOkHttpClient(httpInterceptor))
+            .client(getProvideOkHttpClient(httpInterceptor))
             .build()
 
-//    private val httpInterceptor: Interceptor
-//        get() = Interceptor { chain: Interceptor.Chain ->
-//            val original = chain.request()
-//            val builder = original.newBuilder()
-//            val request = builder.build()
-//            chain.proceed(request)
-//        }
+    private val httpInterceptor: Interceptor
+        get() = Interceptor { chain: Interceptor.Chain ->
+            val original = chain.request()
+            val builder = original.newBuilder()
+            val request = builder.build()
+            chain.proceed(request)
+        }
 
-//    private fun getProvideOkHttpClient(interceptor: Interceptor?): OkHttpClient {
-//        val httpClientBuilder = OkHttpClient.Builder()
-////        httpClientBuilder.addNetworkInterceptor(interceptor)
-//        httpClientBuilder.connectTimeout(2, TimeUnit.MINUTES)
-//            .readTimeout(2, TimeUnit.MINUTES)
-//            .writeTimeout(2, TimeUnit.MINUTES)
-//            .build()
-//        return httpClientBuilder.build()
-//    }
+    private fun getProvideOkHttpClient(interceptor: Interceptor?): OkHttpClient {
+        val httpClientBuilder = OkHttpClient.Builder()
+        httpClientBuilder.addNetworkInterceptor(interceptor)
+        httpClientBuilder.connectTimeout(2, TimeUnit.MINUTES)
+            .readTimeout(2, TimeUnit.MINUTES)
+            .writeTimeout(2, TimeUnit.MINUTES)
+            .build()
+        return httpClientBuilder.build()
+    }
 }

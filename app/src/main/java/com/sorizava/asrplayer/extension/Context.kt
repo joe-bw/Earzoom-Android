@@ -9,30 +9,39 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.sorizava.asrplayer.config.*
 
-// with (sharedPreferences.edit()) {
-//    // Edit the user's shared preferences...
-//    apply()
-// }
 
+// Config 를 쉽게 전역으로 사용할 수 있도록 각 프로젝트 마다 설정 필요
+val Context.config: EarzoomConfig get() = EarzoomConfig.getInstance(applicationContext)
 
 fun Context.getSharedPrefs(): SharedPreferences =
     getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
 
-val Context.config: EarzoomConfig get() = EarzoomConfig.getInstance(applicationContext)
 
 fun Context.getVersion(): String =
     this.packageManager.getPackageInfo(this.packageName, 0).versionName
+
+fun Context.getVersionCode(): Int {
+    val pInfo: PackageInfo =
+        packageManager.getPackageInfo(packageName, 0)
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        pInfo.longVersionCode.toInt()
+    } else {
+        pInfo.versionCode
+    }
+}
 
 fun Context.hasPermission(permId: Int) = ContextCompat.checkSelfPermission(
     this,

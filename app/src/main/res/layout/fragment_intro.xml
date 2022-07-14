@@ -63,29 +63,29 @@
 
     <LinearLayout
         android:id="@+id/layout_bottom"
-        android:layout_width="wrap_content" android:layout_margin="10dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintBottom_toTopOf="@+id/txt_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_weight="1"
+            android:layout_height="25dp"
             android:src="@drawable/img_logo_media" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_weight="1"
             android:src="@drawable/img_logo_tta" />
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/txt_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/nanum_square_ac_r"

@@ -12,6 +12,7 @@ import com.sorizava.asrplayer.data.vo.LogoutRequest
 import com.sorizava.asrplayer.data.vo.StartStatisticsRequest
 import com.sorizava.asrplayer.data.dto.StartStatisticsDataVO
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 
 /**
@@ -22,27 +23,27 @@ import retrofit2.http.Body
 interface AppApiService {
     @POST("api/member/getMember")
     fun requestMemberInfo(
-        @Body param: LoginNewRequest?
-    ): Call<AppApiResponse<LoginDataVO?>?>?
+        @Body param: LoginNewRequest
+    ): Response<AppApiResponse<LoginDataVO>>
 
     @POST("api/member/deleteMember")
     fun requestLogout(
-        @Body param: LogoutRequest?
-    ): Call<AppApiResponse<LoginDataVO?>?>?
+        @Body param: LogoutRequest
+    ): Response<AppApiResponse<LoginDataVO>>
 
     // 더이상 쓰지 않음
     @POST("api/member/loginMember")
     fun requestLogin(
-        @Body param: LoginNewRequest?
-    ): Call<AppApiResponse<LoginDataVO?>?>?
+        @Body param: LoginNewRequest
+    ): Response<AppApiResponse<LoginDataVO>>
 
     @POST("api/stStatistics")
     fun requestStartStatistics(
-        @Body param: StartStatisticsRequest?
-    ): Call<AppApiResponse<StartStatisticsDataVO?>?>?
+        @Body param: StartStatisticsRequest
+    ): Response<AppApiResponse<StartStatisticsDataVO>>
 
     @POST("api/endStatistics")
     fun requestEndStatistics(
-        @Body param: EndStatisticsRequest?
-    ): Call<AppApiResponse<Int?>?>?
+        @Body param: EndStatisticsRequest
+    ): Response<AppApiResponse<Int>>
 }

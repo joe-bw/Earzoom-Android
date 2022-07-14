@@ -32,7 +32,7 @@ android {
         minSdkVersion 23    // 23 으로 변경 22.07.12
         targetSdkVersion 30
         versionCode 26
-        versionName "2.1.5"
+        versionName "2.1.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
@@ -158,7 +158,7 @@ android {
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         kotlinOptions {
-            allWarningsAsErrors = true
+            allWarningsAsErrors = false
             freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
 //            freeCompilerArgs += "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
             freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"

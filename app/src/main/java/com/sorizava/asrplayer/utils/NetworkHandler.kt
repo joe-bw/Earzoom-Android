@@ -15,7 +15,6 @@ import javax.inject.Inject
  * Injectable class which returns information about the network connection state.
  */
 class NetworkHandler (private val context: Context): NetworkConnectivity {
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun isNetworkAvailable(): Boolean {
         val connectivityManager = context.connectivityManager
 
