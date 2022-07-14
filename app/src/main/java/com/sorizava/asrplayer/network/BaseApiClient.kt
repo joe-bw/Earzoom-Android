@@ -5,6 +5,7 @@
 
 package com.sorizava.asrplayer.network
 
+import android.util.Log
 import com.sorizava.asrplayer.data.ErrorCode
 import com.sorizava.asrplayer.utils.NetworkConnectivity
 import retrofit2.Response
@@ -22,7 +23,7 @@ open class BaseApiClient (
         return try {
             val response = responseCall.invoke()
             val responseCode = response.code()
-//            Timber.e("responseCode: $responseCode")
+            Log.e("TEST", "responseCode: $responseCode")
             if (response.isSuccessful) {
 //                Timber.e("response.body(): ${response.body()}")
                 response.body()

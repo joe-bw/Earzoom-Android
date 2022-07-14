@@ -38,8 +38,8 @@ class StartActivity : AppCompatActivity() {
 //            }
 //        });
 
-        startActivity(Intent(this, SampleMainActivity::class.java))
-//        startActivity(Intent(this, IntroActivity::class.java))
+//        startActivity(Intent(this, SampleMainActivity::class.java))
+        startActivity(Intent(this, IntroActivity::class.java))
         //        startActivity(new Intent(this, MainActivity.class));
 //        startActivity(new Intent(this, Signup2Activity.class));
         finish()

@@ -6,6 +6,7 @@
 package org.mozilla.focus
 
 //import org.mozilla.focus.utils.AdjustHelper
+import android.app.Application
 import android.content.pm.PackageManager
 import android.os.StrictMode
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -18,6 +19,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.common.KakaoSdk
 import com.sorizava.asrplayer.application.FBRemoteConfigManager
 import com.sorizava.asrplayer.config.LoginManager
+import com.sorizava.asrplayer.extension.getVersion
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -40,6 +42,15 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.AppConstants
 import kotlin.coroutines.CoroutineContext
 
+
+/**
+ * 기존 firefox 에서 사용하고 있는 config 들 이 있다.
+ *
+ * 아래와 같은 각 종 config 설정을 application 에서 미리 설정하여 사용한다.
+ *  - 앱 버전 확인
+ *  - Firebase remote config manager
+ *
+ */
 open class FocusApplication : LocaleAwareApplication(), CoroutineScope {
     lateinit var goBookmarkUrl: String
 
@@ -59,17 +70,17 @@ open class FocusApplication : LocaleAwareApplication(), CoroutineScope {
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    private lateinit var appVersion: String
+    private var appVersion: String? = null
 
     private val fbRemoteConfigManager = FBRemoteConfigManager()
 
     override fun onCreate() {
         super.onCreate()
-
         goBookmarkUrl = ""
 
         Log.addSink(AndroidLogSink("Focus"))
         components.crashReporter.install(this)
+
 
         if (isMainProcess()) {
             AppConfig.init(this)
@@ -100,14 +111,15 @@ open class FocusApplication : LocaleAwareApplication(), CoroutineScope {
             ProcessLifecycleOwner.get().lifecycle.addObserver(lockObserver)
 
 
-            //////////// 추가 개발 건 //////////
+            ////////////////////////////////////
+            //           추가 개발 건           //
+            ////////////////////////////////////
 
             // 버전 네임 확인
             getAppVersionName()
 
             // Firebase Remote 확인
             getFbRemoteConfig()
-
 
             // jhong - kakao init
             KakaoSdk.init(this, getString(R.string.kakao_app_key))
@@ -131,20 +143,14 @@ open class FocusApplication : LocaleAwareApplication(), CoroutineScope {
     }
 
     private fun getAppVersionName() {
-        appVersion = try {
-            packageManager.getPackageInfo(packageName, 0).versionName
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-            "0.0.0"
-        }
+        appVersion = getVersion()
     }
 
     fun isLatestVersion() : Boolean {
-        return appVersion == fbRemoteConfigManager.getString(FBRemoteConfigManager.LATEST_VERSION_CODE)
+        return appVersion == fbRemoteConfigManager.getString(FBRemoteConfigManager.AOS_APP_VERSION_NAME)
     }
 
     fun setFCMSubscribe() {
-
         android.util.Log.d("TEST", "FCM 구독")
 
         /** FCM 구독 설정  */

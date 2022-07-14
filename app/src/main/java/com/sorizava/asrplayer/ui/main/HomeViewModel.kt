@@ -9,11 +9,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sorizava.asrplayer.data.UiState
-import kotlinx.coroutines.Dispatchers
+import com.sorizava.asrplayer.data.ResultState
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 class HomeViewModel : ViewModel() {
 
@@ -21,11 +18,11 @@ class HomeViewModel : ViewModel() {
     private val homeContentsPrivate = MutableLiveData<String>()
     val homeContents: LiveData<String> get() = homeContentsPrivate
 
-    val uiState: StateFlow<UiState<String>> = requestName()
+    val uiState: StateFlow<ResultState<String>> = requestName()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000L),
-            initialValue = UiState.Loading()
+            initialValue = ResultState.Loading()
         )
 
 
@@ -37,9 +34,9 @@ class HomeViewModel : ViewModel() {
 
     }
 
-    private fun requestName() : Flow<UiState<String>> {
+    private fun requestName() : Flow<ResultState<String>> {
         return flow {
-            emit(UiState.Success("TEST 123"))
+            emit(ResultState.Success("TEST 123"))
         }
     }
 }

@@ -10,28 +10,16 @@ import android.app.Application
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
-import android.os.Handler
-import android.text.TextUtils
-import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.tasks.Task
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
-import com.sorizava.asrplayer.config.LoginManager
-import com.sorizava.asrplayer.data.IntroCode
-import com.sorizava.asrplayer.data.vo.LoginDataVO
-import com.sorizava.asrplayer.data.vo.LoginNewRequest
+import com.sorizava.asrplayer.data.IntroState
 import com.sorizava.asrplayer.extension.observe
-import com.sorizava.asrplayer.network.AppApiClient
-import com.sorizava.asrplayer.network.AppApiResponse
 import com.sorizava.asrplayer.ui.base.BaseFragment
 import org.mozilla.focus.R
 import org.mozilla.focus.databinding.FragmentIntroBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 /**
  * 인트로 화면이 나타나는 가운데,
@@ -57,6 +45,18 @@ class IntroFragment : BaseFragment<FragmentIntroBinding>(FragmentIntroBinding::i
     override fun initViewModelObserver() {
         observe(viewModel.appVersion, ::handleAppVersion)
         observe(viewModel.validAppVersion, ::handleValidSettings)
+        observe(viewModel.isValidLogin, ::handleValidLogin)
+    }
+
+    private fun handleValidLogin(isValid: Boolean) {
+        when(isValid) {
+            true -> {
+
+            }
+            false -> {
+
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -64,39 +64,36 @@ class IntroFragment : BaseFragment<FragmentIntroBinding>(FragmentIntroBinding::i
         binding.txtVersion.text = String.format(getString(R.string.setting_app_version_prefix)) + " $version"
     }
 
-    private fun handleValidSettings(isValid: IntroCode) {
-
+    private fun handleValidSettings(isValid: IntroState) {
         when(isValid) {
-            IntroCode.LOADING -> {
-
-                // TODO -> nothing happen
-
+            IntroState.LOADING -> {
+                // TODO -> nothing happen, 로딩 바가 필요할 경우 그린다.
             }
 
-            IntroCode.NEED_APP_UPDATE -> {
-
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle(getString(R.string.txt_app_update))
-                    .setMessage(getString(R.string.txt_app_update_need))
-                    .setPositiveButton(getString(R.string.txt_app_update)) { _: DialogInterface?, _: Int ->
-                        val marketLaunch = Intent(Intent.ACTION_VIEW)
-                        marketLaunch.data =
-                            Uri.parse("https://play.google.com/store/apps/details?id=${requireContext().packageName}")
-                        startActivity(marketLaunch)
-                        activity?.finish()
-                    }
-                    .setNegativeButton(getString(R.string.action_cancel)) { _: DialogInterface?, _: Int -> activity?.finish() }
-                val alertDialog = builder.create()
-                alertDialog.show()
-
+            IntroState.NEED_APP_UPDATE -> {
+                showAppUpdateDialog()
             }
 
-            IntroCode.GOTO_MAIN -> {
-
+            IntroState.GOTO_MAIN -> {
                 viewModel.checkLoginInfo()
-
             }
         }
+    }
+
+    private fun showAppUpdateDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(getString(R.string.txt_app_update))
+            .setMessage(getString(R.string.txt_app_update_need))
+            .setPositiveButton(getString(R.string.txt_app_update)) { _: DialogInterface?, _: Int ->
+                val marketLaunch = Intent(Intent.ACTION_VIEW)
+                marketLaunch.data =
+                    Uri.parse("https://play.google.com/store/apps/details?id=${requireContext().packageName}")
+                startActivity(marketLaunch)
+                activity?.finish()
+            }
+            .setNegativeButton(getString(R.string.action_cancel)) { _: DialogInterface?, _: Int -> activity?.finish() }
+        val alertDialog = builder.create()
+        alertDialog.show()
     }
 }
 

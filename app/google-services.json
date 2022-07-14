@@ -53,6 +53,13 @@
             {
               "client_id": "405909970891-4cjv4dnrnu77gcq3egpjkhjgk41eouni.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "405909970891-c1lrs2aomburf54kdeat5t81qb27cerb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "kr.co.sorizava.captionbrowser2"
+              }
             }
           ]
         }

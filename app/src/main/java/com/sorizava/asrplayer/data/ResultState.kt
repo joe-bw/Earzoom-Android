@@ -12,11 +12,11 @@ package com.sorizava.asrplayer.data
  * - Error - 데이터 처리 실패시 상태값<ErrorCode> 을 callback
  *
  * */
-sealed class UiState<T>(
+sealed class ResultState<T>(
     val data: T? = null,
-    val errorCode: ErrorCode? = null
+    val errorCode: Int? = null
 ) {
-    class Loading<T>(data: T? = null) : UiState<T>(data)
-    class Success<T>(data: T) : UiState<T>(data)
-    class Error<T>(errorCode: ErrorCode) : UiState<T>(null, errorCode)
+    class Loading<T>(data: T? = null) : ResultState<T>(data)
+    class Success<T>(data: T) : ResultState<T>(data)
+    class Error<T>(errorCode: Int) : ResultState<T>(null, errorCode)
 }
