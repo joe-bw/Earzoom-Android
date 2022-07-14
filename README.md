@@ -14,10 +14,9 @@
 
 - Android Studio 최신 버전
 
-
-      * Update 22/05/16            
-      Android Studio Chipmunk | 2021.2.1
-      Build #AI-212.5712.43.2112.8512546, built on April 29, 2022
+      * Update 22/07/14
+      Android Studio Chipmunk | 2021.2.1 Patch 1
+      Build #AI-212.5712.43.2112.8609683, built on May 19, 2022
       Runtime version: 11.0.12+7-b1504.28-7817840 amd64
       VM: OpenJDK 64-Bit Server VM by Oracle Corporation
       Windows 10 10.0
@@ -27,9 +26,9 @@
       Registry: external.system.auto.import.disabled=true, ide.balloon.shadow.size=0
       Non-Bundled Plugins: 
                com.github.patou.gitmoji (1.10.0), 
+               mobi.hsz.idea.gitignore (4.3.0), 
                idea.plugin.protoeditor (212.5080.8), 
                org.intellij.plugins.markdown (212.5457.16), 
-               mobi.hsz.idea.gitignore (4.3.0), 
                org.jetbrains.kotlin (212-1.6.21-release-334-AS5457.46), 
                com.chrisrm.idea.MaterialThemeUI (6.9.1)
       
