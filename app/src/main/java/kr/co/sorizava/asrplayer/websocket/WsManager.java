@@ -80,7 +80,7 @@ public class WsManager implements IWsManager {
                     .build();
             mApiService = ApiManager.createServer();
         }
-        int a =1;
+        int a =11;
         return mWsManager;
     }
 
