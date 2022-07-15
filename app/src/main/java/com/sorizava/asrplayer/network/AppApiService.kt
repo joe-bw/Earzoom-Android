@@ -29,7 +29,7 @@ interface AppApiService {
     @POST("api/member/deleteMember")
     fun requestLogout(
         @Body param: LogoutRequest
-    ): Response<AppApiResponse<LoginDataVO>>
+    ): Call<AppApiResponse<LoginDataVO>>
 
     // 더이상 쓰지 않음
     @POST("api/member/loginMember")
@@ -40,10 +40,10 @@ interface AppApiService {
     @POST("api/stStatistics")
     fun requestStartStatistics(
         @Body param: StartStatisticsRequest
-    ): Response<AppApiResponse<StartStatisticsDataVO>>
+    ): Call<AppApiResponse<StartStatisticsDataVO>>
 
     @POST("api/endStatistics")
     fun requestEndStatistics(
         @Body param: EndStatisticsRequest
-    ): Response<AppApiResponse<Int>>
+    ): Call<AppApiResponse<Int>>
 }

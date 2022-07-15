@@ -436,29 +436,26 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         )
 
         val call = AppApiClient.apiService.requestStartStatistics(request)
-        call?.enqueue(object : Callback<AppApiResponse<StartStatisticsDataVO?>?> {
-            override fun onResponse(call: Call<AppApiResponse<StartStatisticsDataVO?>?>, response: Response<AppApiResponse<StartStatisticsDataVO?>?>) {
+        call.enqueue(object : Callback<AppApiResponse<StartStatisticsDataVO>> {
+
+            override fun onResponse(
+                call: Call<AppApiResponse<StartStatisticsDataVO>>,
+                response: Response<AppApiResponse<StartStatisticsDataVO>>
+            ) {
                 Log.d(TAG, "callStartTime - response.code(): " + response.code())
                 if (response.isSuccessful) {
                     Log.d(TAG, "callStartTime - isSuccessful")
                     val result: AppApiResponse<*> = response.body()!!
                     Log.d(TAG, "callStartTime - onResponse - result: $result")
-
-//                    val startData = result.data as StartStatisticsDataVO
-//                    val data = startData.result as DataResultVO
-//
-//                    AppConfig.getInstance().prefStartTimeSeq = data.statisticsSeq
-//                    AppConfig.getInstance().prefStartURL = url
-//
-//                    if (AppConfig.getInstance().prefInitStartTimeSeq.isEmpty()) {
-//                        AppConfig.getInstance().prefInitStartTimeSeq = data.statisticsSeq
-//                    }
                 } else {
                     Log.d(TAG, "callStartTime - fail")
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<StartStatisticsDataVO?>?>, t: Throwable) {
+            override fun onFailure(
+                call: Call<AppApiResponse<StartStatisticsDataVO>>,
+                t: Throwable
+            ) {
                 Log.d(TAG, "callStartTime - onFailure - result: " + t.message)
             }
         })
@@ -485,8 +482,8 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         )
 
         val call = AppApiClient.apiService.requestEndStatistics(request)
-        call?.enqueue(object : Callback<AppApiResponse<Int?>?> {
-            override fun onResponse(call: Call<AppApiResponse<Int?>?>, response: Response<AppApiResponse<Int?>?>) {
+        call.enqueue(object : Callback<AppApiResponse<Int>> {
+            override fun onResponse(call: Call<AppApiResponse<Int>>, response: Response<AppApiResponse<Int>>) {
                 Log.d(TAG, "callEndAndStartTime - response.code(): " + response.code())
                 if (response.isSuccessful) {
                     Log.d(TAG, "callEndAndStartTime - isSuccessful")
@@ -501,7 +498,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<Int?>?>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<Int>>, t: Throwable) {
                 Log.d(TAG, "callEndAndStartTime - onFailure - result: " + t.message)
             }
         })
@@ -521,8 +518,8 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         )
 
         val call = AppApiClient.apiService.requestEndStatistics(request)
-        call?.enqueue(object : Callback<AppApiResponse<Int?>?> {
-            override fun onResponse(call: Call<AppApiResponse<Int?>?>, response: Response<AppApiResponse<Int?>?>) {
+        call.enqueue(object : Callback<AppApiResponse<Int>> {
+            override fun onResponse(call: Call<AppApiResponse<Int>>, response: Response<AppApiResponse<Int>>) {
                 Log.d(TAG, "callEndTime - response.code(): " + response.code())
                 if (response.isSuccessful) {
                     Log.d(TAG, "callEndTime - isSuccessful")
@@ -535,7 +532,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<Int?>?>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<Int>>, t: Throwable) {
                 Log.d(TAG, "callEndTime - onFailure - result: " + t.message)
             }
         })
@@ -555,8 +552,8 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         )
 
         val call = AppApiClient.apiService.requestEndStatistics(request)
-        call?.enqueue(object : Callback<AppApiResponse<Int?>?> {
-            override fun onResponse(call: Call<AppApiResponse<Int?>?>, response: Response<AppApiResponse<Int?>?>) {
+        call.enqueue(object : Callback<AppApiResponse<Int>> {
+            override fun onResponse(call: Call<AppApiResponse<Int>>, response: Response<AppApiResponse<Int>>) {
                 Log.d(TAG, "callInitEndTime - response.code(): " + response.code())
                 if (response.isSuccessful) {
                     Log.d(TAG, "callInitEndTime - isSuccessful")
@@ -569,7 +566,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<Int?>?>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<Int>>, t: Throwable) {
                 Log.d(TAG, "callInitEndTime - onFailure - result: " + t.message)
             }
         })
@@ -628,11 +625,11 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
         val request = userID?.let { LogoutRequest(it) }
 
-        val call = AppApiClient.apiService.requestLogout(request)
-        call?.enqueue(object : Callback<AppApiResponse<LoginDataVO?>?> {
+        val call = request?.let { AppApiClient.apiService.requestLogout(it) }
+        call?.enqueue(object : Callback<AppApiResponse<LoginDataVO>> {
             override fun onResponse(
-                call: Call<AppApiResponse<LoginDataVO?>?>,
-                response: Response<AppApiResponse<LoginDataVO?>?>
+                call: Call<AppApiResponse<LoginDataVO>>,
+                response: Response<AppApiResponse<LoginDataVO>>
             ) {
                 Log.d(TAG, "response.code(): " + response.code())
                 Log.d(TAG, "response.body(): " + response.body())
@@ -656,7 +653,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<LoginDataVO?>?>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<LoginDataVO>>, t: Throwable) {
                 Log.d(TAG, "onFailure - result: " + t.message)
             }
         })
