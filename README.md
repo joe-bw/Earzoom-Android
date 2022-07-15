@@ -93,11 +93,10 @@
             - LiveData, Flow
             - ViewModel
             - Room
-            - Navigation
             Hilt for dependency injection -> 낮은 버전으로 사용 불가
             Retrofit for REST api communication
             Glide for image loading
-            Timber for logging
+            Timber for logging -> 낮은 버전으로 사용 불가
             Espresso for UI tests
             Mockito for mocking in tests
             
