@@ -148,10 +148,10 @@ class Signup2Activity : AppCompatActivity() {
         val phone = instance!!.prefUserPhone
         val request = LoginNewRequest(birth!!, phone!!)
         val call = apiService.requestMemberInfo(request)
-        call!!.enqueue(object : Callback<AppApiResponse<LoginDataVO?>?> {
+        call.enqueue(object : Callback<AppApiResponse<LoginDataVO>> {
             override fun onResponse(
-                call: Call<AppApiResponse<LoginDataVO?>?>,
-                response: Response<AppApiResponse<LoginDataVO?>?>
+                call: Call<AppApiResponse<LoginDataVO>>,
+                response: Response<AppApiResponse<LoginDataVO>>
             ) {
                 Log.d(TAG, "response.code(): " + response.code())
                 if (response.isSuccessful) {
@@ -175,7 +175,7 @@ class Signup2Activity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<LoginDataVO?>?>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<LoginDataVO>>, t: Throwable) {
                 Log.d(TAG, "onFailure - result: " + t.message)
             }
         })

@@ -24,7 +24,7 @@ interface AppApiService {
     @POST("api/member/getMember")
     fun requestMemberInfo(
         @Body param: LoginNewRequest
-    ): Response<AppApiResponse<LoginDataVO>>
+    ): Call<AppApiResponse<LoginDataVO>>
 
     @POST("api/member/deleteMember")
     fun requestLogout(
@@ -35,7 +35,7 @@ interface AppApiService {
     @POST("api/member/loginMember")
     fun requestLogin(
         @Body param: LoginNewRequest
-    ): Response<AppApiResponse<LoginDataVO>>
+    ): Call<AppApiResponse<LoginDataVO>>
 
     @POST("api/stStatistics")
     fun requestStartStatistics(
