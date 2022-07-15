@@ -16,23 +16,26 @@ class LoginApiClient(
     private val apiService: AppApiService
 ) : BaseApiClient(networkConnectivity) {
     suspend fun requestMemberInfo(info: LoginNewRequest): ResultState<AppApiResponse<LoginDataVO>> {
-        return when (
-            val response = processCall { apiService.requestMemberInfo(info)}
-        ) {
-            is Int -> {
-                ResultState.Error(errorCode = response)
-            }
-            else -> {
-                val result = response as AppApiResponse<*>
-                if (result.status == 200) {
-                    val data: LoginDataVO = result.data as LoginDataVO
-                    val member = data.member
-                    LoginManager.instance?.prefUserId = member?.id
-                    ResultState.Success(data = response as AppApiResponse<LoginDataVO>)
-                } else {
-                    ResultState.Error(errorCode = result.status)
-                }
-            }
-        }
+
+        return ResultState.Success(data = AppApiResponse<LoginDataVO>())
+
+//        return when (
+//            val response = processCall { apiService.requestMemberInfo(info)}
+//        ) {
+//            is Int -> {
+//                ResultState.Error(errorCode = response)
+//            }
+//            else -> {
+//                val result = response as AppApiResponse<*>
+//                if (result.status == 200) {
+//                    val data: LoginDataVO = result.data as LoginDataVO
+//                    val member = data.member
+//                    LoginManager.instance?.prefUserId = member?.id
+//                    ResultState.Success(data = response as AppApiResponse<LoginDataVO>)
+//                } else {
+//                    ResultState.Error(errorCode = result.status)
+//                }
+//            }
+//        }
     }
 }
