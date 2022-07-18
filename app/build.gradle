@@ -201,6 +201,9 @@ configurations {
 }
 
 dependencies {
+
+//    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+
     implementation Dependencies.androidx_appcompat
     implementation Dependencies.androidx_browser
     implementation Dependencies.androidx_cardview
@@ -357,32 +360,28 @@ dependencies {
 
     // jhong
 
-    // 네이버 로그인
+    /** 네이버 로그인 */
     implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'   // import from jcenter
 
-    // 카카오 로그인
-    implementation "com.kakao.sdk:v2-user:2.8.1" // 카카오 로그인
-//    implementation "com.kakao.sdk:v2-talk:2.8.1" // 친구, 메시지(카카오톡)
-//    implementation "com.kakao.sdk:v2-story:2.8.1" // 카카오스토리
-//    implementation "com.kakao.sdk:v2-link:2.8.1" // 메시지(카카오링크)
-//    implementation "com.kakao.sdk:v2-navi:2.8.1" // 카카오내비
 
-//    implementation "com.kakao.sdk:v2-user:2.6.0" // 카카오 로그인
-    implementation "com.kakao.sdk:v2-talk:2.6.0" // 친구, 메시지(카카오톡)
+    //네이버 로그인
+    implementation 'com.navercorp.nid:oauth-jdk8:5.1.0' // jdk 8
+
+    /** 카카오 로그인 */
+    implementation "com.kakao.sdk:v2-user:2.10.0" // 카카오 로그인
+//    implementation "com.kakao.sdk:v2-talk:2.10.0" // 친구, 메시지(카카오톡)
 //    implementation "com.kakao.sdk:v2-story:2.6.0" // 카카오스토리
 //    implementation "com.kakao.sdk:v2-link:2.6.0" // 메시지(카카오링크)
 //    implementation "com.kakao.sdk:v2-navi:2.6.0" // 카카오내비
 
-//    implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.30.6'
-
-    //페이스북 SDK 추가
+    /** 페이스북 SDK 추가 */
     implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
 //    implementation 'com.facebook.android:facebook-login:5.15.3'
 //    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
     implementation 'com.facebook.android:facebook-login:[8.1)'
 
 
-    // 구글 서비스
+    /** 구글 서비스 */
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
     // 816357090554-3ru29t810tjm9tucntdcoa5gopt95o22.apps.googleusercontent.com
@@ -392,10 +391,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.3'
+//    implementation 'com.google.firebase:firebase-crashlytics:18.2.11'
+
+    implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-config'
 
-//    implementation 'com.google.firebase:firebase-messaging:22.0.0'
+    implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
 
     // worker
     implementation 'androidx.work:work-runtime:2.5.0'

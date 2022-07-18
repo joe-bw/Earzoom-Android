@@ -60,7 +60,7 @@
 //import retrofit2.Callback
 //import retrofit2.Response
 //
-//class LoginActivity : AppCompatActivity(), AddInfoDialogListener {
+//class LoginActivity2 : AppCompatActivity(), AddInfoDialogListener {
 //    private val TAG = "TEST"
 //    private var mNaverOAuthLoginButton: OAuthLoginButton? = null
 //    private var callbackManager: CallbackManager? = null
@@ -95,7 +95,7 @@
 //        initNaverData()
 //
 //        mNaverOAuthLoginButton?.setOnClickListener(View.OnClickListener { //                mOAuthLoginInstance.logoutAndDeleteToken(mContext);
-//            mOAuthLoginInstance!!.startOauthLoginActivity(this@LoginActivity, mOAuthLoginHandler)
+//            mOAuthLoginInstance!!.startOauthLoginActivity(this@LoginActivity2, mOAuthLoginHandler)
 //        })
 //        naverLoginButton.setOnClickListener { mNaverOAuthLoginButton?.performClick() }
 //        // FIXME 네이버 로그인
@@ -160,7 +160,7 @@
 //            .build()
 //
 //// 위에서 만든 GoogleSignInOptions을 사용해 GoogleSignInClient 객체를 만듬
-//        mGoogleSignInClient = GoogleSignIn.getClient(this@LoginActivity, gso)
+//        mGoogleSignInClient = GoogleSignIn.getClient(this@LoginActivity2, gso)
 //        val googleLoginButtonOrg = findViewById<View>(R.id.btn_login_google_org) as SignInButton
 //        googleLoginButtonOrg.setOnClickListener {
 //            Log.d("jinwoo", "googleLoginButtonOrg click")
@@ -198,7 +198,7 @@
 //
 //    override fun onDialogPrivacyClick(dialog: DialogFragment?) {
 //        Log.d("TEST", "onDialogPrivacyClick")
-//        startActivity(Intent(this@LoginActivity, PrivacyPolicyActivity::class.java))
+//        startActivity(Intent(this@LoginActivity2, PrivacyPolicyActivity::class.java))
 //    }
 //
 //    /** 추가 정보 등록 UI 처리  */
@@ -213,8 +213,8 @@
 //
 //    /** 카카오 설치 여부 확인  */
 //    private fun callKakaoLogin() {
-//        if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(mContext)) {
-//            UserApiClient.getInstance()
+//        if (UserApiClient.instance.isKakaoTalkLoginAvailable(mContext)) {
+//            UserApiClient.instance
 //                .loginWithKakaoTalk(mContext) { token: OAuthToken?, error: Throwable? ->
 //                    kakaoLoginCallback(
 //                        token,
@@ -222,7 +222,7 @@
 //                    )
 //                }
 //        } else {
-//            UserApiClient.getInstance()
+//            UserApiClient.instance
 //                .loginWithKakaoAccount(mContext) { token: OAuthToken?, error: Throwable? ->
 //                    kakaoLoginCallback(
 //                        token,
@@ -246,7 +246,7 @@
 //                .show()
 //        } else if (token != null) {
 //            // 유저정보 획득
-//            UserApiClient.getInstance().me { user: User?, e: Throwable? ->
+//            UserApiClient.instance.me { user: User?, e: Throwable? ->
 //                if (e != null) {
 //                    e.printStackTrace()
 //                    FirebaseCrashlytics.getInstance().log("Kakao login failed2: $e")
@@ -282,10 +282,10 @@
 //        val phone = instance!!.prefUserPhone
 //        val request = LoginNewRequest(birth!!, phone!!)
 //        val call = apiService.requestMemberInfo(request)
-//        call!!.enqueue(object : Callback<AppApiResponse<LoginDataVO?>> {
+//        call!!.enqueue(object : Callback<AppApiResponse<LoginDataVO>> {
 //            override fun onResponse(
-//                call: Call<AppApiResponse<LoginDataVO?>>,
-//                response: Response<AppApiResponse<LoginDataVO?>>
+//                call: Call<AppApiResponse<LoginDataVO>>,
+//                response: Response<AppApiResponse<LoginDataVO>>
 //            ) {
 //                hideLoadingbar()
 //                Log.d(TAG, "response.code(): " + response.code())
@@ -294,7 +294,7 @@
 //                    val result: AppApiResponse<*> = response.body()!!
 //                    Log.d(TAG, "onResponse - result: $result")
 //                    if (result.status == 200) {
-//                        val data = result.data as LoginDataVO?
+//                        val data = result.data as LoginDataVO
 //                        val member = data!!.member
 //                        instance!!.prefUserId = member!!.id
 //                        gotoMainActivity()
@@ -311,7 +311,7 @@
 //                }
 //            }
 //
-//            override fun onFailure(call: Call<AppApiResponse<LoginDataVO?>>, t: Throwable) {
+//            override fun onFailure(call: Call<AppApiResponse<LoginDataVO>>, t: Throwable) {
 //                Log.d(TAG, "onFailure - result: " + t.message)
 //                hideLoadingbar()
 //                showErrorPopup()
@@ -509,16 +509,16 @@
 //    }
 //
 //    private fun gotoNoticeActivity() {
-//        startActivity(Intent(this@LoginActivity, NoticeActivity::class.java))
+//        startActivity(Intent(this@LoginActivity2, NoticeActivity::class.java))
 //    }
 //
 //    private fun gotoMainActivity() {
-//        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+//        startActivity(Intent(this@LoginActivity2, MainActivity::class.java))
 //        finish()
 //    }
 //
 //    private fun gotoSignupActivity() {
-//        startActivity(Intent(this@LoginActivity, Signup2Activity::class.java))
+//        startActivity(Intent(this@LoginActivity2, Signup2Activity::class.java))
 //        finish()
 //    }
 //

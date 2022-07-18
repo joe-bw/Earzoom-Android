@@ -62,9 +62,6 @@
             android:exported="false" />
         <activity android:name="com.sorizava.asrplayer.ui.signup.Signup2Activity" />
         <activity android:name="com.sorizava.asrplayer.ui.notice.NoticeActivity" />
-<!--        <activity-->
-<!--            android:name="com.sorizava.asrplayer.ui.login.LoginActivity"-->
-<!--            android:label="@string/title_activity_login" /> -->
 
         <!-- 카카오 -->
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">

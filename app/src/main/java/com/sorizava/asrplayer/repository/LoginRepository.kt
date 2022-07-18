@@ -7,8 +7,10 @@ package com.sorizava.asrplayer.repository
 
 import android.app.Application
 import com.sorizava.asrplayer.data.ResultState
+import com.sorizava.asrplayer.data.SnsProvider
 import com.sorizava.asrplayer.data.vo.LoginDataVO
 import com.sorizava.asrplayer.data.vo.LoginNewRequest
+import com.sorizava.asrplayer.model.SnsModel
 import com.sorizava.asrplayer.network.AppApiClient
 import com.sorizava.asrplayer.network.AppApiResponse
 import com.sorizava.asrplayer.network.LoginApiClient
@@ -27,6 +29,24 @@ class LoginRepository(
             val networkConnectivity = NetworkHandler(context)
             val apiService = AppApiClient.apiService
             emit(LoginApiClient(networkConnectivity, apiService).requestMemberInfo(info))
+        }.flowOn(Dispatchers.IO)
+    }
+
+    override suspend fun signIn(provider: SnsProvider): Flow<ResultState<Boolean>> {
+        return flow {
+
+            when(provider) {
+                SnsProvider.EMAIL -> {}
+                SnsProvider.KAKAO -> {
+//                    SnsModel.callKaKaoLogin(context)
+                }
+                SnsProvider.NAVER -> {}
+                SnsProvider.FACEBOOK -> {}
+                SnsProvider.GOOGLE -> {}
+                else -> {}
+            }
+
+            emit(ResultState.Success(true))
         }.flowOn(Dispatchers.IO)
     }
 }

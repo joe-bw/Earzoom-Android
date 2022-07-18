@@ -13,8 +13,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sorizava.asrplayer.config.LoginManager
 import com.sorizava.asrplayer.data.IntroState
+import com.sorizava.asrplayer.data.ResultState
+import com.sorizava.asrplayer.data.vo.LoginDataVO
 import com.sorizava.asrplayer.data.vo.LoginNewRequest
 import com.sorizava.asrplayer.extension.getVersion
+import com.sorizava.asrplayer.network.AppApiResponse
 import com.sorizava.asrplayer.repository.LoginRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -55,7 +58,7 @@ class IntroViewModel(private val context: Application) : ViewModel() {
                     delay(MAX_DELAY_TIME_WITH_INTRO - delayTime)
                 }
 
-                validAppVersionPrivate.value = IntroState.GOTO_MAIN
+                validAppVersionPrivate.value = IntroState.CHECK_LOGIN
             }
         }
     }
@@ -71,18 +74,26 @@ class IntroViewModel(private val context: Application) : ViewModel() {
             val phone = LoginManager.instance?.prefUserPhone
 
             if (LoginManager.instance?.userSNSType == LoginManager.SNS_TYPE_NONE) {
-                needLoginPrivate.value = true
+                validAppVersionPrivate.value = IntroState.GOTO_MAIN
             } else if (TextUtils.isEmpty(birth)) {
-                needLoginPrivate.value = true
+                validAppVersionPrivate.value = IntroState.GOTO_MAIN
             } else {
                 if (birth != null && phone != null){
                     val request = LoginNewRequest(birth, phone)
                     val repository = LoginRepository(context.application, request)
                     repository.requestMemberInfo().collect {
+                        when (it) {
+                            ResultState.Success(data = AppApiResponse<LoginDataVO>()) -> {
 
+                            }
+
+                            else -> {
+
+                            }
+                        }
+                        validAppVersionPrivate.value = IntroState.GOTO_LOGIN
                     }
                 }
-                needLoginPrivate.value = false
             }
         }
     }

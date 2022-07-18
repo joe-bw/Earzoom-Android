@@ -11,8 +11,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.sorizava.asrplayer.data.IntroState
@@ -48,6 +46,13 @@ class IntroFragment : BaseFragment<FragmentIntroBinding>(FragmentIntroBinding::i
         observe(viewModel.isValidLogin, ::handleValidLogin)
     }
 
+    override fun setBackPressed() {
+        super.setBackPressed()
+        if (viewModel.validAppVersion.value != IntroState.GOTO_MAIN) {
+            activity?.finish()
+        }
+    }
+
     private fun handleValidLogin(isValid: Boolean) {
         when(isValid) {
             true -> {
@@ -67,15 +72,23 @@ class IntroFragment : BaseFragment<FragmentIntroBinding>(FragmentIntroBinding::i
     private fun handleValidSettings(isValid: IntroState) {
         when(isValid) {
             IntroState.LOADING -> {
-                // TODO -> nothing happen, 로딩 바가 필요할 경우 그린다.
+                // TODO -> nothing happen, 로딩 바가 필요할 경우 그린다. 현재는 없음.
             }
 
             IntroState.NEED_APP_UPDATE -> {
                 showAppUpdateDialog()
             }
 
-            IntroState.GOTO_MAIN -> {
+            IntroState.CHECK_LOGIN -> {
                 viewModel.checkLoginInfo()
+            }
+
+            IntroState.GOTO_LOGIN -> {
+                // TODO GO TO LOGIN
+            }
+
+            IntroState.GOTO_MAIN -> {
+                // TODO GO TO MAIN
             }
         }
     }

@@ -104,16 +104,20 @@ class Signup2Activity : AppCompatActivity() {
         @JavascriptInterface
         fun callbackAndroid(result: Int) {
             runOnUiThread {
-                if (result == 1) {
-                    callMemberInfo()
-                } else if (result == 2) {
-                    reLogin()
-                } else {
-                    Toast.makeText(
-                        this@Signup2Activity,
-                        getString(R.string.web_callback_error),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                when (result) {
+                    1 -> {
+                        callMemberInfo()
+                    }
+                    2 -> {
+                        reLogin()
+                    }
+                    else -> {
+                        Toast.makeText(
+                            this@Signup2Activity,
+                            getString(R.string.web_callback_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
@@ -168,9 +172,6 @@ class Signup2Activity : AppCompatActivity() {
                     }
                 } else {
                     Log.d(TAG, "fail")
-                    //                    if(response.code() == 404) {
-//                        reLogin();
-//                    }
                     reLogin()
                 }
             }

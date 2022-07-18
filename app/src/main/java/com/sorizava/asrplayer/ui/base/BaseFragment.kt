@@ -5,6 +5,7 @@
 
 package com.sorizava.asrplayer.ui.base
 
+import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 
@@ -37,6 +39,8 @@ abstract class BaseFragment<VB : ViewBinding>(private val inflate: Inflate<VB>) 
     private var isKeyboardShowing = false
     private var onGlobalLayoutListener: OnGlobalLayoutListener? = null
 
+    private lateinit var callback: OnBackPressedCallback
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,6 +59,17 @@ abstract class BaseFragment<VB : ViewBinding>(private val inflate: Inflate<VB>) 
         super.onViewCreated(view, savedInstanceState)
         initView()
         initViewModelObserver()
+    }
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                setBackPressed()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     fun handleFocus(v: View) {
@@ -83,6 +98,11 @@ abstract class BaseFragment<VB : ViewBinding>(private val inflate: Inflate<VB>) 
         }
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
+    }
+
     fun setKeyboardListener(viewGroup: ViewGroup, view: EditText) {
         activityRootView = viewGroup
         onGlobalLayoutListener = onGlobalLayoutListener(view)
@@ -91,4 +111,5 @@ abstract class BaseFragment<VB : ViewBinding>(private val inflate: Inflate<VB>) 
 
     abstract fun initView()
     open fun initViewModelObserver() {}
+    open fun setBackPressed() {}
 }
