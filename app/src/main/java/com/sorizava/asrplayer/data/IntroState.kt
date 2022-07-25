@@ -5,10 +5,10 @@
 
 package com.sorizava.asrplayer.data
 
-enum class IntroState(var code: Int) {
-    LOADING(0),
-    NEED_APP_UPDATE(1),
-    CHECK_LOGIN(2),
-    GOTO_LOGIN(3),
-    GOTO_MAIN(4),
+enum class IntroState {
+    LOADING,
+    NEED_APP_UPDATE,
+    CHECK_LOGIN,
+    GOTO_LOGIN,
+    GOTO_MAIN
 }

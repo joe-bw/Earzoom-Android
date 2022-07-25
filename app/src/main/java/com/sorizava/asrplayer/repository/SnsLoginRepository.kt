@@ -6,53 +6,32 @@
 package com.sorizava.asrplayer.repository
 
 import android.app.Application
-import com.sorizava.asrplayer.data.ResultState
 import com.sorizava.asrplayer.data.SnsProvider
-import com.sorizava.asrplayer.data.SnsResult
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import com.sorizava.asrplayer.data.model.SnsResultData
+import com.sorizava.asrplayer.dataSource.SnsDataSource
 
 class SnsLoginRepository(
     private val context: Application
 ) : SnsLoginRepositorySource {
-    override fun signIn(provider: SnsProvider): Flow<ResultState<SnsResult>> {
-        return flow {
-
-//            when (provider) {
-//                SnsProvider.EMAIL -> {}
-//                SnsProvider.KAKAO -> {
-//                    SnsModel.callKaKaoLogin(context)
-//                }
-//                SnsProvider.NAVER -> {
-//                    context.applicationContext.getString(R.string.naver_client_id)
-//
-//                    NaverIdLoginSDK.apply {
-//                        initialize(context, )
-//                    }
-//                }
-//                SnsProvider.FACEBOOK -> {}
-//                SnsProvider.GOOGLE -> {}
-//                else -> {}
-//            }
-//
-
-
-//            val success: Boolean?,
-//            val id: String?,
-//            val password: String?,
-//            val type: SnsProvider?,
-//            val error: String?
-
-            val result = SnsResult(true, "id", "pas", SnsProvider.GOOGLE, null)
-
-            emit(ResultState.Success(result))
-        }.flowOn(Dispatchers.IO)
+    override fun signIn(
+        provider: SnsProvider,
+        onSuccess: (SnsResultData) -> Unit,
+        onFailed: (SnsResultData) -> Unit
+    ) {
+        when (provider) {
+            SnsProvider.EMAIL -> {}
+            SnsProvider.KAKAO -> {
+                SnsDataSource.callKakaoLogin(context, onSuccess, onFailed)
+            }
+            SnsProvider.NAVER -> {
+                SnsDataSource.callNaverLogin(context, onSuccess, onFailed)
+            }
+            SnsProvider.FACEBOOK -> {
+                SnsDataSource.callFacebookLogin(context, onSuccess, onFailed)
+            }
+            SnsProvider.GOOGLE -> {
+//                SnsDataSource.callGoogleLogin(context)
+            }
+        }
     }
-
-//    private val setData(provider: SnsProvider, id: String): SnsResult {
-//        return SnsResul(provider)
-//    }
-
 }

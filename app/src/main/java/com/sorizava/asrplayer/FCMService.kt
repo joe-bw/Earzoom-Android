@@ -17,12 +17,12 @@ import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
-import com.sorizava.asrplayer.config.LoginManager
+import com.sorizava.asrplayer.config.SorizavaLoginManager
 
 class FCMService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         Log.d("TEST", "Refreshed token: $token")
-        LoginManager.instance?.putDeviceToken(token)
+        SorizavaLoginManager.instance?.putDeviceToken(token)
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {

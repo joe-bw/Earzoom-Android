@@ -21,6 +21,13 @@ import retrofit2.http.Body
  * "deviceToken":"device_token_test"
  */
 interface AppApiService {
+
+    @POST("api/member/getMember")
+    fun requestMember(
+        @Body param: LoginNewRequest
+    ): Response<AppApiResponse<LoginDataVO>>
+
+
     @POST("api/member/getMember")
     fun requestMemberInfo(
         @Body param: LoginNewRequest

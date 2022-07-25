@@ -10,13 +10,16 @@ import android.app.Application
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.sorizava.asrplayer.data.IntroState
 import com.sorizava.asrplayer.extension.observe
 import com.sorizava.asrplayer.ui.base.BaseFragment
+import com.sorizava.asrplayer.ui.login.LoginActivity
 import org.mozilla.focus.R
+import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.databinding.FragmentIntroBinding
 
 /**
@@ -42,13 +45,13 @@ class IntroFragment : BaseFragment<FragmentIntroBinding>(FragmentIntroBinding::i
 
     override fun initViewModelObserver() {
         observe(viewModel.appVersion, ::handleAppVersion)
-        observe(viewModel.validAppVersion, ::handleValidSettings)
+        observe(viewModel.introState, ::handleValidSettings)
         observe(viewModel.isValidLogin, ::handleValidLogin)
     }
 
     override fun setBackPressed() {
         super.setBackPressed()
-        if (viewModel.validAppVersion.value != IntroState.GOTO_MAIN) {
+        if (viewModel.introState.value != IntroState.GOTO_MAIN) {
             activity?.finish()
         }
     }
@@ -80,17 +83,33 @@ class IntroFragment : BaseFragment<FragmentIntroBinding>(FragmentIntroBinding::i
             }
 
             IntroState.CHECK_LOGIN -> {
+                Log.e("TEST", "CHECK_LOGIN")
                 viewModel.checkLoginInfo()
             }
 
             IntroState.GOTO_LOGIN -> {
                 // TODO GO TO LOGIN
+                Log.e("TEST", "GOTO_LOGIN")
+                gotoLoginActivity()
             }
 
             IntroState.GOTO_MAIN -> {
                 // TODO GO TO MAIN
+                Log.e("TEST", "GOTO_MAIN")
+                appStart()
             }
         }
+    }
+
+    private fun gotoLoginActivity() {
+        startActivity(Intent(context, LoginActivity::class.java))
+        activity?.finish()
+    }
+
+
+    private fun appStart() {
+        startActivity(Intent(context, MainActivity::class.java))
+        activity?.finish()
     }
 
     private fun showAppUpdateDialog() {

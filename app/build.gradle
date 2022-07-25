@@ -160,9 +160,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         kotlinOptions {
             allWarningsAsErrors = false
             freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
-//            freeCompilerArgs += "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
             freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
-//            freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
             jvmTarget = '1.8'
         }
 }
@@ -202,8 +200,6 @@ configurations {
 
 dependencies {
 
-//    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-
     implementation Dependencies.androidx_appcompat
     implementation Dependencies.androidx_browser
     implementation Dependencies.androidx_cardview
@@ -224,14 +220,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.google.android.play:core:1.10.2'
-
-    // 확장함수 추가
-    // jhong
-    // since 220701
-//    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.0'
-//    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
-
-//    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
     compileOnly 'net.jcip:jcip-annotations:1.0'
     implementation("com.google.code.findbugs:jsr305:3.0.2")
@@ -360,8 +350,10 @@ dependencies {
 
     // jhong
 
+
     /** 네이버 로그인 */
-    implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'   // import from jcenter
+//    implementation(name:'oauth-5.1.0', ext:'aar')
+//    implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'   // import from jcenter
 
 
     //네이버 로그인
@@ -375,10 +367,15 @@ dependencies {
 //    implementation "com.kakao.sdk:v2-navi:2.6.0" // 카카오내비
 
     /** 페이스북 SDK 추가 */
+
     implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
+    implementation 'com.facebook.android:facebook-login:[8,9)'
+    implementation 'com.airbnb.android:lottie:3.7.0'
+
+//    implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
 //    implementation 'com.facebook.android:facebook-login:5.15.3'
 //    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
-    implementation 'com.facebook.android:facebook-login:[8.1)'
+//    implementation 'com.facebook.android:facebook-login:[8.1)'
 
 
     /** 구글 서비스 */

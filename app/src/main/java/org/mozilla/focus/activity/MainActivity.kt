@@ -19,8 +19,7 @@ import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.user.UserApiClient
-import com.nhn.android.naverlogin.OAuthLogin
-import com.sorizava.asrplayer.config.LoginManager
+import com.sorizava.asrplayer.config.SorizavaLoginManager
 import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_JTBC
 import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_KBS
 import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_MBC
@@ -419,7 +418,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
         var caseUrl = checkCategoryOrEtc(url)
 
-        val id = LoginManager.instance?.prefUserId ?: return
+        val id = SorizavaLoginManager.instance?.prefUserId ?: return
 
         val currentTime = Calendar.getInstance().time
 
@@ -621,7 +620,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
     private fun callLogout() {
 
-        val userID = LoginManager.instance?.prefUserId
+        val userID = SorizavaLoginManager.instance?.prefUserId
 
         val request = userID?.let { LogoutRequest(it) }
 
@@ -641,9 +640,9 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                     /** FCM 구독 설정 해제 */
                     FirebaseMessaging.getInstance().unsubscribeFromTopic(ZerothDefine.FCM_SUBSCRIBE_NAME)
 
-                    LoginManager.instance?.userSNSType?.let { onSNSLogout(it) }
+                    SorizavaLoginManager.instance?.userSNSType?.let { onSNSLogout(it) }
 
-                    LoginManager.instance?.clear()
+                    SorizavaLoginManager.instance?.clear()
 
 //                    startActivity(Intent(this@MainActivity, LoginActivity::class.java))
 //                    finish()

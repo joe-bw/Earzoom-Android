@@ -10,7 +10,6 @@ import com.sorizava.asrplayer.data.ResultState
 import com.sorizava.asrplayer.data.SnsProvider
 import com.sorizava.asrplayer.data.vo.LoginDataVO
 import com.sorizava.asrplayer.data.vo.LoginNewRequest
-import com.sorizava.asrplayer.model.SnsModel
 import com.sorizava.asrplayer.network.AppApiClient
 import com.sorizava.asrplayer.network.AppApiResponse
 import com.sorizava.asrplayer.network.LoginApiClient

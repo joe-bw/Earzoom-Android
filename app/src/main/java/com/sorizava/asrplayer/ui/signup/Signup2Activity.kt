@@ -18,7 +18,7 @@ import android.webkit.WebView.WebViewTransport
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.sorizava.asrplayer.config.LoginManager.Companion.instance
+import com.sorizava.asrplayer.config.SorizavaLoginManager
 import com.sorizava.asrplayer.data.vo.LoginDataVO
 import com.sorizava.asrplayer.data.vo.LoginNewRequest
 import com.sorizava.asrplayer.network.AppApiClient.apiService
@@ -148,8 +148,8 @@ class Signup2Activity : AppCompatActivity() {
 
     /** 2021.10.31 회원 가입 여부 확인, 가입이 되어 있다면 그대로 앱 사용, 가입이 되어 있지 않다면 회원 가입 웹뷰 요청  */
     private fun callMemberInfo() {
-        val birth = instance!!.prefUserBirth
-        val phone = instance!!.prefUserPhone
+        val birth = SorizavaLoginManager.instance!!.prefUserBirth
+        val phone = SorizavaLoginManager.instance!!.prefUserPhone
         val request = LoginNewRequest(birth!!, phone!!)
         val call = apiService.requestMemberInfo(request)
         call.enqueue(object : Callback<AppApiResponse<LoginDataVO>> {
@@ -165,7 +165,7 @@ class Signup2Activity : AppCompatActivity() {
                     if (result.status == 200) {
                         val data = result.data as LoginDataVO?
                         val member = data!!.member
-                        instance!!.prefUserId = member!!.id
+                        SorizavaLoginManager.instance!!.prefUserId = member!!.id
                         gotoMainActivity()
                     } else {
                         reLogin()

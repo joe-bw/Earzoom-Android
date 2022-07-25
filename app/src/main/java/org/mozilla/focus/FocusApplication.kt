@@ -9,8 +9,11 @@ package org.mozilla.focus
 import android.app.Application
 import android.content.pm.PackageManager
 import android.os.StrictMode
+import android.text.TextUtils
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.preference.PreferenceManager
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -18,7 +21,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.common.KakaoSdk
 import com.sorizava.asrplayer.application.FBRemoteConfigManager
-import com.sorizava.asrplayer.config.LoginManager
+import com.sorizava.asrplayer.config.SorizavaLoginManager
 import com.sorizava.asrplayer.extension.getVersion
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -125,11 +128,11 @@ open class FocusApplication : LocaleAwareApplication(), CoroutineScope {
             KakaoSdk.init(this, getString(R.string.kakao_app_key))
 
             // jhong - facebook init
-//        FacebookSdk.sdkInitialize(applicationContext)
-//        AppEventsLogger.activateApp(this);
+            FacebookSdk.sdkInitialize(applicationContext)
+            AppEventsLogger.activateApp(this);
 
             // jhong - 로그인매니저(토큰 등 관리)
-            LoginManager.onInit(this@FocusApplication)
+            SorizavaLoginManager.onInit(this@FocusApplication)
 
             // jhong - google init
             FirebaseApp.initializeApp(this)
@@ -147,6 +150,16 @@ open class FocusApplication : LocaleAwareApplication(), CoroutineScope {
     }
 
     fun isLatestVersion() : Boolean {
+
+        android.util.Log.e("TEST", "appVersion: $appVersion")
+        android.util.Log.e("TEST", "appVersion2: ${fbRemoteConfigManager.getString(FBRemoteConfigManager.AOS_APP_VERSION_NAME)}")
+
+        val fbVersion = fbRemoteConfigManager.getString(FBRemoteConfigManager.AOS_APP_VERSION_NAME)
+
+        if (TextUtils.isEmpty(fbVersion)) {
+            return true
+        }
+
         return appVersion == fbRemoteConfigManager.getString(FBRemoteConfigManager.AOS_APP_VERSION_NAME)
     }
 

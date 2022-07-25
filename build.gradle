@@ -44,8 +44,6 @@ plugins {
     // other methods involve using undocumented APIs
     // https://docs.gradle.org/current/userguide/plugins.html#plugins_dsl_limitations
     id("io.gitlab.arturbosch.detekt").version("1.18.0")
-    id 'org.jetbrains.kotlin.android' version '1.6.21' apply false
-//    id 'org.jetbrains.kotlin.android' version '1.6.21' apply false
 }
 
 detekt {

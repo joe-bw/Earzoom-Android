@@ -11,13 +11,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sorizava.asrplayer.config.LoginManager
+import com.sorizava.asrplayer.config.SorizavaLoginManager
 import com.sorizava.asrplayer.data.IntroState
 import com.sorizava.asrplayer.data.ResultState
-import com.sorizava.asrplayer.data.vo.LoginDataVO
 import com.sorizava.asrplayer.data.vo.LoginNewRequest
 import com.sorizava.asrplayer.extension.getVersion
-import com.sorizava.asrplayer.network.AppApiResponse
 import com.sorizava.asrplayer.repository.LoginRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -28,8 +26,8 @@ private const val MAX_DELAY_TIME_WITH_INTRO = 3000L
 
 class IntroViewModel(private val context: Application) : ViewModel() {
 
-    private val validAppVersionPrivate = MutableLiveData<IntroState>()
-    val validAppVersion: LiveData<IntroState> = validAppVersionPrivate
+    private val introStatePrivate = MutableLiveData<IntroState>()
+    val introState: LiveData<IntroState> = introStatePrivate
 
     private val appVersionPrivate = MutableLiveData<String>()
     val appVersion: LiveData<String> = appVersionPrivate
@@ -45,12 +43,12 @@ class IntroViewModel(private val context: Application) : ViewModel() {
         appVersionPrivate.value = context.getVersion()
 
         viewModelScope.launch {
-            validAppVersionPrivate.value = IntroState.LOADING
+            introStatePrivate.value = IntroState.LOADING
 
             val time = System.currentTimeMillis()
 
             if (!isLatestVersion()) {
-                validAppVersionPrivate.value = IntroState.NEED_APP_UPDATE
+                introStatePrivate.value = IntroState.NEED_APP_UPDATE
             } else {
                 val delayTime = (System.currentTimeMillis() - time)
 
@@ -58,7 +56,7 @@ class IntroViewModel(private val context: Application) : ViewModel() {
                     delay(MAX_DELAY_TIME_WITH_INTRO - delayTime)
                 }
 
-                validAppVersionPrivate.value = IntroState.CHECK_LOGIN
+                introStatePrivate.value = IntroState.CHECK_LOGIN
             }
         }
     }
@@ -70,28 +68,26 @@ class IntroViewModel(private val context: Application) : ViewModel() {
     fun checkLoginInfo() {
         viewModelScope.launch {
 
-            val birth = LoginManager.instance?.prefUserBirth
-            val phone = LoginManager.instance?.prefUserPhone
+            val birth = SorizavaLoginManager.instance?.prefUserBirth
+            val phone = SorizavaLoginManager.instance?.prefUserPhone
 
-            if (LoginManager.instance?.userSNSType == LoginManager.SNS_TYPE_NONE) {
-                validAppVersionPrivate.value = IntroState.GOTO_MAIN
+            if (SorizavaLoginManager.instance?.userSNSType == SorizavaLoginManager.SNS_TYPE_NONE) {
+                introStatePrivate.value = IntroState.GOTO_LOGIN
             } else if (TextUtils.isEmpty(birth)) {
-                validAppVersionPrivate.value = IntroState.GOTO_MAIN
+                introStatePrivate.value = IntroState.GOTO_LOGIN
             } else {
                 if (birth != null && phone != null){
                     val request = LoginNewRequest(birth, phone)
                     val repository = LoginRepository(context.application, request)
                     repository.requestMemberInfo().collect {
                         when (it) {
-                            ResultState.Success(data = AppApiResponse<LoginDataVO>()) -> {
-
+                            ResultState.Success(data = it) -> {
+                                introStatePrivate.value = IntroState.GOTO_MAIN
                             }
-
                             else -> {
-
+                                introStatePrivate.value = IntroState.GOTO_LOGIN
                             }
                         }
-                        validAppVersionPrivate.value = IntroState.GOTO_LOGIN
                     }
                 }
             }

@@ -5,10 +5,6 @@
 
 package com.sorizava.asrplayer.data
 
-enum class SnsProvider(var type: Int) {
-    EMAIL(0),
-    NAVER(1),
-    KAKAO(2),
-    GOOGLE(3),
-    FACEBOOK(4),
+enum class SnsProvider {
+    EMAIL, NAVER, KAKAO, GOOGLE, FACEBOOK
 }

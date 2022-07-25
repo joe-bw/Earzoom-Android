@@ -5,14 +5,13 @@
 
 package com.sorizava.asrplayer.repository
 
-import com.sorizava.asrplayer.data.ResultState
 import com.sorizava.asrplayer.data.SnsProvider
-import com.sorizava.asrplayer.data.SnsResult
-import com.sorizava.asrplayer.data.vo.LoginDataVO
-import com.sorizava.asrplayer.data.vo.LoginNewRequest
-import com.sorizava.asrplayer.network.AppApiResponse
-import kotlinx.coroutines.flow.Flow
+import com.sorizava.asrplayer.data.model.SnsResultData
 
 interface SnsLoginRepositorySource {
-    fun signIn(provider: SnsProvider): Flow<ResultState<SnsResult>>
+    fun signIn(
+        provider: SnsProvider,
+        onSuccess: (SnsResultData) -> Unit,
+        onFailed: (SnsResultData) -> Unit
+    )
 }
