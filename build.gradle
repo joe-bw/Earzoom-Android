@@ -32,13 +32,9 @@ buildscript {
 
 
         // jhong-google
-        classpath 'com.google.gms:google-services:4.3.10'
+        classpath 'com.google.gms:google-services:4.3.13'
 
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
-
-        // hilt
-//        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.40.5'
-
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.1'
     }
 }
 
@@ -48,7 +44,6 @@ plugins {
     // other methods involve using undocumented APIs
     // https://docs.gradle.org/current/userguide/plugins.html#plugins_dsl_limitations
     id("io.gitlab.arturbosch.detekt").version("1.18.0")
-//    id 'org.jetbrains.kotlin.android' version '1.6.21' apply false
 }
 
 detekt {
@@ -79,7 +74,7 @@ allprojects {
             url "https://maven.mozilla.org/maven2"
         }
 
-        // jhong-카카오
+        /** 카카오 SDK Repository */
         maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
     }
 }

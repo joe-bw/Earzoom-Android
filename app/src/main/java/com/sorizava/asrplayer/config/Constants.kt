@@ -19,10 +19,38 @@ import androidx.annotation.ChecksSdkIntAtLeast
 
 const val TAG = "BARO_NOTE"
 
-const val PREFS_KEY_FILE = "PrefsBaroNote.sz"
-const val PREFS_KEY = "PrefsBaroNote"
+const val PREFS_KEY_FILE = "PrefsEarzoom.sz"
+const val PREFS_KEY = "PrefsEarzoom"
 
 const val APP_ID = "app_id"
+
+/** 로그인 화면 진입시 UI 상태를 나타내는 flag 값을 의미
+ * relogin type은 로그인을 다시 해야하는 사항이 발생하여 로그인 화면을
+ *
+ * */
+const val LOGIN_TYPE_RELOGIN = "relogin"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const val BARONOTE_PATH_NAME = "Baronote"
 const val BARONOTE_PATH_DEFAULT_NAME = "기본폴더"

@@ -43,7 +43,9 @@ object AppApiClient {
 
     private fun getProvideOkHttpClient(interceptor: Interceptor?): OkHttpClient {
         val httpClientBuilder = OkHttpClient.Builder()
-        httpClientBuilder.addNetworkInterceptor(interceptor)
+        if (interceptor != null) {
+            httpClientBuilder.addNetworkInterceptor(interceptor)
+        }
         httpClientBuilder.connectTimeout(2, TimeUnit.MINUTES)
             .readTimeout(2, TimeUnit.MINUTES)
             .writeTimeout(2, TimeUnit.MINUTES)

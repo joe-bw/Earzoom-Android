@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- This Source Code Form is subject to the terms of the Mozilla Public
+<?xml version="1.0" encoding="utf-8"?><!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <resources xmlns:tools="http://schemas.android.com/tools">
@@ -25,7 +24,7 @@
 
     <dimen name="firstrun_card_width">300dp</dimen>
     <dimen name="firstrun_card_height">460dp</dimen>
-    
+
     <dimen name="fingerprint_icon_size">64dp</dimen>
     <dimen name="fingerprint_status_layout_margin_vertical">48dp</dimen>
 
@@ -33,7 +32,8 @@
 
     <dimen name="floating_action_button_size">56dp</dimen>
 
-    <dimen name="adaptive_icon_drawable_dimen">108dp</dimen> <!-- Specified in AdaptiveIconDrawable docs. -->
+    <dimen name="adaptive_icon_drawable_dimen">108dp
+    </dimen> <!-- Specified in AdaptiveIconDrawable docs. -->
 
     <dimen name="dialogHorizontalPadding">24dp</dimen>
 
@@ -123,4 +123,6 @@
     <dimen name="action_button_padding_horizontal">4dp</dimen>
 
     <dimen name="home_url_icon_size">40dp</dimen>
+    <dimen name="list_item_spacing">16dp</dimen>
+    <dimen name="list_item_spacing_half">8dp</dimen>
 </resources>
