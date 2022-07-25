@@ -672,7 +672,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
     private fun onSNSLogout(snsType : Int) {
 
         when(snsType) {
-            0 -> OAuthLogin.getInstance().logout(this)
+//            0 -> OAuthLogin.getInstance().logout(this)
 
             1 -> UserApiClient.instance.logout { error ->
                     if (error != null) {
