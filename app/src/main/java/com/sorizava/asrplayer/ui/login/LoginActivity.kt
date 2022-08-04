@@ -22,7 +22,9 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.navercorp.nid.NaverIdLoginSDK
 import com.sorizava.asrplayer.config.LOGIN_TYPE_RELOGIN
+import com.sorizava.asrplayer.config.NAVER_CLIENT_ID
 import com.sorizava.asrplayer.config.SorizavaLoginManager
+import com.sorizava.asrplayer.extension.config
 import com.sorizava.asrplayer.ui.base.BaseActivity
 import org.mozilla.focus.R
 import org.mozilla.focus.databinding.ActivityLogin2Binding
@@ -47,13 +49,9 @@ class LoginActivity : BaseActivity<ActivityLogin2Binding>(ActivityLogin2Binding:
             }
         }
 
-        val clientId = getString(R.string.naver_client_id)
-        val clientSecret = getString(R.string.naver_client_secret)
-        val clientName = getString(R.string.naver_client_name)
-
         NaverIdLoginSDK.apply {
             showDevelopersLog(true)
-            initialize(application, clientId, clientSecret, clientName)
+            initialize(application, config.naverClientId, config.naverClientSecret, config.naverClientName)
             isShowMarketLink = true
             isShowBottomTab = true
         }

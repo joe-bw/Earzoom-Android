@@ -73,8 +73,12 @@ sealed class Screen {
             Start,
 
             // add sorizava
+            // since 220801
+            Main,
+            Browser,
             //AsrServer,
             //Subtitle,
+
 
             General,
             Privacy,

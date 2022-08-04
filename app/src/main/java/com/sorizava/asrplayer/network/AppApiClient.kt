@@ -27,6 +27,10 @@ object AppApiClient {
     val apiService: AppApiService
         get() = instance.create(AppApiService::class.java)
 
+    @JvmStatic
+    val boardApiService: BoardApiService
+        get() = instance.create(BoardApiService::class.java)
+
     private val instance: Retrofit = Retrofit.Builder()
             .baseUrl(ZerothDefine.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))

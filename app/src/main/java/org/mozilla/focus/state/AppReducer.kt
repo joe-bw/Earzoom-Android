@@ -170,6 +170,20 @@ private fun navigateUp(state: AppState, action: AppAction.NavigateUp): AppState 
             Screen.Home
         }
 
+        // 메인 설정 화면 추가
+        Screen.Settings.Page.Main  -> if (action.tabId != null) {
+            Screen.Browser(tabId = action.tabId, showTabs = false)
+        } else {
+            Screen.Home
+        }
+
+        // 브라우저 설정 화면 추가
+        Screen.Settings.Page.Browser  -> if (action.tabId != null) {
+            Screen.Browser(tabId = action.tabId, showTabs = false)
+        } else {
+            Screen.Home
+        }
+
         Screen.Settings.Page.General -> Screen.Settings(page = Screen.Settings.Page.Start)
         Screen.Settings.Page.Privacy -> Screen.Settings(page = Screen.Settings.Page.Start)
         Screen.Settings.Page.Search -> Screen.Settings(page = Screen.Settings.Page.Start)

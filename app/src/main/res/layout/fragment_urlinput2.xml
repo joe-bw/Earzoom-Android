@@ -8,425 +8,91 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <org.mozilla.focus.widget.ResizableKeyboardLinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/keyboardLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/urlinput_height"
         android:gravity="center"
         android:orientation="vertical"
         android:weightSum="1"
         app:animate="true">
 
-        <ImageView
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:contentDescription="@string/app_name"
-            android:focusable="false"
-            android:paddingBottom="16dp"
-            android:src="@drawable/wordmark" />
-
-
-        <TextView
-            android:id="@+id/homeViewTipsLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="false"
+            android:layout_marginTop="50dp"
             android:gravity="center"
-            android:lineSpacingExtra="7sp"
-            android:text="@string/teaser"
-            android:textColor="#eeeeee"
-            android:textSize="14sp" />
-        <!--
-                <androidx.compose.ui.platform.ComposeView
-                    android:id="@+id/topSites"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+            android:orientation="horizontal">
 
-                <ImageView
+            <ImageView
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:src="@drawable/img_log_earzoom_light" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_title_top"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="0.9"
-                    android:paddingEnd="24dp"
-                    android:paddingStart="24dp"
-                    android:contentDescription="@string/app_name"
-                    android:focusable="false"
-                    android:src="@drawable/wordmark2" />
+                    android:fontFamily="@font/seoul_namsan_eb"
+                    android:text="@string/board_subtitle"
+                    android:textColor="@color/black" />
 
-        <org.mozilla.focus.tips.TipsHorizontalCarousel
-            android:id="@+id/home_tips"
+                <TextView
+                    android:id="@+id/txt_title_top_sub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/seoul_namsan_eb"
+                    android:text="@string/board_title"
+                    android:textColor="@color/mozac_feature_toolbar_container_blue"
+                    android:textSize="30sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        -->
+            android:layout_height="match_parent">
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="440dp">
-
-            <TableRow
-                android:layout_width="fill_parent"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewpager_content"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.25"
-                android:weightSum="1">
+                android:layout_marginBottom="20dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/dots_indicator"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.33">
+            <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+                android:id="@+id/dots_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                app:dotsColor="@color/black"
+                app:dotsCornerRadius="8dp"
+                app:dotsSize="16dp"
+                app:dotsSpacing="4dp"
+                app:dotsStrokeColor="@color/black"
+                app:dotsStrokeWidth="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <ImageView
-                        android:id="@+id/img_mark_kbs"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/ic_main_kbs" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/img_mark_kbs"
-                        android:gravity="center"
-                        android:singleLine="false"
-                        android:text="KBS"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-
-                    <Button
-                        android:id="@+id/mark_kbs"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/right_buttom_btn_line" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.34">
-
-                    <Button
-                        android:id="@+id/mark_mbc"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/right_buttom_btn_line" />
-
-                    <ImageView
-                        android:id="@+id/img_mark_mbc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/ic_main_mbc" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/img_mark_mbc"
-                        android:gravity="center"
-                        android:singleLine="false"
-                        android:text="MBC"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.33">
-
-                    <Button
-                        android:id="@+id/mark_sbs"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/right_buttom_btn_line" />
-
-                    <ImageView
-                        android:id="@+id/img_mark_sbs"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/ic_main_sbs" />
-
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/img_mark_sbs"
-                        android:gravity="center"
-                        android:singleLine="false"
-                        android:text="SBS"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-                </RelativeLayout>
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.25"
-                android:weightSum="1">
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.33">
-
-                    <Button
-                        android:id="@+id/mark_ytn"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/right_buttom_btn_line" />
-
-                    <ImageView
-                        android:id="@+id/img_mark_ytn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/ic_main_ytn" />
-
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/img_mark_ytn"
-                        android:gravity="center"
-                        android:singleLine="false"
-                        android:text="YTN"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.34">
-
-                    <Button
-                        android:id="@+id/mark_yeonhap"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/right_buttom_btn_line" />
-
-                    <ImageView
-                        android:id="@+id/img_mark_yeonhap"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/ic_main_yeonhap" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/img_mark_yeonhap"
-                        android:gravity="center"
-                        android:singleLine="false"
-                        android:text="연합뉴스TV"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.33">
-
-                    <Button
-                        android:id="@+id/mark_jtbc"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/right_buttom_btn_line" />
-
-                    <ImageView
-                        android:id="@+id/img_mark_jtbc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/ic_main_jtbc" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/img_mark_jtbc"
-                        android:gravity="center"
-                        android:singleLine="false"
-                        android:text="JTBC"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-                </RelativeLayout>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.25"
-                android:weightSum="1">
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.33">
-
-                    <Button
-                        android:id="@+id/mark_mbn"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/right_buttom_btn_line" />
-
-                    <ImageView
-                        android:id="@+id/img_mark_mbn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/ic_main_mbn" />
-
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/img_mark_mbn"
-                        android:gravity="center"
-                        android:singleLine="false"
-                        android:text="MBN"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.34">
-
-                    <Button
-                        android:id="@+id/mark_youtube"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/right_buttom_btn_line" />
-
-                    <ImageView
-                        android:id="@+id/img_mark_youtube"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/ic_main_youtube" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/img_mark_youtube"
-                        android:gravity="center"
-                        android:singleLine="false"
-                        android:text="YouTube"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.33">
-
-                    <Button
-                        android:id="@+id/mark_naver"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/right_buttom_btn_line" />
-
-                    <ImageView
-                        android:id="@+id/img_mark_navertv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/ic_main_navertv" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/img_mark_navertv"
-                        android:gravity="center"
-                        android:singleLine="false"
-                        android:text="Naver TV"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-                </RelativeLayout>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.25"
-                android:weightSum="1">
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.33"
-                    android:visibility="invisible">
-
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/right_buttom_btn_line"
-                        android:gravity="center|bottom"
-
-                        android:text="tvN"
-                        android:textAllCaps="false"
-                        android:textSize="14sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/icon_tvn_selector" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.34">
-
-                    <Button
-                        android:id="@+id/mark_bookmark"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/right_buttom_btn_line" />
-
-                    <ImageView
-                        android:id="@+id/img_mark_bookmark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/ic_main_bookmark" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/img_mark_bookmark"
-                        android:gravity="center"
-                        android:singleLine="false"
-                        android:text="북마크 바로가기"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-                </RelativeLayout>
-
-            </TableRow>
-
-        </TableLayout>
-    </org.mozilla.focus.widget.ResizableKeyboardLinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <FrameLayout
         android:id="@+id/urlInputLayout"
@@ -442,7 +108,7 @@
             android:id="@+id/toolbarBackgroundView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/toolbar_color" />
+            android:background="@color/white" />
 
         <View
             android:id="@+id/toolbarBottomBorder"
@@ -450,7 +116,7 @@
             android:layout_height="1dp"
             android:layout_gravity="bottom"
             android:alpha="0.20"
-            android:background="@color/divider" />
+            android:background="@color/white" />
 
         <FrameLayout
             android:id="@+id/urlInputContainerView"
@@ -470,26 +136,66 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <mozilla.components.browser.toolbar.BrowserToolbar
                     android:id="@+id/browserToolbar"
                     android:layout_width="0dp"
                     android:layout_height="56dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:visibility="invisible" />
 
-                <org.mozilla.focus.widget.IndicatorMenuButton
-                    android:id="@+id/menuView"
-                    android:layout_width="40dp"
-                    android:layout_height="56dp"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/indicator_content_description_menu"
-                    android:visibility="visible" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
+                    <Button
+                        android:id="@+id/menuView"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/ic_setting"
+                        android:backgroundTint="@color/black"
+                        android:contentDescription="@string/indicator_content_description_menu"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="설정"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="20dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btn_help"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/ic_help"
+                        android:backgroundTint="@color/black"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="도움말"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+                </LinearLayout>
             </LinearLayout>
-
         </FrameLayout>
-
     </FrameLayout>
 
     <View
@@ -505,13 +211,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/urlinput_height"
         android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/img_banner"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="bottom"
-        android:layout_margin="20dp"
-        android:src="@drawable/img_banner2" />
 
 </FrameLayout>

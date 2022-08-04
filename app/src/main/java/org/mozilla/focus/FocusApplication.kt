@@ -137,7 +137,7 @@ open class FocusApplication : LocaleAwareApplication(), CoroutineScope {
             // jhong - google init
             FirebaseApp.initializeApp(this)
 
-            firebaseAnalytics = Firebase.analytics
+//            firebaseAnalytics = Firebase.analytics
         }
     }
 

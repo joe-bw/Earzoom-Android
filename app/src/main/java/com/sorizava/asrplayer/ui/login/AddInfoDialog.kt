@@ -40,7 +40,7 @@ class AddInfoDialog(private val listener: AddInfoDialogListener) : DialogFragmen
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DialogAddInfoBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -50,7 +50,6 @@ class AddInfoDialog(private val listener: AddInfoDialogListener) : DialogFragmen
         super.onViewCreated(view, savedInstanceState)
         val displayMetrics = requireContext().resources.displayMetrics
         dialog!!.window!!.setLayout(displayMetrics.widthPixels, displayMetrics.heightPixels)
-
 
         binding.apply {
             chkPrivacy.setOnCheckedChangeListener { _, isChecked ->
@@ -62,7 +61,7 @@ class AddInfoDialog(private val listener: AddInfoDialogListener) : DialogFragmen
 
             btnConfirm.setOnClickListener(View.OnClickListener {
                 if (!chkPrivacy.isChecked) {
-                    chkPrivacy.error = "동의 필요"
+                    chkPrivacy.error = getString(R.string.txt_error_permission)
                     chkPrivacy.setTextColor(Color.RED)
                     chkPrivacy.isFocusable = true
                     return@OnClickListener

@@ -6,17 +6,22 @@
 package com.sorizava.asrplayer.ui.main
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.DiffUtil
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class SampleAdapter(
-    fragmentActivity: FragmentActivity
-) : FragmentStateAdapter(fragmentActivity) {
+class MainUIAdapter(
+    fragmentManager: FragmentManager,
+    lifecycle: Lifecycle
+) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
     private val dataList: ArrayList<Fragment> = arrayListOf()
 
     fun setItems(items: ArrayList<Fragment>) {
-        this.dataList.addAll(items)
+        dataList.clear()
+        dataList.addAll(items)
+        notifyItemInserted(dataList.size - 1)
     }
 
     override fun getItemCount(): Int {

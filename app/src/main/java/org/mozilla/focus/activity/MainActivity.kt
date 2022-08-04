@@ -7,15 +7,19 @@ package org.mozilla.focus.activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.user.UserApiClient
@@ -44,6 +48,8 @@ import com.sorizava.asrplayer.data.vo.EndStatisticsRequest
 import com.sorizava.asrplayer.data.vo.LoginDataVO
 import com.sorizava.asrplayer.data.vo.LogoutRequest
 import com.sorizava.asrplayer.data.vo.StartStatisticsRequest
+import com.sorizava.asrplayer.extension.handleFocus
+import com.sorizava.asrplayer.extension.hideKeyboard
 import com.sorizava.asrplayer.network.AppApiClient
 import com.sorizava.asrplayer.network.AppApiResponse
 import kr.co.sorizava.asrplayer.AppConfig
@@ -90,9 +96,10 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Because some MVP characteristics are set from xml files we need to choose the mode of the theme
-        // according to MVP flag and not by system theme mode
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        // Light mode 로 동작
+        // since 220801
+        // jhong
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         if (!isTaskRoot) {
             if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && Intent.ACTION_MAIN == intent.action) {
@@ -297,12 +304,6 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
 //            browserFragment.onCheckStartURL()
             browserFragment.onCallEndTime()
-
-//            Log.d("TEST", "browserFragment gone1: " + components.store.state.selectedTab?.content?.url)
-//            Log.d("TEST", "browserFragment gone2: " + components.store.state.selectedTab?.content?.titleOrDomain)
-//            Log.d("TEST", "browserFragment gone3: " + components.store.state.selectedTabId.orEmpty())
-
-
             return
         }
 
@@ -377,9 +378,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         val fragmentManager = supportFragmentManager
         val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?
 
-        if (browserFragment != null) {
-            browserFragment.onMessageSubtitle(msg)
-        }
+        browserFragment?.onMessageSubtitle(msg)
     }
 
     override fun onMessageSubtitle(msg: String, final: Boolean) {
@@ -389,9 +388,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         val fragmentManager = supportFragmentManager
         val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?
 
-        if (browserFragment != null) {
-            browserFragment.resetSubtitleView(true)
-        }
+        browserFragment?.resetSubtitleView(true)
     }
 
     // url 추적 로직 추가
@@ -406,7 +403,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         if (TextUtils.isEmpty(AppConfig.getInstance().prefStartTimeSeq)){
             callStartTime(url)
         } else {
-            if (url.equals(AppConfig.getInstance().prefStartURL)){
+            if (url == AppConfig.getInstance().prefStartURL){
                 return
             } else {
                 callEndAndStartTime(url)
@@ -416,7 +413,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
     fun callStartTime(url: String) {
 
-        var caseUrl = checkCategoryOrEtc(url)
+        val caseUrl = checkCategoryOrEtc(url)
 
         val id = SorizavaLoginManager.instance?.prefUserId ?: return
 
@@ -687,5 +684,23 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
             3 -> FirebaseAuth.getInstance().signOut()
         }
+    }
+
+    /** 검색어 뷰 이외 터치시 키보드 닫기 */
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        val focusView = currentFocus
+        if (focusView != null && focusView is EditText) {
+            val rect = Rect()
+            focusView.getGlobalVisibleRect(rect)
+            val x = ev.x.toInt()
+            val y = ev.y.toInt()
+            if (!rect.contains(x, y)) {
+                focusView.hideKeyboard()
+                focusView.clearFocus()
+            } else {
+                focusView.handleFocus()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
     }
 }

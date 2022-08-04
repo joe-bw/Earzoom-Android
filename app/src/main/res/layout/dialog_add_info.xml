@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/shape_rectangle_r30"
+        android:background="@drawable/shape_rectangle_r10"
         android:backgroundTint="@color/white"
         android:clipToPadding="false"
         android:elevation="8dp"

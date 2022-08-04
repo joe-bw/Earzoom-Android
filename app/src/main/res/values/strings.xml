@@ -859,7 +859,8 @@ The new line here must be kept as the second half of the string is clickable for
     <string name="setting_asr_app_secret_title">App Secret</string>
     <string name="setting_asr_auth_url_title">Authentication EndPoint URL</string>
     <string name="setting_asr_server_connection_url_title">ASR Server EndPoint URL</string>
-
+    <string name="setting_main_system_title">System</string>
+    <string name="setting_main_helper_title">Customer Service</string>
 
     <string name="setting_asr_connection_method">Server connection method</string>
 
@@ -875,6 +876,10 @@ The new line here must be kept as the second half of the string is clickable for
     <string name="setting_app_info_header">App information</string>
     <string name="setting_app_version_prefix">App version:</string>
 
+    <string name="setting_browser_add_main_app">Add to main screen (Earzoom app)</string>
+    <string name="setting_browser_add_main_device">Add to main screen (smartphone)</string>
+    <string name="setting_browser_show_pc">View as PC version</string>
+    <string name="setting_browser_system_setting">System Settings</string>
 
     <!-- 자막 설정  -->
     <string name="subtitle">Subtitle</string>
@@ -970,5 +975,17 @@ The new line here must be kept as the second half of the string is clickable for
     <string name="txt_detail" translatable="false">Detail...</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="txt_error_permission" translatable="false">Required</string>
+
+    <!-- 게시판 사항 추가 -->
+    <string name="board_menu_notice">Notice</string>
+    <string name="board_menu_faq">FAQ</string>
+    <string name="board_menu_event">Event</string>
+
+    <string name="board_show_more">MORE</string>
+
+    <string name="board_subtitle">Real-time subtitle browser</string>
+    <string name="board_title">Earzoom</string>
 
 </resources>

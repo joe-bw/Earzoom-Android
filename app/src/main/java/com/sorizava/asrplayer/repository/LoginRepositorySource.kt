@@ -14,6 +14,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface LoginRepositorySource {
     suspend fun requestMemberInfo(): Flow<ResultState<AppApiResponse<LoginDataVO>>>
-
     suspend fun signIn(provider: SnsProvider): Flow<ResultState<Boolean>>
 }

@@ -14,6 +14,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.sorizava.asrplayer.ui.intro.IntroActivity
 import kr.co.sorizava.asrplayer.AppConfig
+import org.mozilla.focus.activity.MainActivity
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -38,8 +39,8 @@ class StartActivity : AppCompatActivity() {
 //        });
 
 //        startActivity(Intent(this, SampleMainActivity::class.java))
-        startActivity(Intent(this, IntroActivity::class.java))
-        //        startActivity(new Intent(this, MainActivity.class));
+//        startActivity(Intent(this, IntroActivity::class.java))
+                startActivity(Intent(this, MainActivity::class.java))
 //        startActivity(new Intent(this, Signup2Activity.class));
         finish()
     }

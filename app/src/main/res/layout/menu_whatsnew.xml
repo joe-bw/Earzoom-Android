@@ -34,6 +34,7 @@
         android:lines="1"
         android:ellipsize="end"
         android:text="@string/menu_whats_new"
+        android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@id/icon"
         app:layout_constraintTop_toTopOf="@id/icon"
         app:layout_constraintEnd_toStartOf="@id/dot"
