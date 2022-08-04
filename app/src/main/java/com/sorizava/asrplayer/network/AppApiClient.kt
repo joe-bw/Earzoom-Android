@@ -27,6 +27,10 @@ object AppApiClient {
     val apiService: AppApiService
         get() = instance.create(AppApiService::class.java)
 
+    @JvmStatic
+    val boardApiService: BoardApiService
+        get() = instance.create(BoardApiService::class.java)
+
     private val instance: Retrofit = Retrofit.Builder()
             .baseUrl(ZerothDefine.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
@@ -43,7 +47,9 @@ object AppApiClient {
 
     private fun getProvideOkHttpClient(interceptor: Interceptor?): OkHttpClient {
         val httpClientBuilder = OkHttpClient.Builder()
-        httpClientBuilder.addNetworkInterceptor(interceptor)
+        if (interceptor != null) {
+            httpClientBuilder.addNetworkInterceptor(interceptor)
+        }
         httpClientBuilder.connectTimeout(2, TimeUnit.MINUTES)
             .readTimeout(2, TimeUnit.MINUTES)
             .writeTimeout(2, TimeUnit.MINUTES)

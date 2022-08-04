@@ -43,11 +43,27 @@ public class ZerothDefine {
 
     /**
      * 웹서비스 URL 주소
-     * Notice
+     * 공지사항
      * jhong
-     * 211006
+     * 220803
      **/
     public static final String API_WEB_URL_NOTICEVIEW = BASE_URL + "noticeView/";
+
+    /**
+     * 웹서비스 URL 주소
+     * FAQ
+     * jhong
+     * 220803
+     **/
+    public static final String API_WEB_URL_FAQVIEW = BASE_URL + "faqView/";
+
+    /**
+     * 웹서비스 URL 주소
+     * 이벤트
+     * jhong
+     * 220803
+     **/
+    public static final String API_WEB_URL_EVENTVIEW = BASE_URL + "eventView/";
 
     /**
      * 웹서비스 URL 주소

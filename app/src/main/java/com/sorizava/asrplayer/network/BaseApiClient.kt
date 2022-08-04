@@ -25,7 +25,7 @@ open class BaseApiClient (
             val responseCode = response.code()
             Log.e("TEST", "responseCode: $responseCode")
             if (response.isSuccessful) {
-//                Timber.e("response.body(): ${response.body()}")
+                Log.e("response.body()", "${response.body()}")
                 response.body()
             } else {
                 responseCode

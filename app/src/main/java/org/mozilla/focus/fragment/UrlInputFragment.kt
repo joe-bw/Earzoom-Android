@@ -4,6 +4,7 @@
 
 package org.mozilla.focus.fragment
 
+import android.R.array
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Intent
@@ -15,11 +16,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.sorizava.asrplayer.ui.main.*
 import kotlinx.android.synthetic.main.fragment_urlinput2.*
+import kotlinx.android.synthetic.main.palette_item.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -42,7 +49,6 @@ import org.mozilla.focus.ext.isSearch
 import org.mozilla.focus.ext.requireComponents
 import org.mozilla.focus.input.InputToolbarIntegration
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
-import com.sorizava.asrplayer.config.StatisticsConstants
 import org.mozilla.focus.menu.home.HomeMenu
 import org.mozilla.focus.searchsuggestions.SearchSuggestionsViewModel
 import org.mozilla.focus.searchsuggestions.ui.SearchSuggestionsFragment
@@ -50,16 +56,9 @@ import org.mozilla.focus.state.AppAction
 import org.mozilla.focus.state.Screen
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.topsites.DefaultTopSitesView
-import org.mozilla.focus.utils.AppConstants
-import org.mozilla.focus.utils.Features
-import org.mozilla.focus.utils.OneShotOnPreDrawListener
-import org.mozilla.focus.utils.SearchUtils
-import org.mozilla.focus.utils.Settings
-import org.mozilla.focus.utils.StatusBarUtils
-import org.mozilla.focus.utils.SupportUtils
-import org.mozilla.focus.utils.UrlUtils
-import org.mozilla.focus.utils.ViewUtils
+import org.mozilla.focus.utils.*
 import kotlin.coroutines.CoroutineContext
+
 
 private const val TIP_ONE_CAROUSEL_POSITION = 1
 private const val TIP_TWO_CAROUSEL_POSITION = 2
@@ -79,7 +78,8 @@ class UrlInputFragment :
     BaseFragment(),
     View.OnClickListener,
     SharedPreferences.OnSharedPreferenceChangeListener,
-    CoroutineScope {
+    CoroutineScope,
+    OnSwipeHandleListener {
     companion object {
 
         @JvmField
@@ -94,6 +94,7 @@ class UrlInputFragment :
 
         private val ANIMATION_DURATION = 200
 
+        private lateinit var mainBookmarkViewModel: MainBookmarkViewModel
         private lateinit var searchSuggestionsViewModel: SearchSuggestionsViewModel
 
         @JvmStatic
@@ -143,6 +144,9 @@ class UrlInputFragment :
     private val toolbarIntegration = ViewBoundFeatureWrapper<InputToolbarIntegration>()
     private val topSitesFeature = ViewBoundFeatureWrapper<TopSitesFeature>()
 
+    private val mainUIBoardFragment by lazy { MainSearchNoticeFragment() }
+    private val mainUIBookmarkFragment by lazy { MainBookmarkFragment.newInstance(this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -159,6 +163,7 @@ class UrlInputFragment :
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        mainBookmarkViewModel = ViewModelProvider(this).get(MainBookmarkViewModel::class.java)
         searchSuggestionsViewModel = ViewModelProvider(this).get(SearchSuggestionsViewModel::class.java)
 
         childFragmentManager.beginTransaction()
@@ -186,6 +191,18 @@ class UrlInputFragment :
                 browserToolbar.setSearchTerms(text)
             }
         }
+
+        val adapter = MainUIAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
+        val dataList: ArrayList<Fragment> =
+            arrayListOf(mainUIBoardFragment, mainUIBookmarkFragment)
+        adapter.setItems(dataList)
+        viewpager_content.adapter = adapter
+        viewpager_content.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+            }
+        })
+        dots_indicator.setViewPager2(viewpager_content)
     }
 
     override fun onResume() {
@@ -246,10 +263,6 @@ class UrlInputFragment :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        //   val topSites = view.findViewById<ComposeView>(R.id.topSites)
-        //  topSites.setContent { HomeScreen() }
-
         return inflater.inflate(R.layout.fragment_urlinput2, container, false)
     }
 
@@ -284,6 +297,8 @@ class UrlInputFragment :
 
         dismissView.setOnClickListener(this)
 
+        backgroundView.setOnClickListener(this)
+
         if (urlInputContainerView != null) {
             OneShotOnPreDrawListener(urlInputContainerView) {
                 animateFirstDraw()
@@ -294,7 +309,10 @@ class UrlInputFragment :
         if (isOverlay) {
             keyboardLinearLayout?.visibility = View.GONE
         } else {
-            backgroundView?.setBackgroundResource(R.drawable.dark_background)
+//            backgroundView?.setBackgroundResource(R.drawable.dark_background)
+
+
+            backgroundView?.setBackgroundColor(activity?.getColor(R.color.white)!!)
 
             dismissView?.visibility = View.GONE
 
@@ -320,79 +338,40 @@ class UrlInputFragment :
             menuView?.visibility = View.GONE
         }
 
-        // remove: sorizava create/resume no keyboard needed
-        //browserToolbar.editMode()
-
-        mark_youtube.setOnClickListener {
-            val url = StatisticsConstants.URL_YOUTUBE
-            openUrl(url, null)
-        }
-
-        mark_ytn.setOnClickListener {
-            val url = StatisticsConstants.URL_YTN
-            openUrl(url, null)
-        }
-
-        mark_kbs.setOnClickListener {
-            val url = StatisticsConstants.URL_KBS
-            openUrl(url, null)
-        }
-
-        mark_sbs.setOnClickListener {
-            val url = StatisticsConstants.URL_SBS
-            openUrl(url, null)
-        }
-
-        mark_mbc.setOnClickListener {
-            val url = StatisticsConstants.URL_MBC
-            openUrl(url, null)
-        }
-
-        mark_yeonhap.setOnClickListener {
-            val url = StatisticsConstants.URL_YNA
-            openUrl(url, null)
-        }
-
-//        mark_tvn.setOnClickListener {
-//            val url = "http://tvn.tving.com/"
+//        mark_youtube.setOnClickListener {
+//            val url = StatisticsConstants.URL_YOUTUBE
 //            openUrl(url, null)
 //        }
 //
-//        mark_ocn.setOnClickListener {
-//            val url = "http://ocn.tving.com/"
-//            openUrl(url, null)
+//        mark_bookmark.setOnClickListener {
+//            showBookmarks()
 //        }
-
-        mark_jtbc.setOnClickListener {
-            val url = StatisticsConstants.URL_JTBC
-            openUrl(url, null)
-        }
-
-        mark_mbn.setOnClickListener {
-            val url = StatisticsConstants.URL_MBN
-            openUrl(url, null)
-        }
-
-        mark_naver.setOnClickListener {
-            val url = StatisticsConstants.URL_NAVER
-            openUrl(url, null)
-        }
-
-        mark_bookmark.setOnClickListener {
-            showBookmarks()
-        }
-
-        img_banner.setOnClickListener {
-            (activity as LocaleAwareAppCompatActivity).openBanner()
-        }
 
        // updateTipsLabel()
     }
+
+    private var backKeyPressedTime: Long = 0
+    private lateinit var toast: Toast
 
     fun onBackPressed(): Boolean {
         if (isOverlay) {
             animateAndDismiss()
             return true
+        }
+
+        // 종료 시나리오 추가
+        // since 220803
+        // jhong
+        toast = Toast.makeText(activity, getString(R.string.txt_press_back_button), Toast.LENGTH_SHORT)
+
+        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis()
+            toast.show()
+            return true
+        } else if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            toast.cancel()
+            requireActivity().finish()
+            return false
         }
 
         return false
@@ -410,7 +389,7 @@ class UrlInputFragment :
         super.onStop()
 
         // Reset the keyboard layout to avoid a jarring animation when the view is started again. (#1135)
-        keyboardLinearLayout?.reset()
+//        keyboardLinearLayout?.reset()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -430,10 +409,33 @@ class UrlInputFragment :
         }
     }
 
+    private fun findRecyclerView(viewGroup: ViewGroup): Boolean {
+        val count = viewGroup.childCount
+        for (i in 0 until count) {
+            val view = viewGroup.getChildAt(i)
+            if (view is ViewGroup) findRecyclerView(view)
+            else if (view is RecyclerView) {
+                return true
+            }
+        }
+        return false
+    }
+
     // This method triggers the complexity warning. However it's actually not that hard to understand.
     @Suppress("ComplexMethod")
     override fun onClick(view: View) {
         when (view.id) {
+
+            R.id.backgroundView -> {
+                if(mainBookmarkViewModel.isEditMode) {
+                    if (findRecyclerView(view as ViewGroup)) {
+                        Log.e("TEST", "findRecyclerView OK")
+                    } else{
+                        Log.e("TEST", "findRecyclerView NOT OK")
+                    }
+                }
+            }
+
             R.id.dismissView -> handleDismiss()
 
             R.id.menuView -> showHomeMenu(view)
@@ -458,7 +460,7 @@ class UrlInputFragment :
                 )
             }
 
-            R.id.notice -> (activity as LocaleAwareAppCompatActivity).openNotice()
+            R.id.notice -> (activity as LocaleAwareAppCompatActivity).openNotice(0)
             R.id.privacy_policy -> (activity as LocaleAwareAppCompatActivity).openPrivacyPolicy()
             R.id.sign_out -> (activity as MainActivity).callDialogSignout()
 
@@ -479,13 +481,26 @@ class UrlInputFragment :
     }
 
     private fun showHomeMenu(anchor: View) = context?.let {
-        displayedPopupMenu = HomeMenu(it, this)
 
-        displayedPopupMenu?.show(anchor)
 
-        displayedPopupMenu?.dismissListener = {
-            displayedPopupMenu = null
+
+        // 기존 팝업 layout 에서 전체 설정 화면 layout 으로 UI 변경
+
+        try {
+            requireComponents.appStore.dispatch(
+                AppAction.OpenSettings(page = Screen.Settings.Page.Browser)
+            )
+        } catch (e: Exception) {
+
         }
+
+//        displayedPopupMenu = HomeMenu(it, this)
+//
+//        displayedPopupMenu?.show(anchor)
+//
+//        displayedPopupMenu?.dismissListener = {
+//            displayedPopupMenu = null
+//        }
     }
 
     private fun showBookmarks() = context?.let {
@@ -596,29 +611,6 @@ class UrlInputFragment :
                     }
                 })
         }
-
-        // We only need to animate the toolbar if we are an overlay.
-        /*
-        if (isOverlay) {
-            val screenLocation = IntArray(2)
-            //urlView?.getLocationOnScreen(screenLocation)
-
-            val leftDelta = requireArguments().getInt(ARGUMENT_X) - screenLocation[0] - urlView.paddingLeft
-
-            if (!reverse) {
-                //urlView?.pivotX = 0f
-                //urlView?.pivotY = 0f
-                //urlView?.translationX = leftDelta.toFloat()
-            }
-
-            if (urlView != null) {
-                // The URL moves from the right (at least if the lock is visible) to it's actual position
-                urlView.animate()
-                    .setDuration(ANIMATION_DURATION.toLong())
-                    .translationX((if (reverse) leftDelta else 0).toFloat())
-            }
-        }
-        */
 
         if (toolbarBackgroundView != null) {
 
@@ -795,4 +787,11 @@ class UrlInputFragment :
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
        // if (key == activity?.getString(R.string.pref_key_homescreen_tips)) { updateTipsLabel() }
     }
+
+    // bookmark 화면이 편집 모드 일 경우 viewpager2 swipe를 stop 처리
+    override fun onStopViewPagerSwipe(swipe: Boolean) {
+        viewpager_content.isUserInputEnabled = swipe
+    }
+
+
 }

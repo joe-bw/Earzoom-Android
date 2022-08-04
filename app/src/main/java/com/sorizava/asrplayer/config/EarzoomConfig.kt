@@ -48,6 +48,18 @@ open class EarzoomConfig(val context: Context) {
         get() = prefs.getString(APP_ID, "")!!
         set(appId) = prefs.edit().putString(APP_ID, appId).apply()
 
+    var naverClientId: String
+        get() = prefs.getString(NAVER_CLIENT_ID, "")!!
+        set(naverClientId) = prefs.edit().putString(NAVER_CLIENT_ID, appId).apply()
+
+    var naverClientSecret: String
+        get() = prefs.getString(NAVER_CLIENT_SECRET, "")!!
+        set(naverClientSecret) = prefs.edit().putString(NAVER_CLIENT_SECRET, appId).apply()
+
+    var naverClientName: String
+        get() = prefs.getString(NAVER_CLIENT_NAME, "")!!
+        set(naverClientName) = prefs.edit().putString(NAVER_CLIENT_NAME, appId).apply()
+
     var hideNotification: Boolean
         get() = prefs.getBoolean(HIDE_NOTIFICATION, false)
         set(hideNotification) = prefs.edit().putBoolean(HIDE_NOTIFICATION, hideNotification).apply()

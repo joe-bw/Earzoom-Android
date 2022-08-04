@@ -66,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/txt_bottom"
         app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +79,7 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="20dp" android:scaleType="fitStart"
             android:src="@drawable/img_logo_tta" />
 
     </LinearLayout>

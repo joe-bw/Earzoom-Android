@@ -67,4 +67,24 @@
     <string name="pref_key_asr_server_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_server_screen</xliff:g></string>
     <string name="pref_key_asr_caption_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_caption_screen</xliff:g></string>
 
+    <!-- add: sorizava setting main -->
+    <string name="pref_key_asr_main_caption_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_main_caption_screen</xliff:g></string>
+    <string name="pref_key_asr_main_bookmark_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_main_bookmark_screen</xliff:g></string>
+    <string name="pref_key_asr_main_general_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_main_general_screen</xliff:g></string>
+    <string name="pref_key_asr_main_search_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_main_search_screen</xliff:g></string>
+    <string name="pref_key_asr_main_system_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_main_system_screen</xliff:g></string>
+    <string name="pref_key_asr_main_privacy_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_main_privacy_screen</xliff:g></string>
+    <string name="pref_key_asr_main_helper_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_main_helper_screen</xliff:g></string>
+    <string name="pref_key_asr_main_copyright_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_main_copyright_screen</xliff:g></string>
+
+    <!-- add: sorizava setting browser -->
+    <string name="pref_key_asr_browser_caption_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_browser_caption_screen</xliff:g></string>
+    <string name="pref_key_asr_browser_add_main_app_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_browser_add_main_app_screen</xliff:g></string>
+    <string name="pref_key_asr_browser_add_main_device_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_browser_add_main_device_screen</xliff:g></string>
+    <string name="pref_key_asr_browser_search_page_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_browser_search_page_screen</xliff:g></string>
+    <string name="pref_key_asr_browser_show_pc_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_browser_show_pc_screen</xliff:g></string>
+    <string name="pref_key_asr_browser_bookmark_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_browser_bookmark_screen</xliff:g></string>
+    <string name="pref_key_asr_browser_other_browser_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_browser_other_browser_screen</xliff:g></string>
+    <string name="pref_key_asr_browser_system_screen" translatable="false"><xliff:g id="preference_key">pref_key_asr_browser_system_screen</xliff:g></string>
+
 </resources>

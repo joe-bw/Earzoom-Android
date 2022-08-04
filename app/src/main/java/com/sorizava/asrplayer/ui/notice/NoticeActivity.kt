@@ -19,7 +19,11 @@ import kr.co.sorizava.asrplayer.AppConfig
 import android.webkit.JavascriptInterface
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.sorizava.asrplayer.data.BoardType
 
+
+const val ARGUMENT_IDX = "ARGUMENT_IDX"
+const val ARGUMENT_URL = "ARGUMENT_URL"
 /**
  * 공지사항 activity
  * 알림을 통해 화면에 진입할 때의 예외사항이 있다.
@@ -31,12 +35,34 @@ class NoticeActivity : AppCompatActivity() {
             : WebSettings? = null
     private var webView: WebView? = null
     private val TAG_JAVA_INTERFACE = "SORIJAVA"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notice)
+
+        val argumentIdx = intent.getIntExtra(ARGUMENT_IDX, -1)
+        val argumentUrl = intent.getStringExtra(ARGUMENT_URL)
+
         webView = findViewById(R.id.webViewNotice)
+
+        when(argumentIdx) {
+            BoardType.NOTICE.type -> {
+                webView!!.loadUrl(AppConfig.getInstance().prefWebNoticeViewUrl)
+            }
+            BoardType.FAQ.type -> {
+                webView!!.loadUrl(AppConfig.getInstance().prefWebFaqViewUrl)
+            }
+            BoardType.EVENT.type -> {
+                webView!!.loadUrl(AppConfig.getInstance().prefWebEventViewUrl)
+            }
+        }
+
+        argumentUrl?.let {
+            webView!!.loadUrl(argumentUrl)
+        }
+
         context = this
-        webView!!.setWebViewClient(WebViewClient()) // 클릭시 새창 안뜨게
+        webView!!.webViewClient = WebViewClient() // 클릭시 새창 안뜨게
         mWebSettings = webView!!.getSettings() //세부 세팅 등록
         mWebSettings!!.javaScriptEnabled = true // 웹페이지 자바스클비트 허용 여부
         mWebSettings!!.setSupportMultipleWindows(false) // 새창 띄우기 허용 여부
@@ -49,7 +75,7 @@ class NoticeActivity : AppCompatActivity() {
         mWebSettings!!.cacheMode = WebSettings.LOAD_NO_CACHE // 브라우저 캐시 허용 여부
         mWebSettings!!.domStorageEnabled = true // 로컬저장소 허용 여부
         webView!!.addJavascriptInterface(WebBridge(), TAG_JAVA_INTERFACE)
-        webView!!.setWebChromeClient(object : WebChromeClient() {
+        webView!!.webChromeClient = object : WebChromeClient() {
             override fun onCreateWindow(
                 view: WebView,
                 bDialog: Boolean,
@@ -77,8 +103,11 @@ class NoticeActivity : AppCompatActivity() {
                 resultMsg.sendToTarget()
                 return true
             }
-        })
-        webView!!.loadUrl(AppConfig.getInstance().prefWebNoticeViewUrl)
+        }
+
+
+
+
     }
 
     internal inner class WebBridge {

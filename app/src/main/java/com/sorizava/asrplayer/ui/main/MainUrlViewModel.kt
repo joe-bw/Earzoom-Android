@@ -12,7 +12,7 @@ import androidx.lifecycle.viewModelScope
 import com.sorizava.asrplayer.data.ResultState
 import kotlinx.coroutines.flow.*
 
-class HomeViewModel : ViewModel() {
+class MainUrlViewModel : ViewModel() {
 
 
     private val homeContentsPrivate = MutableLiveData<String>()

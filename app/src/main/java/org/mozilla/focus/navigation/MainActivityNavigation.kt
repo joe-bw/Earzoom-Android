@@ -6,6 +6,8 @@ package org.mozilla.focus.navigation
 
 import android.content.Intent
 import android.util.Log
+import com.sorizava.asrplayer.ui.settings.BrowserSettingsFragment
+import com.sorizava.asrplayer.ui.settings.MainSettingsFragment
 import kr.co.sorizava.asrplayer.AsrConfigActivity
 import kr.co.sorizava.asrplayer.SubtitleSettingActivity
 import org.mozilla.focus.R
@@ -187,6 +189,8 @@ class MainActivityNavigation(
     fun settings(page: Screen.Settings.Page) {
         val fragment = when (page) {
             Screen.Settings.Page.Start -> SettingsFragment()
+            Screen.Settings.Page.Main -> MainSettingsFragment() // 추가
+            Screen.Settings.Page.Browser -> BrowserSettingsFragment() // 추가
             Screen.Settings.Page.General -> GeneralSettingsFragment()
             Screen.Settings.Page.Privacy -> PrivacySecuritySettingsFragment()
             Screen.Settings.Page.Search -> SearchSettingsFragment()

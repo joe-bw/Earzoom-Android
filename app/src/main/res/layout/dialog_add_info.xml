@@ -2,7 +2,6 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/shape_rectangle_r30"
-        android:backgroundTint="@color/pink"
+        android:background="@drawable/shape_rectangle_r10"
+        android:backgroundTint="@color/white"
         android:clipToPadding="false"
         android:elevation="8dp"
         android:maxWidth="400dp"
@@ -26,8 +25,9 @@
             android:id="@+id/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/seoul_namsan_eb"
             android:text="@string/txt_add_auth"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,9 +45,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/nanum_square_ac_r"
                 android:padding="10dp"
                 android:text="@string/txt_birth"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="20sp" />
 
             <com.google.android.material.button.MaterialButton
@@ -59,7 +60,7 @@
                 android:elevation="16dp"
                 android:padding="10dp"
                 android:text="@string/txt_select_birth"
-                android:textColor="@color/pink"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:cornerRadius="10dp"
                 app:rippleColor="@color/white"
@@ -83,14 +84,14 @@
                     android:digits="0123456789"
                     android:gravity="center"
                     android:inputType="numberDecimal"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white" />
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/txt_comma_year"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/black" />
 
                 <EditText
                     android:id="@+id/edit_month"
@@ -100,14 +101,14 @@
                     android:digits="0123456789"
                     android:gravity="center"
                     android:inputType="numberDecimal"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white" />
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/txt_comma_month"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/black" />
 
                 <EditText
                     android:id="@+id/edit_day"
@@ -117,23 +118,24 @@
                     android:digits="0123456789"
                     android:gravity="center"
                     android:inputType="numberDecimal"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white" />
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/txt_comma_day"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                android:fontFamily="@font/nanum_square_ac_r"
                 android:padding="10dp"
                 android:text="@string/txt_phone"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="20sp" />
 
             <EditText
@@ -143,13 +145,14 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:digits="0123456789"
+                android:fontFamily="@font/nanum_square_ac_r"
                 android:hint="@string/txt_phone_explain"
                 android:imeOptions="actionDone"
                 android:inputType="phone"
                 android:maxLength="14"
                 android:minWidth="300dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -157,12 +160,16 @@
                 android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
-                <CheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/chk_privacy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_ac_r"
                     android:text="@string/txt_privacy_policy"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black" android:checked="true"
+
+
+
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -174,8 +181,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:background="@color/transparent"
+                    android:fontFamily="@font/nanum_square_ac_r"
                     android:text="@string/txt_detail"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -202,13 +210,14 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
                 android:elevation="16dp"
+                android:fontFamily="@font/seoul_namsan_eb"
                 android:padding="10dp"
                 android:text="@string/action_cancel"
-                android:textColor="@color/pink"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:cornerRadius="10dp"
-                app:rippleColor="@color/white"
-                app:strokeColor="@color/white" />
+                app:rippleColor="@color/black"
+                app:strokeColor="@color/black" />
 
             <View
                 android:id="@+id/empty_divider"
@@ -221,13 +230,14 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
                 android:elevation="16dp"
+                android:fontFamily="@font/seoul_namsan_eb"
                 android:padding="10dp"
                 android:text="@string/action_ok"
-                android:textColor="@color/pink"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 app:cornerRadius="10dp"
-                app:rippleColor="@color/white"
-                app:strokeColor="@color/white" />
+                app:rippleColor="@color/black"
+                app:strokeColor="@color/black" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

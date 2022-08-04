@@ -6,5 +6,6 @@
 package com.sorizava.asrplayer.ui.base
 
 interface ItemSelectedListener<T> {
-    fun onSelectedItem(item: T)
+    fun onSelectedItem(item: T) {}
+    fun onLongSelectedItem(item: T) {}
 }

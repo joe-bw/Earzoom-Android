@@ -40,7 +40,7 @@ abstract class BaseActivity<VB : ViewBinding>(private val inflate: Inflates<VB>)
         initView(savedInstanceState)
         initViewModelObserver()
 
-        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+//        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 
     override fun onDestroy() {

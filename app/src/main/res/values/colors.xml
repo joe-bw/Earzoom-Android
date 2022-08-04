@@ -3,12 +3,12 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="colorPrimaryDark">#6c3b6e</color>
-    <color name="colorAccent_old">@color/focusContrastPink</color>
+    <color name="colorPrimaryDark">#66FBFBFE</color>
+    <color name="colorAccent_old">@color/accentBright</color>
     <color name="disabled">#66FBFBFE</color>
     <color name="focusContrastPink">#e452B9</color>
 
-    <color name="colorSettingsTint">#f9f9fa</color>
+    <color name="colorSettingsTint">@color/black</color>
     <color name="colorAccentSettings">@color/accentBright</color>
 
     <color name="colorGradientStart">#a90742</color>
@@ -47,7 +47,7 @@
 
     <color name="colorOverlay">#cc000000</color>
 
-    <color name="disabledText">#BFBFC9</color>
+    <color name="disabledText">#272727</color>
 
     <color name="colorTextInactive">#80FFFFFF</color>
     <color name="urlBarHintText">#ffbbbcc5</color>
@@ -56,7 +56,8 @@
     <color name="snackbarTextColor">#ffffffff</color>
     <color name="snackbarActionText">@color/photonBlue50</color>
 
-    <color name="statusBarBackground">#1D1133</color>
+<!--    <color name="statusBarBackground">#1D1133</color>-->
+    <color name="statusBarBackground">@color/white</color>
 
     <color name="searchSuggestionsBackground">@color/photonInk80</color>
 
@@ -116,32 +117,33 @@
     <color name="home_screen_dialog_bg">@color/colorSecondary</color>
     <color name="home_screen_dialog_button_text">@color/focusContrastPink</color>
     <color name="home_screen_dialog_bg_tint">@color/focusContrastPink</color>
-    <color name="home_screen_dialog_text">@color/photonGrey10</color>
+    <color name="home_screen_dialog_text">@color/black</color>
     <color name="home_screen_dialog_highlight">@color/focusContrastPink</color>
 
     <color name="home_screen_dialog_warning_bg">#353852</color>
     <color name="home_screen_dialog_warning_text">#96f9f9fa</color>
 
-    <color name="settings_summary_text">#ffbbbcc5</color>
+    <color name="settings_summary_text">@color/black</color>
     <color name="settings_whats_new">@color/accentBright</color>
 
-    <color name="colorPrimary">#271948</color>
-    <color name="colorSecondary">#342F6D</color>
+    <color name="colorPrimary">@color/black</color>
+    <color name="colorSecondary">@color/black</color>
     <color name="menuBackground">@color/colorSecondary</color>
     <color name="headerGradientStart">#2B2154</color>
     <color name="headerGradientMiddle">#281D4C</color>
     <color name="headerGradientEnd">#2A2051</color>
     <color name="divider">#342F6D</color>
-    <color name="accentBright">#FF4AA2</color>
+    <color name="accentBright">#37adff</color>
     <color name="accent">#C60084</color>
     <color name="destructive">#FF6A75</color>
-    <color name="primaryText">@color/photonLightGrey05</color>
-    <color name="secondaryText">@color/photonLightGrey50</color>
+    <color name="primaryText">@color/black</color>
+    <color name="secondaryText">@color/black</color>
 
     <!-- Preferences -->
-    <color name="preference_summary_text">#BFBFC9</color>
-    <color name="settings_background">#1D1133</color>
-    <color name="preference_learn_more_link">#FF4AA2</color>
+    <color name="preference_summary_text">@color/black</color>
+<!--    <color name="settings_background">#1D1133</color>-->
+    <color name="settings_background">@color/white</color>
+    <color name="preference_learn_more_link">@color/accentBright</color>
     <color name="selected_search_engine">#FF4AA2</color>
 
     <!-- Add : sorizava -->
@@ -233,21 +235,21 @@
     <!--
     <color name="divider">@color/photonInk80</color>
     -->
-    s
+
     <color name="toast_bg">#ee404040</color>
 
-    <color name="setting_bg">@color/photonInk80</color>
-    <color name="setting_list_bg">@color/photonInk80</color>
-    <color name="setting_list_header_text_color">@color/settings_summary_text</color>
-    <color name="setting_list_item_bg">@color/photonInk80</color>
-    <color name="setting_list_item_text_color">@color/white</color>
+    <color name="setting_bg">@color/white</color>
+    <color name="setting_list_bg">@color/white</color>
+    <color name="setting_list_header_text_color">@color/black</color>
+    <color name="setting_list_item_bg">@color/white</color>
+    <color name="setting_list_item_text_color">@color/black</color>
 
 
     <!-- Settings -->
-    <color name="trackingProtectionSheetBackground" tools:ignore="MissingDefaultResource">#1D1133</color>
-    <color name="primaryTextColor" tools:ignore="MissingDefaultResource">#FBFBFE</color>
-    <color name="toolbarUrlDarkBackground" tools:ignore="MissingDefaultResource">#1D1133</color>
-    <color name="toolbarUrlLightBackground" tools:ignore="MissingDefaultResource">#FBFBFE</color>
+    <color name="trackingProtectionSheetBackground" tools:ignore="MissingDefaultResource">@color/black</color>
+    <color name="primaryTextColor" tools:ignore="MissingDefaultResource">@color/black</color>
+    <color name="toolbarUrlDarkBackground" tools:ignore="MissingDefaultResource">@color/black</color>
+    <color name="toolbarUrlLightBackground" tools:ignore="MissingDefaultResource">@color/black</color>
 
     <!-- Home Tips -->
     <color name="inactive_dot_background" tools:ignore="MissingDefaultResource">#66FBFBFE</color>
@@ -257,10 +259,12 @@
 
 
     <!-- Toolbar -->
-    <color name="toolbar_color" tools:ignore="MissingDefaultResource">#271948</color>
+    <color name="toolbar_color" tools:ignore="MissingDefaultResource">@color/black</color>
     <!-- Temporary colors until light theme it will be implemented -->
     <color name="enabled_toolbar_button_color" tools:ignore="MissingDefaultResource">#000000</color>
 
     <color name="pink">#FF819A</color>
 
+    <color name="tab_text_normal">@color/black</color>
+    <color name="tab_text_selected">@color/item_tint_color</color>
 </resources>

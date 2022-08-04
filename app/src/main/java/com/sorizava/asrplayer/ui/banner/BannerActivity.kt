@@ -58,7 +58,7 @@ class BannerActivity : AppCompatActivity() {
                 dialog.setContentView(newWebView)
                 val lp = WindowManager.LayoutParams()
                 lp.copyFrom(dialog.window!!.attributes)
-                lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT
                 lp.height = WindowManager.LayoutParams.MATCH_PARENT
                 dialog.show()
                 val window = dialog.window

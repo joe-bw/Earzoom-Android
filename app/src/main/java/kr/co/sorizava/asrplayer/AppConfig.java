@@ -360,6 +360,8 @@ public class AppConfig {
 
     private final String PREF_WEB_ADDINFO_URL = "PREF_WEB_ADDINFO_URL";
     private final String PREF_WEB_NOTICEVIEW_URL = "PREF_WEB_NOTICEVIEW_URL";
+    private final String PREF_WEB_FAQVIEW_URL = "PREF_WEB_FAQVIEW_URL";
+    private final String PREF_WEB_EVENTVIEW_URL = "PREF_WEB_EVENTVIEW_URL";
     private final String PREF_WEB_PRIVACY_URL = "PREF_WEB_PRIVACY_URL";
 
     public void clearPrefstatistics() {
@@ -429,9 +431,19 @@ public class AppConfig {
         edit.apply();
     }
 
-    // get Web server add info url
+    // get Web server notice view url
     public String getPrefWebNoticeViewUrl() {
         return mSharedPref.getString(PREF_WEB_NOTICEVIEW_URL, ZerothDefine.API_WEB_URL_NOTICEVIEW);
+    }
+
+    // get Web server faq view url
+    public String getPrefWebFaqViewUrl() {
+        return mSharedPref.getString(PREF_WEB_FAQVIEW_URL, ZerothDefine.API_WEB_URL_FAQVIEW);
+    }
+
+    // get Web server event view url
+    public String getPrefWebEventViewUrl() {
+        return mSharedPref.getString(PREF_WEB_EVENTVIEW_URL, ZerothDefine.API_WEB_URL_EVENTVIEW);
     }
 
     // set Web server add info url

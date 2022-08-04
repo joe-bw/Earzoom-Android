@@ -7,18 +7,20 @@ package com.sorizava.asrplayer.config
 import android.content.Context
 import android.content.SharedPreferences
 
-class LoginManager(applicationContext: Context) {
-    private val KEY_LOGIN_AUTO = "isloginAuto"
-    private val KEY_USER_SNS_ID = "userSNSId"
-    private val KEY_USER_SNS_TYPE = "userSNSType"
-    private val KEY_DEVICE_TOKEN = "deviceToken"
 
-    /** 2021.10.31 생년월일, 폰번호 저장 pref  */
-    private val PREF_KEY_USER_BIRTH = "PREF_KEY_USER_BIRTH"
-    private val PREF_KEY_USER_PHONE = "PREF_KEY_USER_PHONE"
+private const val KEY_LOGIN_AUTO = "isloginAuto"
+private const val KEY_USER_SNS_ID = "userSNSId"
+private const val KEY_USER_SNS_TYPE = "userSNSType"
+private const val KEY_DEVICE_TOKEN = "deviceToken"
 
-    /** 2021.11.01 웹서버 ID pref  */
-    private val PREF_KEY_USER_ID = "PREF_KEY_USER_ID"
+/** 2021.10.31 생년월일, 폰번호 저장 pref  */
+private const val PREF_KEY_USER_BIRTH = "PREF_KEY_USER_BIRTH"
+private const val PREF_KEY_USER_PHONE = "PREF_KEY_USER_PHONE"
+
+/** 2021.11.01 웹서버 ID pref  */
+private const val PREF_KEY_USER_ID = "PREF_KEY_USER_ID"
+
+class SorizavaLoginManager(applicationContext: Context) {
     private val app_prefs: SharedPreferences
     fun clear() {
         val edit = app_prefs.edit()
@@ -100,12 +102,12 @@ class LoginManager(applicationContext: Context) {
         const val SNS_TYPE_FACEBOOK = 2
         const val SNS_TYPE_GOOGLE = 3
         @JvmStatic
-        var instance: LoginManager? = null
+        var instance: SorizavaLoginManager? = null
             private set
 
         fun onInit(applicationContext: Context) {
             if (instance == null) {
-                instance = LoginManager(applicationContext)
+                instance = SorizavaLoginManager(applicationContext)
             }
         }
     }

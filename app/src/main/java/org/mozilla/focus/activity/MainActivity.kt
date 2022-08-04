@@ -7,20 +7,23 @@ package org.mozilla.focus.activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.user.UserApiClient
-import com.nhn.android.naverlogin.OAuthLogin
-import com.sorizava.asrplayer.config.LoginManager
+import com.sorizava.asrplayer.config.SorizavaLoginManager
 import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_JTBC
 import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_KBS
 import com.sorizava.asrplayer.config.StatisticsConstants.CASE_URL_MBC
@@ -45,6 +48,8 @@ import com.sorizava.asrplayer.data.vo.EndStatisticsRequest
 import com.sorizava.asrplayer.data.vo.LoginDataVO
 import com.sorizava.asrplayer.data.vo.LogoutRequest
 import com.sorizava.asrplayer.data.vo.StartStatisticsRequest
+import com.sorizava.asrplayer.extension.handleFocus
+import com.sorizava.asrplayer.extension.hideKeyboard
 import com.sorizava.asrplayer.network.AppApiClient
 import com.sorizava.asrplayer.network.AppApiResponse
 import kr.co.sorizava.asrplayer.AppConfig
@@ -91,9 +96,10 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Because some MVP characteristics are set from xml files we need to choose the mode of the theme
-        // according to MVP flag and not by system theme mode
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        // Light mode 로 동작
+        // since 220801
+        // jhong
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         if (!isTaskRoot) {
             if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && Intent.ACTION_MAIN == intent.action) {
@@ -298,12 +304,6 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
 //            browserFragment.onCheckStartURL()
             browserFragment.onCallEndTime()
-
-//            Log.d("TEST", "browserFragment gone1: " + components.store.state.selectedTab?.content?.url)
-//            Log.d("TEST", "browserFragment gone2: " + components.store.state.selectedTab?.content?.titleOrDomain)
-//            Log.d("TEST", "browserFragment gone3: " + components.store.state.selectedTabId.orEmpty())
-
-
             return
         }
 
@@ -378,9 +378,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         val fragmentManager = supportFragmentManager
         val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?
 
-        if (browserFragment != null) {
-            browserFragment.onMessageSubtitle(msg)
-        }
+        browserFragment?.onMessageSubtitle(msg)
     }
 
     override fun onMessageSubtitle(msg: String, final: Boolean) {
@@ -390,9 +388,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         val fragmentManager = supportFragmentManager
         val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?
 
-        if (browserFragment != null) {
-            browserFragment.resetSubtitleView(true)
-        }
+        browserFragment?.resetSubtitleView(true)
     }
 
     // url 추적 로직 추가
@@ -407,7 +403,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         if (TextUtils.isEmpty(AppConfig.getInstance().prefStartTimeSeq)){
             callStartTime(url)
         } else {
-            if (url.equals(AppConfig.getInstance().prefStartURL)){
+            if (url == AppConfig.getInstance().prefStartURL){
                 return
             } else {
                 callEndAndStartTime(url)
@@ -417,9 +413,9 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
     fun callStartTime(url: String) {
 
-        var caseUrl = checkCategoryOrEtc(url)
+        val caseUrl = checkCategoryOrEtc(url)
 
-        val id = LoginManager.instance?.prefUserId ?: return
+        val id = SorizavaLoginManager.instance?.prefUserId ?: return
 
         val currentTime = Calendar.getInstance().time
 
@@ -436,29 +432,26 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         )
 
         val call = AppApiClient.apiService.requestStartStatistics(request)
-        call?.enqueue(object : Callback<AppApiResponse<StartStatisticsDataVO?>?> {
-            override fun onResponse(call: Call<AppApiResponse<StartStatisticsDataVO?>?>, response: Response<AppApiResponse<StartStatisticsDataVO?>?>) {
+        call.enqueue(object : Callback<AppApiResponse<StartStatisticsDataVO>> {
+
+            override fun onResponse(
+                call: Call<AppApiResponse<StartStatisticsDataVO>>,
+                response: Response<AppApiResponse<StartStatisticsDataVO>>
+            ) {
                 Log.d(TAG, "callStartTime - response.code(): " + response.code())
                 if (response.isSuccessful) {
                     Log.d(TAG, "callStartTime - isSuccessful")
                     val result: AppApiResponse<*> = response.body()!!
                     Log.d(TAG, "callStartTime - onResponse - result: $result")
-
-//                    val startData = result.data as StartStatisticsDataVO
-//                    val data = startData.result as DataResultVO
-//
-//                    AppConfig.getInstance().prefStartTimeSeq = data.statisticsSeq
-//                    AppConfig.getInstance().prefStartURL = url
-//
-//                    if (AppConfig.getInstance().prefInitStartTimeSeq.isEmpty()) {
-//                        AppConfig.getInstance().prefInitStartTimeSeq = data.statisticsSeq
-//                    }
                 } else {
                     Log.d(TAG, "callStartTime - fail")
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<StartStatisticsDataVO?>?>, t: Throwable) {
+            override fun onFailure(
+                call: Call<AppApiResponse<StartStatisticsDataVO>>,
+                t: Throwable
+            ) {
                 Log.d(TAG, "callStartTime - onFailure - result: " + t.message)
             }
         })
@@ -485,8 +478,8 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         )
 
         val call = AppApiClient.apiService.requestEndStatistics(request)
-        call?.enqueue(object : Callback<AppApiResponse<Int?>?> {
-            override fun onResponse(call: Call<AppApiResponse<Int?>?>, response: Response<AppApiResponse<Int?>?>) {
+        call.enqueue(object : Callback<AppApiResponse<Int>> {
+            override fun onResponse(call: Call<AppApiResponse<Int>>, response: Response<AppApiResponse<Int>>) {
                 Log.d(TAG, "callEndAndStartTime - response.code(): " + response.code())
                 if (response.isSuccessful) {
                     Log.d(TAG, "callEndAndStartTime - isSuccessful")
@@ -501,7 +494,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<Int?>?>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<Int>>, t: Throwable) {
                 Log.d(TAG, "callEndAndStartTime - onFailure - result: " + t.message)
             }
         })
@@ -521,8 +514,8 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         )
 
         val call = AppApiClient.apiService.requestEndStatistics(request)
-        call?.enqueue(object : Callback<AppApiResponse<Int?>?> {
-            override fun onResponse(call: Call<AppApiResponse<Int?>?>, response: Response<AppApiResponse<Int?>?>) {
+        call.enqueue(object : Callback<AppApiResponse<Int>> {
+            override fun onResponse(call: Call<AppApiResponse<Int>>, response: Response<AppApiResponse<Int>>) {
                 Log.d(TAG, "callEndTime - response.code(): " + response.code())
                 if (response.isSuccessful) {
                     Log.d(TAG, "callEndTime - isSuccessful")
@@ -535,7 +528,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<Int?>?>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<Int>>, t: Throwable) {
                 Log.d(TAG, "callEndTime - onFailure - result: " + t.message)
             }
         })
@@ -555,8 +548,8 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         )
 
         val call = AppApiClient.apiService.requestEndStatistics(request)
-        call?.enqueue(object : Callback<AppApiResponse<Int?>?> {
-            override fun onResponse(call: Call<AppApiResponse<Int?>?>, response: Response<AppApiResponse<Int?>?>) {
+        call.enqueue(object : Callback<AppApiResponse<Int>> {
+            override fun onResponse(call: Call<AppApiResponse<Int>>, response: Response<AppApiResponse<Int>>) {
                 Log.d(TAG, "callInitEndTime - response.code(): " + response.code())
                 if (response.isSuccessful) {
                     Log.d(TAG, "callInitEndTime - isSuccessful")
@@ -569,7 +562,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<Int?>?>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<Int>>, t: Throwable) {
                 Log.d(TAG, "callInitEndTime - onFailure - result: " + t.message)
             }
         })
@@ -624,15 +617,15 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
     private fun callLogout() {
 
-        val userID = LoginManager.instance?.prefUserId
+        val userID = SorizavaLoginManager.instance?.prefUserId
 
         val request = userID?.let { LogoutRequest(it) }
 
-        val call = AppApiClient.apiService.requestLogout(request)
-        call?.enqueue(object : Callback<AppApiResponse<LoginDataVO?>?> {
+        val call = request?.let { AppApiClient.apiService.requestLogout(it) }
+        call?.enqueue(object : Callback<AppApiResponse<LoginDataVO>> {
             override fun onResponse(
-                call: Call<AppApiResponse<LoginDataVO?>?>,
-                response: Response<AppApiResponse<LoginDataVO?>?>
+                call: Call<AppApiResponse<LoginDataVO>>,
+                response: Response<AppApiResponse<LoginDataVO>>
             ) {
                 Log.d(TAG, "response.code(): " + response.code())
                 Log.d(TAG, "response.body(): " + response.body())
@@ -644,9 +637,9 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                     /** FCM 구독 설정 해제 */
                     FirebaseMessaging.getInstance().unsubscribeFromTopic(ZerothDefine.FCM_SUBSCRIBE_NAME)
 
-                    LoginManager.instance?.userSNSType?.let { onSNSLogout(it) }
+                    SorizavaLoginManager.instance?.userSNSType?.let { onSNSLogout(it) }
 
-                    LoginManager.instance?.clear()
+                    SorizavaLoginManager.instance?.clear()
 
 //                    startActivity(Intent(this@MainActivity, LoginActivity::class.java))
 //                    finish()
@@ -656,7 +649,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<LoginDataVO?>?>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<LoginDataVO>>, t: Throwable) {
                 Log.d(TAG, "onFailure - result: " + t.message)
             }
         })
@@ -676,7 +669,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
     private fun onSNSLogout(snsType : Int) {
 
         when(snsType) {
-            0 -> OAuthLogin.getInstance().logout(this)
+//            0 -> OAuthLogin.getInstance().logout(this)
 
             1 -> UserApiClient.instance.logout { error ->
                     if (error != null) {
@@ -691,5 +684,23 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
             3 -> FirebaseAuth.getInstance().signOut()
         }
+    }
+
+    /** 검색어 뷰 이외 터치시 키보드 닫기 */
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        val focusView = currentFocus
+        if (focusView != null && focusView is EditText) {
+            val rect = Rect()
+            focusView.getGlobalVisibleRect(rect)
+            val x = ev.x.toInt()
+            val y = ev.y.toInt()
+            if (!rect.contains(x, y)) {
+                focusView.hideKeyboard()
+                focusView.clearFocus()
+            } else {
+                focusView.handleFocus()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
     }
 }

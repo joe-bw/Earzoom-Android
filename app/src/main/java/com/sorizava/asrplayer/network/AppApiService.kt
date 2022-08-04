@@ -21,29 +21,36 @@ import retrofit2.http.Body
  * "deviceToken":"device_token_test"
  */
 interface AppApiService {
+
+    @POST("api/member/getMember")
+    fun requestMember(
+        @Body param: LoginNewRequest
+    ): Response<AppApiResponse<LoginDataVO>>
+
+
     @POST("api/member/getMember")
     fun requestMemberInfo(
         @Body param: LoginNewRequest
-    ): Response<AppApiResponse<LoginDataVO>>
+    ): Call<AppApiResponse<LoginDataVO>>
 
     @POST("api/member/deleteMember")
     fun requestLogout(
         @Body param: LogoutRequest
-    ): Response<AppApiResponse<LoginDataVO>>
+    ): Call<AppApiResponse<LoginDataVO>>
 
     // 더이상 쓰지 않음
     @POST("api/member/loginMember")
     fun requestLogin(
         @Body param: LoginNewRequest
-    ): Response<AppApiResponse<LoginDataVO>>
+    ): Call<AppApiResponse<LoginDataVO>>
 
     @POST("api/stStatistics")
     fun requestStartStatistics(
         @Body param: StartStatisticsRequest
-    ): Response<AppApiResponse<StartStatisticsDataVO>>
+    ): Call<AppApiResponse<StartStatisticsDataVO>>
 
     @POST("api/endStatistics")
     fun requestEndStatistics(
         @Body param: EndStatisticsRequest
-    ): Response<AppApiResponse<Int>>
+    ): Call<AppApiResponse<Int>>
 }

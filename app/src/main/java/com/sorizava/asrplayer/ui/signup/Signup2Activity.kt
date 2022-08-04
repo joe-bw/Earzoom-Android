@@ -18,7 +18,7 @@ import android.webkit.WebView.WebViewTransport
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.sorizava.asrplayer.config.LoginManager.Companion.instance
+import com.sorizava.asrplayer.config.SorizavaLoginManager
 import com.sorizava.asrplayer.data.vo.LoginDataVO
 import com.sorizava.asrplayer.data.vo.LoginNewRequest
 import com.sorizava.asrplayer.network.AppApiClient.apiService
@@ -104,16 +104,20 @@ class Signup2Activity : AppCompatActivity() {
         @JavascriptInterface
         fun callbackAndroid(result: Int) {
             runOnUiThread {
-                if (result == 1) {
-                    callMemberInfo()
-                } else if (result == 2) {
-                    reLogin()
-                } else {
-                    Toast.makeText(
-                        this@Signup2Activity,
-                        getString(R.string.web_callback_error),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                when (result) {
+                    1 -> {
+                        callMemberInfo()
+                    }
+                    2 -> {
+                        reLogin()
+                    }
+                    else -> {
+                        Toast.makeText(
+                            this@Signup2Activity,
+                            getString(R.string.web_callback_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
@@ -144,14 +148,14 @@ class Signup2Activity : AppCompatActivity() {
 
     /** 2021.10.31 회원 가입 여부 확인, 가입이 되어 있다면 그대로 앱 사용, 가입이 되어 있지 않다면 회원 가입 웹뷰 요청  */
     private fun callMemberInfo() {
-        val birth = instance!!.prefUserBirth
-        val phone = instance!!.prefUserPhone
+        val birth = SorizavaLoginManager.instance!!.prefUserBirth
+        val phone = SorizavaLoginManager.instance!!.prefUserPhone
         val request = LoginNewRequest(birth!!, phone!!)
         val call = apiService.requestMemberInfo(request)
-        call!!.enqueue(object : Callback<AppApiResponse<LoginDataVO?>?> {
+        call.enqueue(object : Callback<AppApiResponse<LoginDataVO>> {
             override fun onResponse(
-                call: Call<AppApiResponse<LoginDataVO?>?>,
-                response: Response<AppApiResponse<LoginDataVO?>?>
+                call: Call<AppApiResponse<LoginDataVO>>,
+                response: Response<AppApiResponse<LoginDataVO>>
             ) {
                 Log.d(TAG, "response.code(): " + response.code())
                 if (response.isSuccessful) {
@@ -161,21 +165,18 @@ class Signup2Activity : AppCompatActivity() {
                     if (result.status == 200) {
                         val data = result.data as LoginDataVO?
                         val member = data!!.member
-                        instance!!.prefUserId = member!!.id
+                        SorizavaLoginManager.instance!!.prefUserId = member!!.id
                         gotoMainActivity()
                     } else {
                         reLogin()
                     }
                 } else {
                     Log.d(TAG, "fail")
-                    //                    if(response.code() == 404) {
-//                        reLogin();
-//                    }
                     reLogin()
                 }
             }
 
-            override fun onFailure(call: Call<AppApiResponse<LoginDataVO?>?>, t: Throwable) {
+            override fun onFailure(call: Call<AppApiResponse<LoginDataVO>>, t: Throwable) {
                 Log.d(TAG, "onFailure - result: " + t.message)
             }
         })

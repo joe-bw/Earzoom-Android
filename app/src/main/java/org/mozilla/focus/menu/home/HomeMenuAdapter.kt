@@ -27,7 +27,6 @@ class HomeMenuAdapter(
     private val items: List<MenuItem> = listOf(
         // add: sorizava bookmark
 
-
         MenuItem(R.id.notice, MenuItemViewHolder.LAYOUT_ID, context.getString(R.string.menu_notice)),
 
         MenuItem(R.id.bookmarks, MenuItemViewHolder.LAYOUT_ID, context.getString(R.string.menu_bookmarks)),
@@ -111,7 +110,7 @@ private class WhatsNewViewHolder(
         val updated = WhatsNew.shouldHighlightWhatsNew(itemView.context)
 
         if (updated) {
-            itemView.setBackgroundResource(R.drawable.menu_item_dark_background)
+            itemView.setBackgroundResource(R.drawable.white)
         }
 
         itemView.setOnClickListener(listener)

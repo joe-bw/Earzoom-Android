@@ -4,6 +4,9 @@
 
 package org.mozilla.focus.locale;
 
+import static com.sorizava.asrplayer.ui.notice.NoticeActivityKt.ARGUMENT_IDX;
+import static com.sorizava.asrplayer.ui.notice.NoticeActivityKt.ARGUMENT_URL;
+
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -14,9 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.TextUtilsCompat;
 import androidx.core.view.ViewCompat;
 
-import com.sorizava.asrplayer.ui.banner.BannerActivity;
 import com.sorizava.asrplayer.ui.notice.NoticeActivity;
 import com.sorizava.asrplayer.ui.privacy.PrivacyPolicyActivity;
+
 import org.mozilla.focus.utils.Settings;
 
 import java.util.Locale;
@@ -88,8 +91,16 @@ public abstract class LocaleAwareAppCompatActivity
     /**
      * Open the notice preferences.
      */
-    public void openNotice() {
-        final Intent settingsIntent = new Intent(this, NoticeActivity.class);
+    public void openNotice(int idx) {
+        final Intent settingsIntent = new Intent(this, NoticeActivity.class).putExtra(ARGUMENT_IDX, idx);
+        startActivityForResult(settingsIntent, 0);
+    }
+
+    /**
+     * Open the notice preferences.
+     */
+    public void openNotice(String url) {
+        final Intent settingsIntent = new Intent(this, NoticeActivity.class).putExtra(ARGUMENT_URL, url);
         startActivityForResult(settingsIntent, 0);
     }
 
@@ -100,15 +111,6 @@ public abstract class LocaleAwareAppCompatActivity
         final Intent settingsIntent = new Intent(this, PrivacyPolicyActivity.class);
         startActivityForResult(settingsIntent, 0);
     }
-
-    /**
-     * Open the banner view.
-     */
-    public void openBanner() {
-        final Intent settingsIntent = new Intent(this, BannerActivity.class);
-        startActivityForResult(settingsIntent, 0);
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
