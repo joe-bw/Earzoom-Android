@@ -52,11 +52,11 @@ import com.sorizava.asrplayer.extension.handleFocus
 import com.sorizava.asrplayer.extension.hideKeyboard
 import com.sorizava.asrplayer.network.AppApiClient
 import com.sorizava.asrplayer.network.AppApiResponse
-import kr.co.sorizava.asrplayer.AppConfig
-import kr.co.sorizava.asrplayer.ZerothDefine
-import kr.co.sorizava.asrplayer.websocket.WsManager
-import kr.co.sorizava.asrplayer.websocket.WsStatus
-import kr.co.sorizava.asrplayer.websocket.listener.WsStatusListener
+import kr.co.sorizava.asrplayerKt.AppConfig
+import kr.co.sorizava.asrplayerKt.ZerothDefine
+import kr.co.sorizava.asrplayerKt.websocket.WsManager
+import kr.co.sorizava.asrplayerKt.websocket.WsStatus
+import kr.co.sorizava.asrplayerKt.websocket.listener.WsStatusListener
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.lib.crash.Crash
 import mozilla.components.support.utils.SafeIntent
@@ -131,8 +131,8 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
         lifecycle.addObserver(navigator)
 
-        WsManager.getInstance().configure(48000, 2)
-        WsManager.getInstance().setListener(this, this)
+        WsManager.getInstance()?.configure(48000, 2)
+        WsManager.getInstance()?.setListener(this, this)
 
 
       //  audioMonitorThread = AudioMonitorThread()
@@ -179,7 +179,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
         focusApplication.goBookmarkUrl = ""
 */
-        WsManager.getInstance().startConnect()
+        WsManager.getInstance()?.startConnect()
 
         TelemetryWrapper.startSession()
         checkBiometricStillValid()
@@ -187,7 +187,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
     override fun onPause() {
         Log.e("TEST", "##onPause")
-        WsManager.getInstance().stopConnect()
+        WsManager.getInstance()?.stopConnect()
 
         val fragmentManager = supportFragmentManager
         val browserFragment =
@@ -374,15 +374,18 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         mASRServerConnectionStatus = status
     }
 
-    override fun onMessageSubtitle(msg: String) {
+    override fun onMessageSubtitle(msg: String?, isFinal: Boolean) {
+        //TODO("Not yet implemented")
+    }
+
+    override fun onMessageSubtitle(msg: String?) {
+        //TODO("Not yet implemented")
         val fragmentManager = supportFragmentManager
         val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?
 
-        browserFragment?.onMessageSubtitle(msg)
+        browserFragment?.onMessageSubtitle(msg!!)
     }
 
-    override fun onMessageSubtitle(msg: String, final: Boolean) {
-    }
 
     override fun resetSubtitleView() {
         val fragmentManager = supportFragmentManager
@@ -400,10 +403,10 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
     }
 
     private fun checkStartTime(url: String) {
-        if (TextUtils.isEmpty(AppConfig.getInstance().prefStartTimeSeq)){
+        if (TextUtils.isEmpty(AppConfig.getInstance()?.getPrefStartTimeSeq())){
             callStartTime(url)
         } else {
-            if (url == AppConfig.getInstance().prefStartURL){
+            if (url == AppConfig.getInstance()?.getPrefStartURL()){
                 return
             } else {
                 callEndAndStartTime(url)
@@ -459,7 +462,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
     fun callEndAndStartTime(url: String) {
 
-        val statisticsSeq = AppConfig.getInstance().prefStartTimeSeq
+        val statisticsSeq = AppConfig.getInstance()?.getPrefStartTimeSeq()
 
         if (TextUtils.isEmpty(statisticsSeq)) {
 //            callStartTime(url)
@@ -473,7 +476,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         val endTime = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(currentTime)
 
         val request = EndStatisticsRequest(
-            statisticsSeq,
+            statisticsSeq!!,
             endTime
         )
 
@@ -502,14 +505,14 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
     fun callEndTime() {
 
-        val statisticsSeq = AppConfig.getInstance().prefStartTimeSeq
+        val statisticsSeq = AppConfig.getInstance()?.getPrefStartTimeSeq()
 
         val currentTime = Calendar.getInstance().time
 
         val endTime = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(currentTime)
 
         val request = EndStatisticsRequest(
-            statisticsSeq,
+            statisticsSeq!!,
             endTime
         )
 
@@ -536,14 +539,14 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
     fun callInitEndTime() {
 
-        val statisticsSeq = AppConfig.getInstance().prefInitStartTimeSeq
+        val statisticsSeq = AppConfig.getInstance()?.getPrefInitStartTimeSeq()
 
         val currentTime = Calendar.getInstance().time
 
         val endTime = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(currentTime)
 
         val request = EndStatisticsRequest(
-            statisticsSeq,
+            statisticsSeq!!,
             endTime
         )
 
@@ -556,7 +559,7 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
                     val result: AppApiResponse<*> = response.body()!!
                     Log.d(TAG, "callInitEndTime - onResponse - result: $result")
 
-                    AppConfig.getInstance().clearPrefstatistics()
+                    AppConfig.getInstance()?.clearPrefstatistics()
                 } else {
                     Log.d(TAG, "callInitEndTime - fail")
                 }

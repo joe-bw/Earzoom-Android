@@ -13,7 +13,7 @@ import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.sorizava.asrplayer.ui.intro.IntroActivity
-import kr.co.sorizava.asrplayer.AppConfig
+import kr.co.sorizava.asrplayerKt.AppConfig
 import org.mozilla.focus.activity.MainActivity
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -25,7 +25,7 @@ class StartActivity : AppCompatActivity() {
 //        getHashKey()
 
         // 시작 통계 삭제
-        AppConfig.getInstance().clearPrefstatistics()
+        AppConfig.getInstance()?.clearPrefstatistics()
 
         // 페이스북 빠른 로그인
 //        LoginManager.getInstance().retrieveLoginStatus(this, new LoginStatusCallback() {

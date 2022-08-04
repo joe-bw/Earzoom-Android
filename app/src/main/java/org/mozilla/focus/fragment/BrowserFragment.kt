@@ -28,22 +28,30 @@ import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.compose.ui.graphics.toArgb
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.preference.PreferenceManager
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
+import com.sorizava.asrplayer.extension.observe
+import kotlinx.android.synthetic.main.browser_display_toolbar.view.*
 import kotlinx.android.synthetic.main.fragment_browser.*
+import kotlinx.android.synthetic.main.fragment_browser.view.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kr.co.sorizava.asrplayer.AppConfig
-import kr.co.sorizava.asrplayer.UIUtils
-import kr.co.sorizava.asrplayer.entity.ZerothMessage
-import kr.co.sorizava.asrplayer.helper.PlayerCaptionHelper
+import kr.co.sorizava.asrplayerKt.AppConfig
+import kr.co.sorizava.asrplayerKt.Model.BrowserFragmentModel
+import kr.co.sorizava.asrplayerKt.UIUtils
+import kr.co.sorizava.asrplayerKt.entity.ZerothMessage
+import kr.co.sorizava.asrplayerKt.helper.PlayerCaptionHelper
+import kr.co.sorizava.asrplayerKt.viewmodel.BrowserFragmentViewModel
 import mozilla.components.browser.state.selector.findTabOrCustomTab
 import mozilla.components.browser.state.selector.privateTabs
 import mozilla.components.browser.state.state.CustomTabConfig
@@ -107,6 +115,7 @@ import org.mozilla.focus.widget.FloatingSessionsButton
 import java.lang.ref.WeakReference
 
 import mozilla.components.concept.engine.mediasession.MediaSession
+import org.mozilla.focus.databinding.FragmentBrowserBinding
 
 /**
  * Fragment for displaying the browser UI.
@@ -165,14 +174,57 @@ class BrowserFragment :
         // Workaround for tab not existing temporarily.
             ?: createTab("about:blank")
 
+    private lateinit var binding: FragmentBrowserBinding
+    private val viewModel : BrowserFragmentViewModel by viewModels()
+
     @Suppress("LongMethod", "ComplexMethod")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_browser, container, false)
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_browser,container,false)
+        binding.lifecycleOwner = requireActivity()
+        binding.broswerFragmentVM = viewModel
 
+        val view = binding.root
+
+        //val view = inflater.inflate(R.layout.fragment_browser, container, false)
+        urlBar = view.urlbar
+        statusBar = view.status_bar_background
+
+        popupTint = view.popup_tint
+
+        mSzSubtitleView = view.sz_subtitle_view as TextView
+        mSzSubtitleView?.setOnTouchListener (captionTouchListener)
+
+
+
+        this.SetBackgroundColorSpan()
+        ////mvvm 구조 변경
+        viewModel.mCSSpeakerText_LiveData.observe(requireActivity()){String ->
+
+            var msg =""
+            for( i in viewModel.mCSSpeakerText_LiveData.value!!.indices)
+            {
+                Log.e("observefunc()",
+                    viewModel.mCSSpeakerText_LiveData.value!![i].mSpeakerNum.toString() +
+                            viewModel.mCSSpeakerText_LiveData.value!![i].mText.toString()
+                )
+                msg = msg + viewModel.mCSSpeakerText_LiveData.value!![i].mText.toString()
+            }
+            this.SubtitleTextOutBySpeakerNum(true,msg!!)
+            Log.e("observefunc()","aaaaaaaaaaa")
+        }
+
+        //viewModel.mCSSpeakerText_LiveData.observe(requireActivity(), ::observefunc)
+        //viewModel.getSpeakerText().observe(requireActivity(), ::observefunc)
+
+
+
+        //observe(viewModel.mNowCSSpeakerText_LiveData, this::observefunc1)
+/*
+        //val view = inflater.inflate(R.layout.fragment_browser, container, false)
         urlBar = view.findViewById(R.id.urlbar)
         statusBar = view.findViewById(R.id.status_bar_background)
 
@@ -180,9 +232,10 @@ class BrowserFragment :
 
         mSzSubtitleView = view.findViewById(R.id.sz_subtitle_view) as TextView
         mSzSubtitleView?.setOnTouchListener (captionTouchListener)
-
+*/
         return view
     }
+
 
     @Suppress("ComplexCondition", "LongMethod")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -1020,31 +1073,221 @@ class BrowserFragment :
         private const val MSG_SUBTILTILE_CUE_RESET = 100
     }
 
-    private var mPrevSubtitleText = ""
-    private var mPartialText = ""
+    //색을 미리 만들어 놓는다.
+    var mBackgroundColorSpanBySpeakerNumList : MutableList<BackgroundColorSpan> = mutableListOf<BackgroundColorSpan>()
 
-    fun onMessageSubtitle(message: String) {
-        val gson = GsonBuilder().create()
-        val zerothMessage: ZerothMessage = gson.fromJson(message, ZerothMessage::class.java)
-
-        if (zerothMessage.getResult() == null || zerothMessage.getResult()
-                .getHypotheses() == null
-        ) return;
-
-        val transcript: String = zerothMessage.getResult().getHypotheses().get(0).getTranscript()
-        val isFinal: Boolean = zerothMessage.getResult().getFinal()
-
-        if (isFinal) {
-            mPrevSubtitleText = mPrevSubtitleText + transcript
-            SubtitleTextOut(true, mPrevSubtitleText)
-            mPrevSubtitleText = mPrevSubtitleText + "\n"
-        } else {
-            mPartialText = transcript
-            var text = mPartialText.replace("\n", " ")
-            SubtitleTextOut(true, mPrevSubtitleText + text)
+    fun SetBackgroundColorSpan()
+    {
+        for(i in viewModel.mSpeakerColorList!!.indices)
+        {
+            mBackgroundColorSpanBySpeakerNumList.add(
+                BackgroundColorSpan(
+                    PlayerCaptionHelper.getColorWithAlpha(
+                        //viewModel.mSpeakerColorList!!.get(0). ,
+                        viewModel.mSpeakerColorList!![i].toArgb() ,
+                        AppConfig.getInstance()?.convertPrefSubtitleTransparency(mSubtitleTransparency)!!
+                    )
+                ))
         }
     }
 
+
+    fun SubtitleTextOutBySpeakerNum(isApplyResetTimer: Boolean,msg: String?){
+        // Log.d(LOGTAG, type + " cueTextOut: " +msg);
+        if (isApplyResetTimer) {
+            mResetSubtitleHandler.removeMessages(MSG_SUBTILTILE_CUE_RESET)
+            mResetSubtitleHandler.sendEmptyMessageDelayed(MSG_SUBTILTILE_CUE_RESET, 5000)
+        }
+        if (getActivity() != null && msg == null) {
+            requireActivity().runOnUiThread(Runnable { mSzSubtitleView!!.text = "" })
+        }
+        for( i in viewModel.mCSSpeakerText_LiveData.value!!.indices)
+        {
+            Log.e("observefunc()",
+                viewModel.mCSSpeakerText_LiveData.value!![i].mSpeakerNum.toString() +
+                        viewModel.mCSSpeakerText_LiveData.value!![i].mText.toString()
+            )
+        }
+
+
+        val spannable: Spannable = SpannableString(msg)
+        var textStartIndex =0
+        for( i in viewModel.mCSSpeakerText_LiveData.value!!.indices)
+        {
+            var mText = viewModel.mCSSpeakerText_LiveData.value!![i].mText
+            var mSpeakerNum = viewModel.mCSSpeakerText_LiveData.value!![i].mSpeakerNum
+
+            spannable.setSpan(
+                mBackgroundColorSpanBySpeakerNumList[mSpeakerNum],
+                textStartIndex,
+                textStartIndex + mText!!.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            textStartIndex = textStartIndex + mText!!.length
+        }
+        viewModel.mSpannable_MutableLiveData.value = spannable
+        /*
+        if (getActivity() != null) {
+            requireActivity().runOnUiThread(Runnable { mSzSubtitleView!!.text = spannable })
+        }
+        */
+    }
+
+
+
+
+
+
+
+
+
+
+    private var mPartialText = ""
+    private var mPrevSubtitleText = ""
+
+    var mSpeakerNum :Int = 0
+    private var mCsSpeakerText : MutableList<csSpeakerText>?  = mutableListOf<csSpeakerText>()
+
+    fun onMessageSubtitle(message: String) {
+
+        Log.e(TAG, "DPDPDP message:" + message)
+
+        //임시로 speaker
+        val speakerNumStr : String = "\"speakerNum\":" + ((Math.random()*10) % 2).toInt() + ",";
+        var messageWithSpeakerNumStr =message[0] + speakerNumStr + message.substring(1, (message.length) )
+
+        Log.e(TAG, "DPDPDP message:" + messageWithSpeakerNumStr)
+        val gson = GsonBuilder().create()
+        //val zerothMessage: ZerothMessage = gson.fromJson(message, ZerothMessage::class.java)
+        val zerothMessage: ZerothMessage = gson.fromJson(messageWithSpeakerNumStr, ZerothMessage::class.java)
+        //val zerothMessage: ZerothMessage = gson.fromJson(message, ZerothMessage::class.java)
+
+        if (zerothMessage.getResult() == null || zerothMessage.getResult()?.getHypotheses() == null
+        ) return;
+
+        val transcript: String = zerothMessage.getResult()?.getHypotheses()!!.get(0)!!.getTranscript()!!
+        val isFinal: Boolean = zerothMessage.getResult()?.getFinal()!!
+
+
+        viewModel.setTranscript(transcript,isFinal,mSpeakerNum!!)
+        if( isFinal == true) mSpeakerNum = (mSpeakerNum + 1) %10
+
+        /*
+        if (isFinal) {
+            Log.e(TAG, "DPDPDP isFinal == true mPrevSubtitleText :" + mPrevSubtitleText  + "  transcript:" + transcript)
+
+            mPrevSubtitleText = mPrevSubtitleText + "화자" + mSpeakerNum + ":" + transcript
+            SubtitleTextOut(true, mPrevSubtitleText , mSpeakerNum!!)
+            mPrevSubtitleText = mPrevSubtitleText + "\n"
+
+            //20220722 cbw 화자분리를 위해 추가
+            //1. 이제까지 확정된 화자의 정보를 저장한다.
+            mCsSpeakerText!!.add(object : csSpeakerText(mSpeakerNum!! ,"화자" + mSpeakerNum + ":" + transcript + "\n" ,"화자"+ mSpeakerNum!! ,1){})
+
+            //2. 새로운 화자의 넘버를 임시로 할당한다.
+            mSpeakerNum = (mSpeakerNum!! +1 ) % 2
+            //mSpeakerNum = zerothMessage.getSpeakerNum()
+            if( mSpeakerNum == null) mSpeakerNum = 0
+        } else {
+            Log.e(TAG, "DPDPDP isFinal == false mPrevSubtitleText :" + mPrevSubtitleText  + "  transcript:" + transcript)
+
+            mPartialText = transcript
+            var text = "화자" + mSpeakerNum + ":" + mPartialText.replace("\n", " ")
+
+            SubtitleTextOut(true, mPrevSubtitleText + text, mSpeakerNum!!)
+        }
+         */
+    }
+
+    //20220722 cbw 화자분리를 위해 추가
+    var preMsgLength :Int = 0
+    var preBackColor :Int = Color.BLACK
+    private fun SubtitleTextOut(isApplyResetTimer: Boolean, msg: String?, _mSpeakerNum : Int) {
+        // Log.d(LOGTAG, type + " cueTextOut: " +msg);
+        if (isApplyResetTimer) {
+            mResetSubtitleHandler.removeMessages(MSG_SUBTILTILE_CUE_RESET)
+            mResetSubtitleHandler.sendEmptyMessageDelayed(MSG_SUBTILTILE_CUE_RESET, 5000)
+        }
+        if (getActivity() != null && msg == null) {
+            requireActivity().runOnUiThread(Runnable { mSzSubtitleView!!.text = "" })
+        }
+        val spannable: Spannable = SpannableString(msg)
+
+
+
+        //색을 미리 만들어 놓는다.
+        val backgroundColorSpan_speakerNum0 = BackgroundColorSpan(
+            PlayerCaptionHelper.getColorWithAlpha(
+                Color.BLACK,
+                AppConfig.getInstance()?.convertPrefSubtitleTransparency(mSubtitleTransparency)!!
+            )
+        )
+
+        val backgroundColorSpan_speakerNum1 = BackgroundColorSpan(
+            PlayerCaptionHelper.getColorWithAlpha(
+                Color.YELLOW,
+                AppConfig.getInstance()?.convertPrefSubtitleTransparency(mSubtitleTransparency)!!
+            )
+        )
+
+        var BackColor : Int = Color.BLACK
+        if(_mSpeakerNum == 0 ) BackColor = Color.BLACK
+        else BackColor = Color.YELLOW
+
+        //과거 text의 색을 세팅한다.
+        var preTextlength :Int = 0
+        for( i in mCsSpeakerText!!.indices)
+        {
+            if( mCsSpeakerText!!.get(i)!!.mSpeakerNum == 0 )
+            {
+                spannable.setSpan(
+                    backgroundColorSpan_speakerNum0,
+                    preTextlength,
+                    mCsSpeakerText!!.get(i)!!.mText!!.length + preTextlength,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+            else
+            {
+                spannable.setSpan(
+                    backgroundColorSpan_speakerNum1,
+                    preTextlength,
+                    mCsSpeakerText!!.get(i)!!.mText!!.length + preTextlength,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+            preTextlength += mCsSpeakerText!!.get(i)!!.mText!!.length
+        }
+
+        //현재 text의 색을 세팅한다.
+        if(_mSpeakerNum == 0 )
+        {
+            spannable.setSpan(
+                backgroundColorSpan_speakerNum0,
+                preTextlength ,
+                //msg!!.length - preTextlength,
+                msg!!.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+        else
+        {
+            spannable.setSpan(
+                backgroundColorSpan_speakerNum1,
+                preTextlength,
+                //msg!!.length - preTextlength,
+                msg!!.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+
+        if (getActivity() != null) {
+            requireActivity().runOnUiThread(Runnable { mSzSubtitleView!!.text = spannable })
+        }
+    }
+
+    /*
+    //20220722 cbw 화자분리를 위해 수정 - 기존소스 주석처리
     private fun SubtitleTextOut(isApplyResetTimer: Boolean, msg: String?) {
         // Log.d(LOGTAG, type + " cueTextOut: " +msg);
         if (isApplyResetTimer) {
@@ -1058,7 +1301,7 @@ class BrowserFragment :
         val backgroundColorSpan = BackgroundColorSpan(
             PlayerCaptionHelper.getColorWithAlpha(
                 Color.BLACK,
-                AppConfig.getInstance().convertPrefSubtitleTransparency(mSubtitleTransparency)
+                AppConfig.getInstance()?.convertPrefSubtitleTransparency(mSubtitleTransparency)!!
             )
         )
         spannable.setSpan(
@@ -1071,6 +1314,8 @@ class BrowserFragment :
             requireActivity().runOnUiThread(Runnable { mSzSubtitleView!!.text = spannable })
         }
     }
+    */
+    //20220722 cbw 화자분리를 위해 수정 끝
 
 
     private val mResetSubtitleHandler: Handler = ResetSubtitleHandler(this)
@@ -1092,30 +1337,34 @@ class BrowserFragment :
     fun resetSubtitleView(force: Boolean) {
         if (force) {
             mResetSubtitleHandler.removeMessages(MSG_SUBTILTILE_CUE_RESET)
+
             mPrevSubtitleText = ""
-            SubtitleTextOut(false, "")
+            mCsSpeakerText!!.clear()
+            viewModel.clearSpeakerText()
+            this.SubtitleTextOutBySpeakerNum(false,"")
+            //SubtitleTextOut(false, "",0)
         }
     }
 
 
-/*
-    fun getDisplayWidth(): Int {
-        val displayWidth: Int
-        val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val display = wm.defaultDisplay
-        val metrics = DisplayMetrics()
-        display.getMetrics(metrics)
-        displayWidth = metrics.widthPixels
-        return displayWidth
-    }
+    /*
+        fun getDisplayWidth(): Int {
+            val displayWidth: Int
+            val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val display = wm.defaultDisplay
+            val metrics = DisplayMetrics()
+            display.getMetrics(metrics)
+            displayWidth = metrics.widthPixels
+            return displayWidth
+        }
 
-    fun getDisplayHeight(): Int {
-        val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val displaymetrics = DisplayMetrics()
-        wm.defaultDisplay.getMetrics(displaymetrics)
-        return displaymetrics.heightPixels
-    }
-*/
+        fun getDisplayHeight(): Int {
+            val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val displaymetrics = DisplayMetrics()
+            wm.defaultDisplay.getMetrics(displaymetrics)
+            return displaymetrics.heightPixels
+        }
+    */
     private var pressed_x:Int = 0
     private var pressed_y:Int = 0
 
@@ -1141,12 +1390,12 @@ class BrowserFragment :
                 // Update the margins
                 // layoutParams.leftMargin += dx;
                 val subtitleParent = mSzSubtitleView!!.parent as ViewGroup
-                val textSize = UIUtils.dp2px(requireContext(), AppConfig.getInstance().convertPrefSubtitleFontSize(mSubtitleFontSize).toFloat()).toFloat()
+                val textSize = UIUtils.dp2px(requireContext(), AppConfig.getInstance()?.convertPrefSubtitleFontSize(mSubtitleFontSize)!!.toFloat()).toFloat()
                 val controlBarHeight = UIUtils.dp2px(requireContext(), 46.0f)
                 val maxSubtitleHeight = (mSubtitleLine + 0.3f) * textSize
 
                 if (layoutParams.topMargin + dy > controlBarHeight &&
-                        layoutParams.topMargin + dy < subtitleParent.height - maxSubtitleHeight - controlBarHeight) {
+                    layoutParams.topMargin + dy < subtitleParent.height - maxSubtitleHeight - controlBarHeight) {
                     layoutParams.topMargin += dy
 
                     //   Log.d(TAG,"layoutParams.topMargin: " + layoutParams.topMargin);
@@ -1165,14 +1414,14 @@ class BrowserFragment :
 
     // Setup subtitle
     private fun setupSubtitleView() {
-        mSubtitleOnOff = AppConfig.getInstance().prefSubtitleOnOff
-        mSubtitlePoistion = AppConfig.getInstance().prefSubtitlePosition
-        mSubtitleLine = AppConfig.getInstance().prefSubtitleLine
-        mSubtitleFont = AppConfig.getInstance().prefSubtitleFont
-        mSubtitleFontSize = AppConfig.getInstance().prefSubtitleFontSize
-        mSubtitleForegroundColor = AppConfig.getInstance().prefSubtitleForegroundColor
-        mSubtitleTransparency = AppConfig.getInstance().prefSubtitleTransparency
-        val textSize = UIUtils.dp2px(requireContext(), AppConfig.getInstance().convertPrefSubtitleFontSize(mSubtitleFontSize).toFloat()).toFloat()
+        mSubtitleOnOff = AppConfig.getInstance()?.getPrefSubtitleOnOff()!!
+        mSubtitlePoistion = AppConfig.getInstance()?.getPrefSubtitlePosition()!!
+        mSubtitleLine = AppConfig.getInstance()?.getPrefSubtitleLine()!!
+        mSubtitleFont = AppConfig.getInstance()?.getPrefSubtitleFont()!!
+        mSubtitleFontSize = AppConfig.getInstance()?.getPrefSubtitleFontSize()!!
+        mSubtitleForegroundColor = AppConfig.getInstance()?.getPrefSubtitleForegroundColor()!!
+        mSubtitleTransparency = AppConfig.getInstance()?.getPrefSubtitleTransparency()!!
+        val textSize = UIUtils.dp2px(requireContext(), AppConfig.getInstance()?.convertPrefSubtitleFontSize(mSubtitleFontSize)!!.toFloat()).toFloat()
 
         // ìë¦¬ìë° ìë§ setup
         mSzSubtitleView!!.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
@@ -1185,8 +1434,8 @@ class BrowserFragment :
         mSzSubtitleView!!.movementMethod = createMovementMethod(requireContext())
         mSzSubtitleView!!.setTextIsSelectable(false)
         PlayerCaptionHelper.setSubtitleViewFont(requireContext(),
-                mSzSubtitleView,
-                AppConfig.getInstance().convertPrefSubtitleFontPath(requireContext(), mSubtitleFont))
+            mSzSubtitleView,
+            AppConfig.getInstance()?.convertPrefSubtitleFontPath(requireContext(), mSubtitleFont))
         if (mSubtitleOnOff) {
             mSzSubtitleView!!.visibility = View.VISIBLE
         } else {
@@ -1231,7 +1480,7 @@ class BrowserFragment :
             layoutParams.topMargin = controlBarHeight.toInt()
         } else {
             // ViewGroup subtitleParent = (ViewGroup)mSzSubtitleView.getParent();
-            val textSize = UIUtils.dp2px(requireContext(), AppConfig.getInstance().convertPrefSubtitleFontSize(mSubtitleFontSize).toFloat()).toFloat()
+            val textSize = UIUtils.dp2px(requireContext(), AppConfig.getInstance()?.convertPrefSubtitleFontSize(mSubtitleFontSize)!!.toFloat()).toFloat()
             var factor = 0.1f
 
             val orientation: Int = resources.configuration.orientation
@@ -1257,7 +1506,7 @@ class BrowserFragment :
         // íë©´ íì ì ìë§ ìì¹ ê³ì°í´ì íì
         val layoutParams = mSzSubtitleView!!.layoutParams as RelativeLayout.LayoutParams
         val controlBarHeight = UIUtils.dp2px(requireContext(), 46.0f)
-        val textSize = UIUtils.dp2px(requireContext(), AppConfig.getInstance().convertPrefSubtitleFontSize(mSubtitleFontSize).toFloat())
+        val textSize = UIUtils.dp2px(requireContext(), AppConfig.getInstance()?.convertPrefSubtitleFontSize(mSubtitleFontSize)!!.toFloat())
         var factor = 0.1f
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             factor = 1.3f
@@ -1285,5 +1534,18 @@ class BrowserFragment :
     override fun onPause() {
         (activity as MainActivity?)?.callInitEndTime()
         super.onPause()
+    }
+
+
+    //20220722 cbw 화자분리를 위해
+    // 글자마다 화자와 글자색을의 구조체. spannable의 setSpan을 사용하여 글자색을 입혀주기위함
+    open class csSpeakerText(var mSpeakerNum :Int, var mText : String?, var mSpeakerName : String, var mTextColor : Int)
+    {
+        /*
+        var mSpeakerNum :Int = 0;
+        var mText : String  = "";
+        var mSpeakerName : String  = "화자1";  //안쓸수 있음
+        var mTextColor : Int  = Color.BLACK;  //안쓸수 있음
+        */
     }
 }

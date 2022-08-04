@@ -21,7 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.mozilla.focus.R;
 
-import kr.co.sorizava.asrplayer.AppConfig;
+import kr.co.sorizava.asrplayerKt.AppConfig;
 
 public class PrivacyPolicyActivity extends AppCompatActivity {
 
@@ -88,7 +88,9 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
             }
         });
 
-        webView.loadUrl(AppConfig.getInstance().getPrefWebViewPrivacyPolicyUrl());
+        //webView.loadUrl(AppConfig.getInstance().getPrefWebViewPrivacyPolicyUrl());
+
+        webView.loadUrl(AppConfig.Companion.getInstance().getPrefWebViewPrivacyPolicyUrl());
     }
 
     class WebBridge{

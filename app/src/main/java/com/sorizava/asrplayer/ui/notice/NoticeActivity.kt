@@ -15,7 +15,7 @@ import android.webkit.WebViewClient
 import android.webkit.WebChromeClient
 import android.view.WindowManager
 import android.webkit.WebView.WebViewTransport
-import kr.co.sorizava.asrplayer.AppConfig
+import kr.co.sorizava.asrplayerKt.AppConfig
 import android.webkit.JavascriptInterface
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -47,13 +47,15 @@ class NoticeActivity : AppCompatActivity() {
 
         when(argumentIdx) {
             BoardType.NOTICE.type -> {
-                webView!!.loadUrl(AppConfig.getInstance().prefWebNoticeViewUrl)
+                //webView!!.loadUrl(AppConfig.getInstance().prefWebNoticeViewUrl)
+                webView!!.loadUrl(AppConfig.getInstance()?.getPrefWebNoticeViewUrl()!!)
             }
             BoardType.FAQ.type -> {
-                webView!!.loadUrl(AppConfig.getInstance().prefWebFaqViewUrl)
+                //webView!!.loadUrl(AppConfig.getInstance().prefWebFaqViewUrl)
+                webView!!.loadUrl(AppConfig.getInstance()?.getPrefWebFaqViewUrl()!!)
             }
             BoardType.EVENT.type -> {
-                webView!!.loadUrl(AppConfig.getInstance().prefWebEventViewUrl)
+                webView!!.loadUrl(AppConfig.getInstance()?.getPrefWebEventViewUrl()!!)
             }
         }
 

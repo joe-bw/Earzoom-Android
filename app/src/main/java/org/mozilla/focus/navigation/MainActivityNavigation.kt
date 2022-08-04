@@ -8,8 +8,8 @@ import android.content.Intent
 import android.util.Log
 import com.sorizava.asrplayer.ui.settings.BrowserSettingsFragment
 import com.sorizava.asrplayer.ui.settings.MainSettingsFragment
-import kr.co.sorizava.asrplayer.AsrConfigActivity
-import kr.co.sorizava.asrplayer.SubtitleSettingActivity
+import kr.co.sorizava.asrplayerKt.AsrConfigActivity
+import kr.co.sorizava.asrplayerKt.SubtitleSettingActivity
 import org.mozilla.focus.R
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.autocomplete.AutocompleteAddFragment

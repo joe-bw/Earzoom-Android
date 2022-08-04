@@ -6,7 +6,7 @@ package org.mozilla.focus.engine
 
 import android.content.Context
 import android.util.Log
-import kr.co.sorizava.asrplayer.websocket.WsManager
+import kr.co.sorizava.asrplayerKt.websocket.WsManager
 import mozilla.components.browser.errorpages.ErrorPages
 import mozilla.components.browser.errorpages.ErrorType
 import mozilla.components.concept.engine.EngineSession
@@ -37,8 +37,8 @@ class AppContentInterceptor(
 
             override fun onMediaDeactivated() {
                 //Log.d("Interceptor","## onMediaDeactivated")
-                WsManager.getInstance().stopEOS()
-                WsManager.getInstance().requsetFinalTranscript()
+                WsManager.getInstance()?.stopEOS()
+                WsManager.getInstance()?.requsetFinalTranscript()
             }
 
             override fun onMediaPlaybackStateChanged(playbackState: MediaSession.PlaybackState
@@ -48,13 +48,13 @@ class AppContentInterceptor(
                 }
                 else if(playbackState == MediaSession.PlaybackState.PAUSED) {
                     //Log.d("Interceptor","## PAUSED")
-                    WsManager.getInstance().stopEOS()
-                    WsManager.getInstance().requsetFinalTranscript()
+                    WsManager.getInstance()?.stopEOS()
+                    WsManager.getInstance()?.requsetFinalTranscript()
                 }
                 else if(playbackState == MediaSession.PlaybackState.STOPPED) {
                    //Log.d("Interceptor","## STOPPED")
-                    WsManager.getInstance().stopEOS()
-                    WsManager.getInstance().requsetFinalTranscript()
+                    WsManager.getInstance()?.stopEOS()
+                    WsManager.getInstance()?.requsetFinalTranscript()
                 }
                 else if(playbackState == MediaSession.PlaybackState.UNKNOWN) {
                    //Log.d("Interceptor","## UNKNOWN")

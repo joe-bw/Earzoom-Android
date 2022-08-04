@@ -2,133 +2,148 @@
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:mozac="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:id="@+id/browser_container"
+
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="broswerFragmentVM"
+            type="kr.co.sorizava.asrplayerKt.viewmodel.BrowserFragmentViewModel" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        xmlns:mozac="http://schemas.android.com/apk/res-auto"
+        >
 
-        <View
-            android:id="@+id/status_bar_background"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@drawable/background_gradient_dark" />
 
-        <org.mozilla.focus.widget.ResizableKeyboardCoordinatorLayout
-            app:viewsToHideWhenActivated="@array/viewsToHide"
-            android:layout_marginTop="0dp"
-            android:id="@+id/main_content"
+        <LinearLayout
+            android:id="@+id/browser_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:clipChildren="false">
+            android:orientation="vertical">
 
-            <mozilla.components.concept.engine.EngineView
-                tools:ignore="Instantiatable"
-                android:id="@+id/webview"
+            <View
+                android:id="@+id/status_bar_background"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/background_gradient_dark" />
+
+            <org.mozilla.focus.widget.ResizableKeyboardCoordinatorLayout
+                app:viewsToHideWhenActivated="@array/viewsToHide"
+                android:layout_marginTop="0dp"
+                android:id="@+id/main_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                android:orientation="vertical"
+                android:clipChildren="false">
 
-            <FrameLayout
-                android:id="@+id/crash_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/destructive"
-                android:visibility="gone"/>
+                <mozilla.components.concept.engine.EngineView
+                    tools:ignore="Instantiatable"
+                    android:id="@+id/webview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-            <include
-                layout="@layout/browser_display_toolbar"/>
+                <FrameLayout
+                    android:id="@+id/crash_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/destructive"
+                    android:visibility="gone"/>
 
-            <org.mozilla.focus.widget.FloatingSessionsButton
-                android:id="@+id/tabs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_marginBottom="@dimen/floating_action_button_margin"
-                android:layout_marginEnd="@dimen/floating_action_button_margin"
-                android:elevation="4dp"
-                android:visibility="gone"
-                app:backgroundTint="@color/accentBright"
-                app:rippleColor="@color/accent"
-                app:layout_behavior="org.mozilla.focus.widget.FloatingActionButtonBehavior"
-                app:fabSize="normal"
-                app:layout_dodgeInsetEdges="bottom"/>
+                <include
+                    layout="@layout/browser_display_toolbar"/>
 
-            <org.mozilla.focus.widget.FloatingEraseButton
-                android:id="@+id/erase"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_marginBottom="@dimen/floating_action_button_margin"
-                android:layout_marginEnd="@dimen/floating_action_button_margin"
-                android:elevation="4dp"
-                android:src="@drawable/ic_delete"
-                app:backgroundTint="@color/accentBright"
-                app:rippleColor="@color/accent"
-                android:visibility="gone"
-                app:fabSize="normal"
-                app:layout_behavior="org.mozilla.focus.widget.FloatingActionButtonBehavior"
-                android:contentDescription="@string/content_description_erase"
-                app:layout_dodgeInsetEdges="bottom"/>
+                <org.mozilla.focus.widget.FloatingSessionsButton
+                    android:id="@+id/tabs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:layout_marginBottom="@dimen/floating_action_button_margin"
+                    android:layout_marginEnd="@dimen/floating_action_button_margin"
+                    android:elevation="4dp"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/accentBright"
+                    app:rippleColor="@color/accent"
+                    app:layout_behavior="org.mozilla.focus.widget.FloatingActionButtonBehavior"
+                    app:fabSize="normal"
+                    app:layout_dodgeInsetEdges="bottom"/>
 
-            <mozilla.components.feature.findinpage.view.FindInPageBar
-                android:id="@+id/find_in_page"
-                android:layout_width="match_parent"
-                android:elevation="10dp"
-                android:layout_height="56dp"
-                android:padding="4dp"
-                android:background="@color/find_in_page_background"
-                mozac:findInPageNoMatchesTextColor="@color/find_in_page_no_matches_color"
-                mozac:findInPageQueryTextColor="@color/find_in_page_query_color"
-                mozac:findInPageQueryHintTextColor="@color/find_in_page_query_hint_color"
-                mozac:findInPageResultCountTextColor="@color/find_in_page_results_color"
-                app:findInPageButtonsTint="@color/find_in_page_buttons_tint"
-                android:visibility="gone" />
+                <org.mozilla.focus.widget.FloatingEraseButton
+                    android:id="@+id/erase"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:layout_marginBottom="@dimen/floating_action_button_margin"
+                    android:layout_marginEnd="@dimen/floating_action_button_margin"
+                    android:elevation="4dp"
+                    android:src="@drawable/ic_delete"
+                    app:backgroundTint="@color/accentBright"
+                    app:rippleColor="@color/accent"
+                    android:visibility="gone"
+                    app:fabSize="normal"
+                    app:layout_behavior="org.mozilla.focus.widget.FloatingActionButtonBehavior"
+                    android:contentDescription="@string/content_description_erase"
+                    app:layout_dodgeInsetEdges="bottom"/>
 
-        </org.mozilla.focus.widget.ResizableKeyboardCoordinatorLayout>
-    </LinearLayout>
+                <mozilla.components.feature.findinpage.view.FindInPageBar
+                    android:id="@+id/find_in_page"
+                    android:layout_width="match_parent"
+                    android:elevation="10dp"
+                    android:layout_height="56dp"
+                    android:padding="4dp"
+                    android:background="@color/find_in_page_background"
+                    mozac:findInPageNoMatchesTextColor="@color/find_in_page_no_matches_color"
+                    mozac:findInPageQueryTextColor="@color/find_in_page_query_color"
+                    mozac:findInPageQueryHintTextColor="@color/find_in_page_query_hint_color"
+                    mozac:findInPageResultCountTextColor="@color/find_in_page_results_color"
+                    app:findInPageButtonsTint="@color/find_in_page_buttons_tint"
+                    android:visibility="gone" />
 
-    <FrameLayout
-        android:id="@+id/popup_tint"
-        android:visibility="gone"
-        android:background="@color/colorPrimary"
-        android:alpha=".5"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+            </org.mozilla.focus.widget.ResizableKeyboardCoordinatorLayout>
+        </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/video_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:visibility="gone" />
-
-    <RelativeLayout
-        android:id="@+id/subtitle_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <!--  소리자바 실시간 자막 처리용 TextView -->
-        <TextView
-            android:id="@+id/sz_subtitle_view"
+        <FrameLayout
+            android:id="@+id/popup_tint"
+            android:visibility="gone"
+            android:background="@color/colorPrimary"
+            android:alpha=".5"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="40dp"
-            android:gravity="bottom"
-            android:layout_gravity="center_horizontal"/>
-    </RelativeLayout>
-</FrameLayout>
+            android:layout_height="match_parent"/>
+
+        <FrameLayout
+            android:id="@+id/video_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/subtitle_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--  소리자바 실시간 자막 처리용 TextView -->
+            <TextView
+                android:id="@+id/sz_subtitle_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="40dp"
+                android:gravity="bottom"
+                android:text="@{broswerFragmentVM.MSpannable_LiveData}"
+                android:layout_gravity="center_horizontal"/>
+        </RelativeLayout>
+    </FrameLayout>
+</layout>

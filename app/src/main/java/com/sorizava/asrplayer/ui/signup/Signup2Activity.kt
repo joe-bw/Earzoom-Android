@@ -23,7 +23,7 @@ import com.sorizava.asrplayer.data.vo.LoginDataVO
 import com.sorizava.asrplayer.data.vo.LoginNewRequest
 import com.sorizava.asrplayer.network.AppApiClient.apiService
 import com.sorizava.asrplayer.network.AppApiResponse
-import kr.co.sorizava.asrplayer.AppConfig
+import kr.co.sorizava.asrplayerKt.AppConfig
 import org.mozilla.focus.R
 import org.mozilla.focus.activity.MainActivity
 import retrofit2.Call
