@@ -1101,6 +1101,9 @@ class BrowserFragment :
         if (getActivity() != null && msg == null) {
             requireActivity().runOnUiThread(Runnable { mSzSubtitleView!!.text = "" })
         }
+        if( viewModel.mCSSpeakerText_LiveData.value == null) return;
+
+
         for( i in viewModel.mCSSpeakerText_LiveData.value!!.indices)
         {
             Log.e("observefunc()",
