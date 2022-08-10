@@ -154,11 +154,21 @@ android {
         pickFirst 'META-INF/atomicfu.kotlin_module'
         pickFirst 'META-INF/proguard/coroutines.pro'
     }
-
+/*
     // 뷰 바인딩
     buildFeatures {
         viewBinding true
         dataBinding true
+    }
+
+ */
+    android {
+        dataBinding {
+            enabled = true
+        }
+        viewBinding {
+            enabled = true
+        }
     }
 }
 

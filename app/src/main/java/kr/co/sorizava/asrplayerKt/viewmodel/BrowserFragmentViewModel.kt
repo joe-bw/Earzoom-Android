@@ -50,7 +50,7 @@ class BrowserFragmentViewModel : ViewModel(){
 //        BrowserFragmentModel.Companion.mNowCSSpeakerText_LiveData.value!!.mText =""
         mBrowserFragmentModel.mPreCSSpeakerText_LiveData.value!!.clear()
         mBrowserFragmentModel.mNowCSSpeakerText_LiveData.value!!.mText =""
-        mCSSpeakerText_MutableLiveData.value!!.clear()
+        if( mCSSpeakerText_MutableLiveData.value != null) mCSSpeakerText_MutableLiveData.value!!.clear()
 
         /*
         mPreCSSpeakerText_LiveData!!.value!!.clear()
