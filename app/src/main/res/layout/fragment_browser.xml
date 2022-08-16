@@ -115,17 +115,34 @@
         <FrameLayout
             android:id="@+id/popup_tint"
             android:visibility="gone"
+
             android:background="@color/colorPrimary"
             android:alpha=".5"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
 
+        </FrameLayout>
+
+<!--
         <FrameLayout
             android:id="@+id/video_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorPrimary"
-            android:visibility="gone" />
+            android:visibility="gone"/>
+-->
+        <FrameLayout
+            android:id="@+id/video_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <kr.co.sorizava.asrplayerKt.unity.UnityView
+                android:id="@+id/custom_unity_view"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="right|bottom"
+                app:layout_constraintWidth_percent=".4" />
+        </FrameLayout>
 
         <RelativeLayout
             android:id="@+id/subtitle_container"
@@ -144,6 +161,8 @@
                 android:gravity="bottom"
                 android:text="@{broswerFragmentVM.MSpannable_LiveData}"
                 android:layout_gravity="center_horizontal"/>
+
+
         </RelativeLayout>
     </FrameLayout>
 </layout>

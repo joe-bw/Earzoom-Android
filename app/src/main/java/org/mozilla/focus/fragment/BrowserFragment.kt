@@ -51,6 +51,7 @@ import kr.co.sorizava.asrplayerKt.Model.BrowserFragmentModel
 import kr.co.sorizava.asrplayerKt.UIUtils
 import kr.co.sorizava.asrplayerKt.entity.ZerothMessage
 import kr.co.sorizava.asrplayerKt.helper.PlayerCaptionHelper
+import kr.co.sorizava.asrplayerKt.unity.UnityView
 import kr.co.sorizava.asrplayerKt.viewmodel.BrowserFragmentViewModel
 import mozilla.components.browser.state.selector.findTabOrCustomTab
 import mozilla.components.browser.state.selector.privateTabs
@@ -115,7 +116,13 @@ import org.mozilla.focus.widget.FloatingSessionsButton
 import java.lang.ref.WeakReference
 
 import mozilla.components.concept.engine.mediasession.MediaSession
+import org.json.JSONException
+import org.json.JSONObject
 import org.mozilla.focus.databinding.FragmentBrowserBinding
+
+import kr.co.sorizava.asrplayerKt.unity.*
+
+
 
 /**
  * Fragment for displaying the browser UI.
@@ -235,6 +242,76 @@ class BrowserFragment :
 */
         return view
     }
+
+    //2020707 cbw unity 추가
+    private lateinit var unityView : UnityView
+    fun InitUnityView()
+    {
+        /*
+        //1. 가로 세로 상태에 맞게 xml 세팅
+        requestedOrientation =
+            if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                //setContentView(R.layout.activity_portrait);
+                setContentView(R.layout.unity_main_port)
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            } else {
+                //setContentView(R.layout.activity_landscape);
+                setContentView(R.layout.unity_main)
+                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            }
+        */
+        //2. unity 뷰 세팅
+//        unityView =  binding.customUnityView
+        unityView = activity?.findViewById<UnityView>(R.id.custom_unity_view)!!
+
+        unityView.start() //(ContextWrapper) GlobalApplication.getInstance());
+        unityView.resetOverlay()
+
+        val `object` = JSONObject()
+
+        try {
+            `object`.put("id", "signlanguage_final")
+            `object`.put("time", 0.2)
+            `object`.put("text", "김치+볶음밥")
+            `object`.put("origin_text", "김치볶음밥을")
+        } catch (e: JSONException) {
+            Log.e("NewsListFragment", "error parse json", e)
+        } finally {
+            UnityBridgeManager.getInstance()
+                .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
+            UnityBridgeManager.getInstance()
+                .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
+            UnityBridgeManager.getInstance()
+                .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
+            UnityBridgeManager.getInstance()
+                .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
+            UnityBridgeManager.getInstance()
+                .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
+            UnityBridgeManager.getInstance()
+                .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
+            UnityBridgeManager.getInstance()
+                .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     @Suppress("ComplexCondition", "LongMethod")
@@ -395,6 +472,9 @@ class BrowserFragment :
                 view = view
             )
         }
+
+        //2020707 cbw unity 추가
+        this.InitUnityView()
     }
 
     private fun getAdditionalNote(hitResult: HitResult): String? {

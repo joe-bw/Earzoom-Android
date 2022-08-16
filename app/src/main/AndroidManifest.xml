@@ -30,7 +30,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="android:appComponentFactory"
+        tools:replace="android:theme,android:appComponentFactory"
         tools:targetApi="p">
 
         <!-- 4차 사업 내용 -->
