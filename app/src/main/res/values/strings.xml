@@ -2,6 +2,9 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <resources>
+    <!-- 무조건 필수 -->
+    <string name="game_view_content_description">Game view</string>
+
     <!-- ####################################################################################### -->
     <!-- ## Put only strings into this file that should be translated. Move all other strings ## -->
     <!-- ## into a separate file like strings_references.xml                                  ## -->

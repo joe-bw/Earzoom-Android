@@ -170,6 +170,22 @@ android {
             enabled = true
         }
     }
+
+
+
+
+    //20220705 Unity 추가
+    aaptOptions {
+        noCompress = ['.unity3d', '.ress', '.resource', '.obb']
+        ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~"
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    ndkVersion '19.0.5232133'
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
@@ -238,6 +254,21 @@ dependencies {
     implementation 'com.google.android.play:core:1.10.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
+
+    //20220705 Unity 추가 시작
+    implementation project(':unityLibrary')
+    implementation fileTree(dir: project(':unityLibrary').getProjectDir().toString() + ('\\libs'), include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+
+    //implementation 'androidx.appcompat:appcompat:1.1.0'
+    //implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    //implementation 'com.google.android.material:material:1.0.0'
+    //20220705 Unity 추가 끝
+
+
+
 
     compileOnly 'net.jcip:jcip-annotations:1.0'
     implementation("com.google.code.findbugs:jsr305:3.0.2")
