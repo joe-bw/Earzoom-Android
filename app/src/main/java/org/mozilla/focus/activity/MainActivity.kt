@@ -52,11 +52,13 @@ import com.sorizava.asrplayer.extension.handleFocus
 import com.sorizava.asrplayer.extension.hideKeyboard
 import com.sorizava.asrplayer.network.AppApiClient
 import com.sorizava.asrplayer.network.AppApiResponse
-import kr.co.sorizava.asrplayerKt.AppConfig
-import kr.co.sorizava.asrplayerKt.ZerothDefine
-import kr.co.sorizava.asrplayerKt.websocket.WsManager
-import kr.co.sorizava.asrplayerKt.websocket.WsStatus
-import kr.co.sorizava.asrplayerKt.websocket.listener.WsStatusListener
+import kr.co.sorizava.asrplayer.AppConfig
+import kr.co.sorizava.asrplayer.ZerothDefine
+import kr.co.sorizava.asrplayer.unity.AppliactionUnity
+import kr.co.sorizava.asrplayer.unity.UnityView
+import kr.co.sorizava.asrplayer.websocket.WsManager
+import kr.co.sorizava.asrplayer.websocket.WsStatus
+import kr.co.sorizava.asrplayer.websocket.listener.WsStatusListener
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.lib.crash.Crash
 import mozilla.components.support.utils.SafeIntent
@@ -81,6 +83,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.security.auth.Destroyable
 
 @Suppress("TooManyFunctions")
 open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
@@ -139,8 +142,14 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
       //  audioMonitorThread!!.start()
 
 
-
-
+/*
+        if( AppliactionUnity.unityView == null) {
+            //AppliactionUnity.unityView = activity?.findViewById<UnityView>(R.id.custom_unity_view)!!
+            AppliactionUnity.unityView = this.findViewById<UnityView>(R.id.custom_unity_view)!!
+            AppliactionUnity.unityView!!.start() //(ContextWrapper) GlobalApplication.getInstance());
+            AppliactionUnity.unityView!!.resetOverlay()
+        }
+ */
     }
 /*
     override fun onDestroy() {
@@ -160,9 +169,13 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         // We don't care here: all our fragments update themselves as appropriate
     }
 
+
+
     override fun onResume() {
         Log.e("TEST", "##onResume")
         super.onResume()
+
+        //AppliactionUnity.unityView!!.visibility = View.INVISIBLE
 /*
         val focusApplication = applicationContext as FocusApplication
 
@@ -179,12 +192,15 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
 
         focusApplication.goBookmarkUrl = ""
 */
+
         WsManager.getInstance()?.startConnect()
 
         TelemetryWrapper.startSession()
         checkBiometricStillValid()
     }
 
+
+    
     override fun onPause() {
         Log.e("TEST", "##onPause")
         WsManager.getInstance()?.stopConnect()
@@ -201,6 +217,14 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         super.onPause()
 
         TelemetryWrapper.stopSession()
+
+        /*
+        AppliactionUnity.unityView!!.pause()
+        AppliactionUnity.unityView =null
+
+         */
+        //AppliactionUnity.unityView!!.RemoveUnityView()
+        //AppliactionUnity.unityView = null
     }
 
     override fun onStop() {
@@ -706,4 +730,6 @@ open class MainActivity : LocaleAwareAppCompatActivity(), WsStatusListener {
         }
         return super.dispatchTouchEvent(ev)
     }
+
+
 }

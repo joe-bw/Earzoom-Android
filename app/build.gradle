@@ -72,7 +72,8 @@ android {
         }
         debug {
             // jhong - SNS 로그인 등 여러가지 테스트를 위해 제거
-//            applicationIdSuffix ".debug"
+            //applicationIdSuffix ".debug"
+            //applicationIdSuffix ".avatar"
             matchingFallbacks = ['debug']
         }
         beta {

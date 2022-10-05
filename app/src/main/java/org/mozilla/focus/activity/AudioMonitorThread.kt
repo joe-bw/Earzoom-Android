@@ -3,7 +3,7 @@ package org.mozilla.focus.activity
 import android.content.*
 import android.net.*
 import android.util.Log
-import kr.co.sorizava.asrplayerKt.websocket.WsManager
+import kr.co.sorizava.asrplayer.websocket.WsManager
 import java.io.*
 import java.nio.*
 import java.util.concurrent.*

@@ -15,7 +15,7 @@ import android.webkit.WebViewClient
 import android.webkit.WebChromeClient
 import android.view.WindowManager
 import android.webkit.WebView.WebViewTransport
-import kr.co.sorizava.asrplayerKt.AppConfig
+import kr.co.sorizava.asrplayer.AppConfig
 import android.webkit.JavascriptInterface
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity

@@ -12,7 +12,7 @@
     <data>
         <variable
             name="broswerFragmentVM"
-            type="kr.co.sorizava.asrplayerKt.viewmodel.BrowserFragmentViewModel" />
+            type="kr.co.sorizava.asrplayer.viewmodel.BrowserFragmentViewModel" />
     </data>
 
     <FrameLayout
@@ -131,18 +131,8 @@
             android:background="@color/colorPrimary"
             android:visibility="gone"/>
 -->
-        <FrameLayout
-            android:id="@+id/video_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-            <kr.co.sorizava.asrplayerKt.unity.UnityView
-                android:id="@+id/custom_unity_view"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="right|bottom"
-                app:layout_constraintWidth_percent=".4" />
-        </FrameLayout>
+
+
 
         <RelativeLayout
             android:id="@+id/subtitle_container"
@@ -162,6 +152,24 @@
                 android:text="@{broswerFragmentVM.MSpannable_LiveData}"
                 android:layout_gravity="center_horizontal"/>
 
+            <kr.co.sorizava.asrplayer.unity.UnityView
+                android:id="@+id/custom_unity_view"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+
+
+                />
+            <!--
+            <FrameLayout
+                android:id="@+id/custom_unity_view_FrameLayout"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="right|bottom"
+                android:background="@color/black"
+                android:orientation="horizontal">
+            </FrameLayout>
+            -->
+            <!-- android:visibility="gone"-->
 
         </RelativeLayout>
     </FrameLayout>

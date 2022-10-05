@@ -6,7 +6,7 @@ package org.mozilla.focus.engine
 
 import android.content.Context
 import android.util.Log
-import kr.co.sorizava.asrplayerKt.websocket.WsManager
+import kr.co.sorizava.asrplayer.websocket.WsManager
 import mozilla.components.browser.errorpages.ErrorPages
 import mozilla.components.browser.errorpages.ErrorType
 import mozilla.components.concept.engine.EngineSession

@@ -12,8 +12,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
-import kr.co.sorizava.asrplayerKt.AsrConfigActivity
-import kr.co.sorizava.asrplayerKt.SubtitleSettingActivity
+import kr.co.sorizava.asrplayer.AsrConfigActivity
+import kr.co.sorizava.asrplayer.SubtitleSettingActivity
 import mozilla.components.browser.state.state.SessionState
 import org.mozilla.focus.GleanMetrics.SettingsScreen
 import org.mozilla.focus.R

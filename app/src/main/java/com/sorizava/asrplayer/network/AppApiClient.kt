@@ -6,7 +6,7 @@ package com.sorizava.asrplayer.network
 
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
-import kr.co.sorizava.asrplayerKt.ZerothDefine
+import kr.co.sorizava.asrplayer.ZerothDefine
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.converter.gson.GsonConverterFactory

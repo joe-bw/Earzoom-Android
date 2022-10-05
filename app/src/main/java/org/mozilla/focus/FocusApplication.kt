@@ -26,8 +26,8 @@ import com.sorizava.asrplayer.extension.getVersion
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kr.co.sorizava.asrplayerKt.AppConfig
-import kr.co.sorizava.asrplayerKt.ZerothDefine
+import kr.co.sorizava.asrplayer.AppConfig
+import kr.co.sorizava.asrplayer.ZerothDefine
 import mozilla.components.browser.state.state.SessionState
 import mozilla.components.support.base.facts.register
 import mozilla.components.support.base.log.Log

@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "org.mozilla.sorizava.focus.debug",
+  "applicationId": "org.mozilla.sorizava.focus",
   "variantName": "focusDebug",
   "elements": [
     {
@@ -16,8 +16,8 @@
         }
       ],
       "attributes": [],
-      "versionCode": 11,
-      "versionName": "93.0",
+      "versionCode": 26,
+      "versionName": "2.1.4",
       "outputFile": "app-focus-x86_64-debug.apk"
     },
     {
@@ -29,8 +29,8 @@
         }
       ],
       "attributes": [],
-      "versionCode": 11,
-      "versionName": "93.0",
+      "versionCode": 26,
+      "versionName": "2.1.4",
       "outputFile": "app-focus-x86-debug.apk"
     },
     {
@@ -42,8 +42,8 @@
         }
       ],
       "attributes": [],
-      "versionCode": 11,
-      "versionName": "93.0",
+      "versionCode": 26,
+      "versionName": "2.1.4",
       "outputFile": "app-focus-arm64-v8a-debug.apk"
     },
     {
@@ -55,8 +55,8 @@
         }
       ],
       "attributes": [],
-      "versionCode": 11,
-      "versionName": "93.0",
+      "versionCode": 26,
+      "versionName": "2.1.4",
       "outputFile": "app-focus-armeabi-v7a-debug.apk"
     }
   ],

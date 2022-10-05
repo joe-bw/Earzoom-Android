@@ -16,22 +16,9 @@
         }
       ],
       "attributes": [],
-      "versionCode": 361461354,
-      "versionName": "2.1.5",
+      "versionCode": 362481047,
+      "versionName": "2.1.4",
       "outputFile": "app-focus-x86_64-release.apk"
-    },
-    {
-      "type": "ONE_OF_MANY",
-      "filters": [
-        {
-          "filterType": "ABI",
-          "value": "arm64-v8a"
-        }
-      ],
-      "attributes": [],
-      "versionCode": 361461352,
-      "versionName": "2.1.5",
-      "outputFile": "app-focus-arm64-v8a-release.apk"
     },
     {
       "type": "ONE_OF_MANY",
@@ -42,8 +29,8 @@
         }
       ],
       "attributes": [],
-      "versionCode": 361461353,
-      "versionName": "2.1.5",
+      "versionCode": 362481046,
+      "versionName": "2.1.4",
       "outputFile": "app-focus-x86-release.apk"
     },
     {
@@ -55,9 +42,22 @@
         }
       ],
       "attributes": [],
-      "versionCode": 361461351,
-      "versionName": "2.1.5",
+      "versionCode": 362481044,
+      "versionName": "2.1.4",
       "outputFile": "app-focus-armeabi-v7a-release.apk"
+    },
+    {
+      "type": "ONE_OF_MANY",
+      "filters": [
+        {
+          "filterType": "ABI",
+          "value": "arm64-v8a"
+        }
+      ],
+      "attributes": [],
+      "versionCode": 362481045,
+      "versionName": "2.1.4",
+      "outputFile": "app-focus-arm64-v8a-release.apk"
     }
   ],
   "elementType": "File"

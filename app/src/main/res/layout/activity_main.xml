@@ -9,4 +9,15 @@
              tools:ignore="MergeRootFrame"
              android:id="@+id/container"
              android:layout_width="match_parent"
-             android:layout_height="match_parent"/>
+             android:layout_height="match_parent"
+   >
+<!--
+    <kr.co.sorizava.asrplayer.unity.UnityView
+        android:id="@+id/custom_unity_view"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="right|bottom"
+        android:visibility="gone"
+        />
+-->
+</FrameLayout>

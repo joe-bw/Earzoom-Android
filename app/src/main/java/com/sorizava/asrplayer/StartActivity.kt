@@ -13,7 +13,7 @@ import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.sorizava.asrplayer.ui.intro.IntroActivity
-import kr.co.sorizava.asrplayerKt.AppConfig
+import kr.co.sorizava.asrplayer.AppConfig
 import org.mozilla.focus.activity.MainActivity
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException

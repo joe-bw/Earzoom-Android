@@ -21,7 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.mozilla.focus.R;
 
-import kr.co.sorizava.asrplayerKt.AppConfig;
+import kr.co.sorizava.asrplayer.AppConfig;
 
 public class PrivacyPolicyActivity extends AppCompatActivity {
 

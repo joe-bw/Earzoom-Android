@@ -24,10 +24,7 @@ import android.view.*
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
 import android.webkit.MimeTypeMap
-import android.widget.FrameLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.compose.ui.graphics.toArgb
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
@@ -38,7 +35,6 @@ import androidx.preference.PreferenceManager
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
-import com.sorizava.asrplayer.extension.observe
 import kotlinx.android.synthetic.main.browser_display_toolbar.view.*
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
@@ -46,13 +42,12 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kr.co.sorizava.asrplayerKt.AppConfig
-import kr.co.sorizava.asrplayerKt.Model.BrowserFragmentModel
-import kr.co.sorizava.asrplayerKt.UIUtils
-import kr.co.sorizava.asrplayerKt.entity.ZerothMessage
-import kr.co.sorizava.asrplayerKt.helper.PlayerCaptionHelper
-import kr.co.sorizava.asrplayerKt.unity.UnityView
-import kr.co.sorizava.asrplayerKt.viewmodel.BrowserFragmentViewModel
+import kr.co.sorizava.asrplayer.AppConfig
+import kr.co.sorizava.asrplayer.UIUtils
+import kr.co.sorizava.asrplayer.entity.ZerothMessage
+import kr.co.sorizava.asrplayer.helper.PlayerCaptionHelper
+import kr.co.sorizava.asrplayer.unity.*
+import kr.co.sorizava.asrplayer.viewmodel.BrowserFragmentViewModel
 import mozilla.components.browser.state.selector.findTabOrCustomTab
 import mozilla.components.browser.state.selector.privateTabs
 import mozilla.components.browser.state.state.CustomTabConfig
@@ -62,6 +57,7 @@ import mozilla.components.browser.state.state.createTab
 import mozilla.components.browser.toolbar.BrowserToolbar
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.concept.engine.HitResult
+import mozilla.components.concept.engine.mediasession.MediaSession
 import mozilla.components.feature.app.links.AppLinksFeature
 import mozilla.components.feature.contextmenu.ContextMenuCandidate
 import mozilla.components.feature.contextmenu.ContextMenuFeature
@@ -79,10 +75,12 @@ import mozilla.components.lib.crash.Crash
 import mozilla.components.support.base.feature.PermissionsFeature
 import mozilla.components.support.base.feature.ViewBoundFeatureWrapper
 import mozilla.components.support.ktx.kotlin.tryGetHostFromUrl
+import org.json.JSONException
+import org.json.JSONObject
 import org.mozilla.focus.GleanMetrics.TrackingProtection
 import org.mozilla.focus.R
-import org.mozilla.focus.activity.InstallFirefoxActivity
 import org.mozilla.focus.activity.BookmarksActivity
+import org.mozilla.focus.activity.InstallFirefoxActivity
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.browser.DisplayToolbar
 import org.mozilla.focus.browser.binding.TabCountBinding
@@ -90,14 +88,11 @@ import org.mozilla.focus.browser.integration.BrowserMenuController
 import org.mozilla.focus.browser.integration.BrowserToolbarIntegration
 import org.mozilla.focus.browser.integration.FindInPageIntegration
 import org.mozilla.focus.browser.integration.FullScreenIntegration
+import org.mozilla.focus.databinding.FragmentBrowserBinding
 import org.mozilla.focus.downloads.DownloadService
 import org.mozilla.focus.engine.EngineSharedPreferencesListener
 import org.mozilla.focus.exceptions.ExceptionDomains
-import org.mozilla.focus.ext.components
-import org.mozilla.focus.ext.ifCustomTab
-import org.mozilla.focus.ext.isCustomTab
-import org.mozilla.focus.ext.requireComponents
-import org.mozilla.focus.ext.titleOrDomain
+import org.mozilla.focus.ext.*
 import org.mozilla.focus.menu.browser.DefaultBrowserMenu
 import org.mozilla.focus.open.OpenWithFragment
 import org.mozilla.focus.popup.PopupUtils
@@ -114,14 +109,6 @@ import org.mozilla.focus.utils.AppPermissionCodes.REQUEST_CODE_PROMPT_PERMISSION
 import org.mozilla.focus.widget.FloatingEraseButton
 import org.mozilla.focus.widget.FloatingSessionsButton
 import java.lang.ref.WeakReference
-
-import mozilla.components.concept.engine.mediasession.MediaSession
-import org.json.JSONException
-import org.json.JSONObject
-import org.mozilla.focus.databinding.FragmentBrowserBinding
-
-import kr.co.sorizava.asrplayerKt.unity.*
-
 
 
 /**
@@ -188,7 +175,7 @@ class BrowserFragment :
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_browser,container,false)
         binding.lifecycleOwner = requireActivity()
@@ -207,21 +194,77 @@ class BrowserFragment :
 
 
 
-        this.SetBackgroundColorSpan()
+        //this.SetBackgroundColorSpan()
         ////mvvm 구조 변경
         viewModel.mCSSpeakerText_LiveData.observe(requireActivity()){String ->
 
             var msg =""
             for( i in viewModel.mCSSpeakerText_LiveData.value!!.indices)
             {
-                Log.e("observefunc()",
+                /*
+                Log.e("observefunc()1 :",
                     viewModel.mCSSpeakerText_LiveData.value!![i].mSpeakerNum.toString() +
                             viewModel.mCSSpeakerText_LiveData.value!![i].mText.toString()
                 )
+                */
                 msg = msg + viewModel.mCSSpeakerText_LiveData.value!![i].mText.toString()
+
+                //Log.e("observefunc()2 :", viewModel.mCSSpeakerText_LiveData.value!![i].mSpeakerNum.toString())
+                //Log.e("observefunc()3 :", viewModel.mCSSpeakerText_LiveData.value!![i].mText.toString())
+                //Log.e("observefunc()4 msg:",msg)
             }
             this.SubtitleTextOutBySpeakerNum(true,msg!!)
+            //this.SubtitleTextOutBySpeakerNum(false,msg!!)
             Log.e("observefunc()","aaaaaaaaaaa")
+            if( msg =="")
+            {
+                Log.e("observefunc() msg:",msg)
+            }
+            else
+            {
+
+
+                if( AppliactionUnity.getInstance()!!.getUnityView()!!.visibility == View.INVISIBLE ||
+                    AppliactionUnity.getInstance()!!.getUnityView()!!.visibility == View.GONE ) {
+
+                    AppliactionUnity.getInstance()!!.getUnityView()!!.visibility = View.VISIBLE
+                    AppliactionUnity.getInstance()!!.getUnityView()!!.setTranslationY(  "0".toFloat() )
+                    resetUnityViewPositon()
+/*
+                if( tempFrameLayout?.visibility == View.INVISIBLE ||
+                    tempFrameLayout?.visibility == View.GONE ) {
+                    tempFrameLayout?.visibility = View.VISIBLE
+*/
+                /*
+                if( AppliactionUnity.unityView!!.visibility == View.INVISIBLE ||
+                    AppliactionUnity.unityView!!.visibility == View.GONE ) {
+                    AppliactionUnity.unityView!!.visibility = View.VISIBLE
+*/
+/*
+
+                if( mUnityView!!.visibility == View.INVISIBLE ||
+                    mUnityView!!.visibility == View.GONE ) {
+                    mUnityView!!.visibility = View.VISIBLE
+*/
+
+                val `object` = JSONObject()
+
+                try {
+                    `object`.put("id", "signlanguage_final")
+                    `object`.put("time", 0.2)
+                    `object`.put("text", "김치+볶음밥")
+                    `object`.put("origin_text", "김치볶음밥을")
+                } catch (e: JSONException) {
+                    Log.e("NewsListFragment", "error parse json", e)
+                } finally {
+                    UnityBridgeManager.getInstance()
+                        .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
+                    UnityBridgeManager.getInstance()
+                        .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
+                }
+
+                }
+            }
         }
 
         //viewModel.mCSSpeakerText_LiveData.observe(requireActivity(), ::observefunc)
@@ -240,11 +283,14 @@ class BrowserFragment :
         mSzSubtitleView = view.findViewById(R.id.sz_subtitle_view) as TextView
         mSzSubtitleView?.setOnTouchListener (captionTouchListener)
 */
+
+        //mSzSubtitleView?.setOnTouchListener (captionTouchListener)
         return view
     }
 
     //2020707 cbw unity 추가
-    private lateinit var unityView : UnityView
+    //private  var mUnityView : UnityView? = null
+
     fun InitUnityView()
     {
         /*
@@ -262,54 +308,24 @@ class BrowserFragment :
         */
         //2. unity 뷰 세팅
 //        unityView =  binding.customUnityView
-        unityView = activity?.findViewById<UnityView>(R.id.custom_unity_view)!!
 
-        unityView.start() //(ContextWrapper) GlobalApplication.getInstance());
-        unityView.resetOverlay()
 
-        val `object` = JSONObject()
 
-        try {
-            `object`.put("id", "signlanguage_final")
-            `object`.put("time", 0.2)
-            `object`.put("text", "김치+볶음밥")
-            `object`.put("origin_text", "김치볶음밥을")
-        } catch (e: JSONException) {
-            Log.e("NewsListFragment", "error parse json", e)
-        } finally {
-            UnityBridgeManager.getInstance()
-                .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
-            UnityBridgeManager.getInstance()
-                .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
-            UnityBridgeManager.getInstance()
-                .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
-            UnityBridgeManager.getInstance()
-                .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
-            UnityBridgeManager.getInstance()
-                .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
-            UnityBridgeManager.getInstance()
-                .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
-            UnityBridgeManager.getInstance()
-                .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
+        //tempFrameLayout?.visibility = View.INVISIBLE
+
+        //unityViewFrameLayout  = activity?.findViewById<RelativeLayout>(R.id.custom_unity_view_FrameLayout)!!
+        //unityViewFrameLayout?.visibility = View.VISIBLE
+
+        if( AppliactionUnity.getInstance()!!.getUnityView() == null) {
+            AppliactionUnity.getInstance()!!.setUnityView(requireActivity())
+
+            AppliactionUnity.getInstance()!!.getUnityView()?.start() //(ContextWrapper) GlobalApplication.getInstance());
+            //무슨 역할인지 모르겟음
+            AppliactionUnity.getInstance()!!.getUnityView()?.resetOverlay()
+
         }
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -589,12 +605,20 @@ class BrowserFragment :
         // This fragment might get destroyed before the user left immersive mode (e.g. by opening another URL from an
         // app). In this case let's leave immersive mode now when the fragment gets destroyed.
         fullScreenIntegration.get()?.exitImmersiveModeIfNeeded()
+
+/*
+        //AppliactionUnity.unityView!!.RemoveUnityView()
+        mUnityView!!.destroy()
+        mUnityView = null
+        */
+        AppliactionUnity.getInstance()!!.getUnityView()!!.destroy()
+        AppliactionUnity.getInstance()!!.setUnityView(null)
     }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         val feature: PermissionsFeature? = when (requestCode) {
             REQUEST_CODE_PROMPT_PERMISSIONS -> promptFeature.get()
@@ -663,7 +687,7 @@ class BrowserFragment :
 
     private fun showDownloadSnackbar(
         state: DownloadState,
-        status: DownloadState.Status
+        status: DownloadState.Status,
     ) {
         if (status != DownloadState.Status.COMPLETED) {
             // We currently only show an in-app snackbar for completed downloads.
@@ -743,13 +767,25 @@ class BrowserFragment :
     override fun onResume() {
         super.onResume()
 
+
+        AppliactionUnity.getInstance()!!.getUnityView()!!.resume()
+        //AppliactionUnity.unityView!!.visibility = View.INVISIBLE
+
         setupSubtitleView()
 
         resetSubtitlePositon()
+        resetUnityViewPositon()
+        AppliactionUnity.getInstance()!!.getUnityView()!!.setTranslationY(  "-10000.0".toFloat() )
+        AppliactionUnity.getInstance()!!.getUnityView()!!.visibility = View.INVISIBLE
+
+        //AppliactionUnity.unityView!!.setTranslationY(  "-10000.0".toFloat() )
+        //AppliactionUnity.unityView!!.visibility = View.INVISIBLE
 
         StatusBarUtils.getStatusBarHeight(statusBar) { statusBarHeight ->
             statusBar!!.layoutParams.height = statusBarHeight
         }
+
+
     }
 
     @Suppress("ComplexMethod", "ReturnCount")
@@ -1152,7 +1188,7 @@ class BrowserFragment :
 
         private const val MSG_SUBTILTILE_CUE_RESET = 100
     }
-
+/*
     //색을 미리 만들어 놓는다.
     var mBackgroundColorSpanBySpeakerNumList : MutableList<BackgroundColorSpan> = mutableListOf<BackgroundColorSpan>()
 
@@ -1170,58 +1206,75 @@ class BrowserFragment :
                 ))
         }
     }
-
+*/
 
     fun SubtitleTextOutBySpeakerNum(isApplyResetTimer: Boolean,msg: String?){
         // Log.d(LOGTAG, type + " cueTextOut: " +msg);
-        if (isApplyResetTimer) {
-            mResetSubtitleHandler.removeMessages(MSG_SUBTILTILE_CUE_RESET)
-            mResetSubtitleHandler.sendEmptyMessageDelayed(MSG_SUBTILTILE_CUE_RESET, 5000)
-        }
-        if (getActivity() != null && msg == null) {
-            requireActivity().runOnUiThread(Runnable { mSzSubtitleView!!.text = "" })
-        }
-        if( viewModel.mCSSpeakerText_LiveData.value == null) return;
+        try {
 
+            if (isApplyResetTimer) {
+                mResetSubtitleHandler.removeMessages(MSG_SUBTILTILE_CUE_RESET)
+                mResetSubtitleHandler.sendEmptyMessageDelayed(MSG_SUBTILTILE_CUE_RESET, 5000)
+                //mResetSubtitleHandler.sendEmptyMessageDelayed(MSG_SUBTILTILE_CUE_RESET, 5000)
+            }
+            if (getActivity() != null && msg == null) {
+                requireActivity().runOnUiThread(Runnable { mSzSubtitleView!!.text = "" })
+            }
+            if( viewModel.mCSSpeakerText_LiveData.value == null) return;
 
-        for( i in viewModel.mCSSpeakerText_LiveData.value!!.indices)
+/*
+            for( i in viewModel.mCSSpeakerText_LiveData.value!!.indices)
+            {
+                Log.e("observefunc()",
+                    viewModel.mCSSpeakerText_LiveData.value!![i].mSpeakerNum.toString() +
+                            viewModel.mCSSpeakerText_LiveData.value!![i].mText.toString()
+                )
+            }
+*/
+
+            val spannable: Spannable = SpannableString(msg)
+            var textStartIndex =0
+            for( i in viewModel.mCSSpeakerText_LiveData.value!!.indices)
+            {
+                Log.e(TAG, "i:" + i)
+                var mText = viewModel.mCSSpeakerText_LiveData.value!![i].mText
+                Log.e(TAG, "mText:" + mText)
+                var mSpeakerNum = viewModel.mCSSpeakerText_LiveData.value!![i].mSpeakerNum
+                Log.e(TAG, "mSpeakerNum:" + mSpeakerNum)
+                //Log.e(TAG, "mBackgroundColorSpanBySpeakerNumList[mSpeakerNum]:" + mBackgroundColorSpanBySpeakerNumList[mSpeakerNum])
+                Log.e(TAG, "textStartIndex1:" + textStartIndex)
+                Log.e(TAG, "mText!!.length:" + mText!!.length)
+                spannable.setSpan(
+                    //mBackgroundColorSpanBySpeakerNumList[mSpeakerNum],
+                    BackgroundColorSpan(
+                        PlayerCaptionHelper.getColorWithAlpha(
+                            //viewModel.mSpeakerColorList!!.get(0). ,
+                            viewModel.mSpeakerColorList!![mSpeakerNum].toArgb() ,
+                            AppConfig.getInstance()?.convertPrefSubtitleTransparency(mSubtitleTransparency)!!
+                        )
+                    ),
+                    textStartIndex,
+                    textStartIndex + mText!!.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                textStartIndex = textStartIndex + mText!!.length
+                Log.e(TAG, "textStartIndex2:" + textStartIndex)
+            }
+
+            viewModel.mSpannable_MutableLiveData.value = spannable
+            /*
+            if (getActivity() != null) {
+                requireActivity().runOnUiThread(Runnable { mSzSubtitleView!!.text = spannable })
+            }
+            */
+        }
+        catch (ex : Exception)
         {
-            Log.e("observefunc()",
-                viewModel.mCSSpeakerText_LiveData.value!![i].mSpeakerNum.toString() +
-                        viewModel.mCSSpeakerText_LiveData.value!![i].mText.toString()
-            )
+            Log.e("SubtitleTextOutBySpeakerNum(isApplyResetTimer: Boolean,msg: String?) ex:" ,
+                "isApplyResetTimer:" + isApplyResetTimer +",msg:" + msg
+             + "," + ex.toString())
         }
-
-
-        val spannable: Spannable = SpannableString(msg)
-        var textStartIndex =0
-        for( i in viewModel.mCSSpeakerText_LiveData.value!!.indices)
-        {
-            var mText = viewModel.mCSSpeakerText_LiveData.value!![i].mText
-            var mSpeakerNum = viewModel.mCSSpeakerText_LiveData.value!![i].mSpeakerNum
-
-            spannable.setSpan(
-                mBackgroundColorSpanBySpeakerNumList[mSpeakerNum],
-                textStartIndex,
-                textStartIndex + mText!!.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            textStartIndex = textStartIndex + mText!!.length
-        }
-        viewModel.mSpannable_MutableLiveData.value = spannable
-        /*
-        if (getActivity() != null) {
-            requireActivity().runOnUiThread(Runnable { mSzSubtitleView!!.text = spannable })
-        }
-        */
     }
-
-
-
-
-
-
-
 
 
 
@@ -1235,14 +1288,17 @@ class BrowserFragment :
 
         Log.e(TAG, "DPDPDP message:" + message)
 
-        //임시로 speaker
+            //임시로 speaker
         val speakerNumStr : String = "\"speakerNum\":" + ((Math.random()*10) % 2).toInt() + ",";
         var messageWithSpeakerNumStr =message[0] + speakerNumStr + message.substring(1, (message.length) )
+        //messageWithSpeakerNumStr = "{\"bayes-risk\": 0.0, \"result\": {\"final\": true, \"hypotheses\": [{\"likelihood\": 0.0, \"transcript\": \"김진아 기자가 보도합니다. 얼마 전 전북 전주의 한 여인숙에서 불이 나 폐지를 주어 생활하던 노인들이 숨지는 사건이 있었죠. 경찰이 불을 지른 육십대, 남성을 방화 혐의로 체포했습니다. 진유민 기자가 보도합니다.\", \"word-alignment\": [{\"confidence\": -1.24, \"length\": 0.48, \"start\": 0.9, \"word\": \"|김진아\"}, {\"confidence\": -2.36, \"length\": 0.32, \"start\": 1.38, \"word\": \"|기자가\"}, {\"confidence\": -4.18, \"length\": 1.16, \"start\": 1.7, \"word\": \"|보도합니다.\"}, {\"confidence\": -1.96, \"length\": 0.24, \"start\": 2.86, \"word\": \"|얼마\"}, {\"confidence\": -1.73, \"length\": 0.28, \"start\": 3.1, \"word\": \"|전\"}, {\"confidence\": -3.28, \"length\": 0.4, \"start\": 3.38, \"word\": \"|전북\"}, {\"confidence\": -4.22, \"length\": 0.56, \"start\": 3.78, \"word\": \"|전주의\"}, {\"confidence\": -2.32, \"length\": 0.2, \"start\": 4.34, \"word\": \"|한\"}, {\"confidence\": -9.72, \"length\": 0.8, \"start\": 4.54, \"word\": \"|여인숙에서\"}, {\"confidence\": -4.67, \"length\": 0.24, \"start\": 5.34, \"word\": \"|불이\"}, {\"confidence\": -4.07, \"length\": 0.16, \"start\": 5.58, \"word\": \"|나\"}, {\"confidence\": -0.35, \"length\": 0.4, \"start\": 5.89, \"word\": \"|폐지를\"}, {\"confidence\": -0.66, \"length\": 0.2, \"start\": 6.29, \"word\": \"|주        어\"}, {\"confidence\": -2.15, \"length\": 0.48, \"start\": 6.49, \"word\": \"|생활하던\"}, {\"confidence\": -3.71, \"length\": 0.52, \"start\": 6.97, \"word\": \"|노인들이\"}, {\"confidence\": -5.46, \"length\": 0.48, \"start\": 7.49, \"word\": \"|>숨지는\"}, {\"confidence\": -6.37, \"length\": 0.36, \"start\": 7.97, \"word\": \"|사건이\"}, {\"confidence\": -6.92, \"length\": 1.16, \"start\": 8.33, \"word\": \"|있었죠.\"}, {\"confidence\": -7.31, \"length\": 0.56, \"start\": 9.49, \"word\": \"|경찰이\"}, {\"confidence\": -6.47, \"length\": 0.2, \"start\": 10.05, \"word\": \"|불을\"}, {\"confidence\": -2.41, \"length\": 0.28, \"start\": 10.4, \"word\": \"|지른\"}, {\"confidence\": -5.33, \"length\": 0.56, \"start\": 10.68, \"word\": \"|육십        대,\"}, {\"confidence\": -5.76, \"length\": 0.52, \"start\": 11.24, \"word\": \"|남성을\"}, {\"confidence\": -5.78, \"length\": 0.4, \"start\": 11.76, \"word\": \"|방화\"}, {\"confidence\": -7.15, \"length\": 0.36, \"start\": 12.16, \"word\": \"|혐의        로\"}, {\"confidence\": -12.26, \"length\": 1.0, \"start\": 12.52, \"word\": \"|체포했습니다.\"}, {\"confidence\": -10.04, \"length\": 0.48, \"start\": 13.52, \"word\": \"|진유민\"}, {\"confidence\": -12.0, \"length\": 0.36, \"start\": 14.0, \"word\": \"|기자가\"}, {\"confidence\": -18.64, \"length\": 0.4, \"start\": 14.36, \"word\": \"|보도합니다.\"}]}]}, \"segment\": 0, \"segment-length\": 13.56, \"segment-start\": 0.9, \"speaker\": 0, \"status\": 0, \"total-length\": 14.84}"
+        //messageWithSpeakerNumStr = "{\"bayes-risk\": 0.0, \"result\": {\"final\": true, \"hypotheses\": [{\"likelihood\": 0.0, \"transcript\": \"경찰이 불을 지른 육십대, 남성을 방화 혐의로 체포했습니다.\", \"word-alignment\": [{\"confidence\": -1.24, \"length\": 0.48, \"start\": 0.9, \"word\": \"|김진아\"}, {\"confidence\": -2.36, \"length\": 0.32, \"start\": 1.38, \"word\": \"|기자가\"}, {\"confidence\": -4.18, \"length\": 1.16, \"start\": 1.7, \"word\": \"|보도합니다.\"}, {\"confidence\": -1.96, \"length\": 0.24, \"start\": 2.86, \"word\": \"|얼마\"}, {\"confidence\": -1.73, \"length\": 0.28, \"start\": 3.1, \"word\": \"|전\"}, {\"confidence\": -3.28, \"length\": 0.4, \"start\": 3.38, \"word\": \"|전북\"}, {\"confidence\": -4.22, \"length\": 0.56, \"start\": 3.78, \"word\": \"|전주의\"}, {\"confidence\": -2.32, \"length\": 0.2, \"start\": 4.34, \"word\": \"|한\"}, {\"confidence\": -9.72, \"length\": 0.8, \"start\": 4.54, \"word\": \"|여인숙에서\"}, {\"confidence\": -4.67, \"length\": 0.24, \"start\": 5.34, \"word\": \"|불이\"}, {\"confidence\": -4.07, \"length\": 0.16, \"start\": 5.58, \"word\": \"|나\"}, {\"confidence\": -0.35, \"length\": 0.4, \"start\": 5.89, \"word\": \"|폐지를\"}, {\"confidence\": -0.66, \"length\": 0.2, \"start\": 6.29, \"word\": \"|주        어\"}, {\"confidence\": -2.15, \"length\": 0.48, \"start\": 6.49, \"word\": \"|생활하던\"}, {\"confidence\": -3.71, \"length\": 0.52, \"start\": 6.97, \"word\": \"|노인들이\"}, {\"confidence\": -5.46, \"length\": 0.48, \"start\": 7.49, \"word\": \"|>숨지는\"}, {\"confidence\": -6.37, \"length\": 0.36, \"start\": 7.97, \"word\": \"|사건이\"}, {\"confidence\": -6.92, \"length\": 1.16, \"start\": 8.33, \"word\": \"|있었죠.\"}, {\"confidence\": -7.31, \"length\": 0.56, \"start\": 9.49, \"word\": \"|경찰이\"}, {\"confidence\": -6.47, \"length\": 0.2, \"start\": 10.05, \"word\": \"|불을\"}, {\"confidence\": -2.41, \"length\": 0.28, \"start\": 10.4, \"word\": \"|지른\"}, {\"confidence\": -5.33, \"length\": 0.56, \"start\": 10.68, \"word\": \"|육십        대,\"}, {\"confidence\": -5.76, \"length\": 0.52, \"start\": 11.24, \"word\": \"|남성을\"}, {\"confidence\": -5.78, \"length\": 0.4, \"start\": 11.76, \"word\": \"|방화\"}, {\"confidence\": -7.15, \"length\": 0.36, \"start\": 12.16, \"word\": \"|혐의        로\"}, {\"confidence\": -12.26, \"length\": 1.0, \"start\": 12.52, \"word\": \"|체포했습니다.\"}, {\"confidence\": -10.04, \"length\": 0.48, \"start\": 13.52, \"word\": \"|진유민\"}, {\"confidence\": -12.0, \"length\": 0.36, \"start\": 14.0, \"word\": \"|기자가\"}, {\"confidence\": -18.64, \"length\": 0.4, \"start\": 14.36, \"word\": \"|보도합니다.\"}]}]}, \"segment\": 0, \"segment-length\": 13.56, \"segment-start\": 0.9, \"speaker\": 0, \"status\": 0, \"total-length\": 14.84}"
 
         Log.e(TAG, "DPDPDP message:" + messageWithSpeakerNumStr)
         val gson = GsonBuilder().create()
         //val zerothMessage: ZerothMessage = gson.fromJson(message, ZerothMessage::class.java)
         val zerothMessage: ZerothMessage = gson.fromJson(messageWithSpeakerNumStr, ZerothMessage::class.java)
+
         //val zerothMessage: ZerothMessage = gson.fromJson(message, ZerothMessage::class.java)
 
         if (zerothMessage.getResult() == null || zerothMessage.getResult()?.getHypotheses() == null
@@ -1251,9 +1307,60 @@ class BrowserFragment :
         val transcript: String = zerothMessage.getResult()?.getHypotheses()!!.get(0)!!.getTranscript()!!
         val isFinal: Boolean = zerothMessage.getResult()?.getFinal()!!
 
+        var startTime: Double = 0.0
+        var endTime: Double = 0.0
 
-        viewModel.setTranscript(transcript,isFinal,mSpeakerNum!!)
-        if( isFinal == true) mSpeakerNum = (mSpeakerNum + 1) %10
+        //mSpeakerNum = zerothMessage.getSpeakerNum()!!
+
+        /*
+        if( isFinal == true){ //만약 final이면 기존의 text를 다 지운다.
+            Log.e("isFinal == true",transcript)
+            mPrevSubtitleText = ""
+            mCsSpeakerText!!.clear()
+            viewModel.clearSpeakerText()
+            mResetSubtitleHandler.removeMessages(MSG_SUBTILTILE_CUE_RESET)
+            requireActivity().runOnUiThread(Runnable { mSzSubtitleView!!.text = "" })
+            //this.SubtitleTextOutBySpeakerNum(true,"")
+        }
+        */
+        if( isFinal == true)
+        {
+            try {
+                mSpeakerNum = zerothMessage.getSpeakerNum()!!
+                if( mSpeakerNum == null || mSpeakerNum < 0 ) mSpeakerNum =0;
+                mSpeakerNum = (mSpeakerNum ) %10
+            }
+            catch (ex : Exception)
+            {
+                Log.e(TAG, "mSpeakerNum:" + mSpeakerNum )
+            }
+
+
+            val `object` = JSONObject()
+
+            try {
+                `object`.put("id", "signlanguage_final")
+                `object`.put("time", 0.2)
+                `object`.put("text", "김치+볶음밥")
+                `object`.put("origin_text", "김치볶음밥을")
+            } catch (e: JSONException) {
+                Log.e("NewsListFragment", "error parse json", e)
+            } finally {
+                UnityBridgeManager.getInstance()
+                    .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
+                UnityBridgeManager.getInstance()
+                    .newUnitySendMessage("SetRecieveLyrics", `object`.toString())
+            }
+
+            startTime = zerothMessage.getSegmentStart()!!
+            endTime = zerothMessage.getTotalLength()!!
+
+        }
+        else
+        {
+
+        }
+        viewModel.setTranscript(transcript,isFinal,mSpeakerNum!!,startTime,endTime)
 
         /*
         if (isFinal) {
@@ -1282,92 +1389,6 @@ class BrowserFragment :
          */
     }
 
-    //20220722 cbw 화자분리를 위해 추가
-    var preMsgLength :Int = 0
-    var preBackColor :Int = Color.BLACK
-    private fun SubtitleTextOut(isApplyResetTimer: Boolean, msg: String?, _mSpeakerNum : Int) {
-        // Log.d(LOGTAG, type + " cueTextOut: " +msg);
-        if (isApplyResetTimer) {
-            mResetSubtitleHandler.removeMessages(MSG_SUBTILTILE_CUE_RESET)
-            mResetSubtitleHandler.sendEmptyMessageDelayed(MSG_SUBTILTILE_CUE_RESET, 5000)
-        }
-        if (getActivity() != null && msg == null) {
-            requireActivity().runOnUiThread(Runnable { mSzSubtitleView!!.text = "" })
-        }
-        val spannable: Spannable = SpannableString(msg)
-
-
-
-        //색을 미리 만들어 놓는다.
-        val backgroundColorSpan_speakerNum0 = BackgroundColorSpan(
-            PlayerCaptionHelper.getColorWithAlpha(
-                Color.BLACK,
-                AppConfig.getInstance()?.convertPrefSubtitleTransparency(mSubtitleTransparency)!!
-            )
-        )
-
-        val backgroundColorSpan_speakerNum1 = BackgroundColorSpan(
-            PlayerCaptionHelper.getColorWithAlpha(
-                Color.YELLOW,
-                AppConfig.getInstance()?.convertPrefSubtitleTransparency(mSubtitleTransparency)!!
-            )
-        )
-
-        var BackColor : Int = Color.BLACK
-        if(_mSpeakerNum == 0 ) BackColor = Color.BLACK
-        else BackColor = Color.YELLOW
-
-        //과거 text의 색을 세팅한다.
-        var preTextlength :Int = 0
-        for( i in mCsSpeakerText!!.indices)
-        {
-            if( mCsSpeakerText!!.get(i)!!.mSpeakerNum == 0 )
-            {
-                spannable.setSpan(
-                    backgroundColorSpan_speakerNum0,
-                    preTextlength,
-                    mCsSpeakerText!!.get(i)!!.mText!!.length + preTextlength,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-            }
-            else
-            {
-                spannable.setSpan(
-                    backgroundColorSpan_speakerNum1,
-                    preTextlength,
-                    mCsSpeakerText!!.get(i)!!.mText!!.length + preTextlength,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-            }
-            preTextlength += mCsSpeakerText!!.get(i)!!.mText!!.length
-        }
-
-        //현재 text의 색을 세팅한다.
-        if(_mSpeakerNum == 0 )
-        {
-            spannable.setSpan(
-                backgroundColorSpan_speakerNum0,
-                preTextlength ,
-                //msg!!.length - preTextlength,
-                msg!!.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        }
-        else
-        {
-            spannable.setSpan(
-                backgroundColorSpan_speakerNum1,
-                preTextlength,
-                //msg!!.length - preTextlength,
-                msg!!.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        }
-
-        if (getActivity() != null) {
-            requireActivity().runOnUiThread(Runnable { mSzSubtitleView!!.text = spannable })
-        }
-    }
 
     /*
     //20220722 cbw 화자분리를 위해 수정 - 기존소스 주석처리
@@ -1418,6 +1439,7 @@ class BrowserFragment :
     }
 
     fun resetSubtitleView(force: Boolean) {
+
         if (force) {
             mResetSubtitleHandler.removeMessages(MSG_SUBTILTILE_CUE_RESET)
 
@@ -1425,7 +1447,34 @@ class BrowserFragment :
             mCsSpeakerText!!.clear()
             viewModel.clearSpeakerText()
             this.SubtitleTextOutBySpeakerNum(false,"")
-            //SubtitleTextOut(false, "",0)
+            if( AppliactionUnity.getInstance()!!.getUnityView() != null) {
+                AppliactionUnity.getInstance()!!.getUnityView()?.visibility = View.INVISIBLE
+
+                AppliactionUnity.getInstance()!!.getUnityView()?.setTranslationY(  "-10000.0".toFloat() )
+            }
+            //tempFrameLayout?.visibility = View.INVISIBLE
+
+            //AppliactionUnity.unityView!!.visibility = View.INVISIBLE
+            //mUnityView!!.visibility = View.INVISIBLE
+
+            /*
+            //this.SubtitleTextOutBySpeakerNum(true,"")
+
+            //mSzSubtitleView!!.visibility = View.INVISIBLE
+            Handler().postDelayed({ //딜레이 후 시작할 코드 작성
+
+                mResetSubtitleHandler.removeMessages(MSG_SUBTILTILE_CUE_RESET)
+
+                mPrevSubtitleText = ""
+                mCsSpeakerText!!.clear()
+                viewModel.clearSpeakerText()
+
+                requireActivity().runOnUiThread(Runnable { mSzSubtitleView!!.text = "" })
+                //AppliactionUnity.unityView!!.visibility = View.INVISIBLE
+
+            }, 800)
+            //2000822 cbw <-- 바로 ""로 지우면, 전에 들어간 마지막 인풋이 남아서. 다시 갱신되어 버린다. 딜레이를 안주고 하려면 flaging을 해야하는데 flaging도 시작과 끝을 정하기가 애매한 부분이 있음 우선 이방식으로 진행한다.
+*/
         }
     }
 
@@ -1448,6 +1497,14 @@ class BrowserFragment :
             return displaymetrics.heightPixels
         }
     */
+
+
+
+
+
+
+
+
     private var pressed_x:Int = 0
     private var pressed_y:Int = 0
 
@@ -1477,8 +1534,16 @@ class BrowserFragment :
                 val controlBarHeight = UIUtils.dp2px(requireContext(), 46.0f)
                 val maxSubtitleHeight = (mSubtitleLine + 0.3f) * textSize
 
+                /*
                 if (layoutParams.topMargin + dy > controlBarHeight &&
-                    layoutParams.topMargin + dy < subtitleParent.height - maxSubtitleHeight - controlBarHeight) {
+                    layoutParams.topMargin + dy < subtitleParent.height - maxSubtitleHeight - controlBarHeight)
+
+                 */
+
+                if ( ( dy > 0 && layoutParams.topMargin + dy < subtitleParent.height - maxSubtitleHeight - controlBarHeight )
+                    ||
+                    ( dy < 0 && layoutParams.topMargin + dy > controlBarHeight ) )
+                {
                     layoutParams.topMargin += dy
 
                     //   Log.d(TAG,"layoutParams.topMargin: " + layoutParams.topMargin);
@@ -1524,6 +1589,7 @@ class BrowserFragment :
         } else {
             mSzSubtitleView!!.visibility = View.INVISIBLE
         }
+
     }
 
     /**
@@ -1569,15 +1635,64 @@ class BrowserFragment :
             val orientation: Int = resources.configuration.orientation
 
             if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                factor = 1.3f
+                //factor = 1.3f
+                factor = 2f
             }
             val maxSubtitleHeight = (mSubtitleLine + factor) * textSize
             layoutParams.topMargin = (DisplayUtil.getHeightPixels(requireContext()) - maxSubtitleHeight - controlBarHeight).toInt()
+
         }
         Log.d(TAG, "resetSubtitlePositon layoutParams.topMargin: " + layoutParams.topMargin)
+        val textSize = UIUtils.dp2px(requireContext(), AppConfig.getInstance()?.convertPrefSubtitleFontSize(mSubtitleFontSize)!!.toFloat()).toFloat()
+        //layoutParams.width =(DisplayUtil.getWidthPixels(requireContext()) - mUnityView!!.layoutParams.width).toInt()
+        //layoutParams.width =(DisplayUtil.getWidthPixels(requireContext()) - AppliactionUnity.unityView!!.layoutParams.width).toInt()
+        layoutParams.width =(DisplayUtil.getWidthPixels(requireContext()) - AppliactionUnity.getInstance()!!.getUnityView()!!.layoutParams.width - textSize ).toInt()
+
         mSzSubtitleView!!.layoutParams = layoutParams
     }
 
+    /**
+     * reset subtitle position
+     */
+    fun resetUnityViewPositon() {
+        Log.d(TAG, "resetUnityViewPositon: ")
+
+        //val layoutParams = AppliactionUnity.unityView!!.layoutParams as RelativeLayout.LayoutParams
+        val layoutParams = AppliactionUnity.getInstance()!!.getUnityView()!!.layoutParams as RelativeLayout.LayoutParams
+
+        //val layoutParams = mUnityView!!.layoutParams as RelativeLayout.LayoutParams
+
+        val controlBarHeight = UIUtils.dp2px(requireContext(), 46.0f)
+        if (mSubtitlePoistion == AppConfig.SUBTITLE_POSITION_TOP) {
+            layoutParams.topMargin = controlBarHeight.toInt()
+        } else {
+            // ViewGroup subtitleParent = (ViewGroup)mSzSubtitleView.getParent();
+            val textSize = UIUtils.dp2px(requireContext(), AppConfig.getInstance()?.convertPrefSubtitleFontSize(mSubtitleFontSize)!!.toFloat()).toFloat()
+            var factor = 0.1f
+
+            val orientation: Int = resources.configuration.orientation
+
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                factor = 1.3f
+            }
+            val maxSubtitleHeight = (mSubtitleLine + factor) * textSize
+            //layoutParams.topMargin = (DisplayUtil.getHeightPixels(requireContext()) - maxSubtitleHeight - controlBarHeight).toInt()
+            //layoutParams.topMargin = (DisplayUtil.getHeightPixels(requireContext()) - AppliactionUnity.unityView!!.layoutParams.height - controlBarHeight).toInt()
+            layoutParams.topMargin = (DisplayUtil.getHeightPixels(requireContext()) - AppliactionUnity.getInstance()!!.getUnityView()!!.layoutParams.height - controlBarHeight).toInt()
+
+            //layoutParams.topMargin = (DisplayUtil.getHeightPixels(requireContext()) - mUnityView!!.layoutParams.height - controlBarHeight).toInt()
+
+        }
+        //layoutParams.leftMargin  = (DisplayUtil.getWidthPixels(requireContext()) - AppliactionUnity.unityView!!.layoutParams.width).toInt()
+        layoutParams.leftMargin  = (DisplayUtil.getWidthPixels(requireContext()) - AppliactionUnity.getInstance()!!.getUnityView()!!.layoutParams.width).toInt()
+        //layoutParams.leftMargin  = (DisplayUtil.getWidthPixels(requireContext()) - mUnityView!!.layoutParams.width).toInt()
+
+        Log.d(TAG, "resetSubtitlePositon layoutParams.topMargin: " + layoutParams.topMargin)
+        //AppliactionUnity.unityView!!.layoutParams = layoutParams
+        AppliactionUnity.getInstance()!!.getUnityView()!!.layoutParams = layoutParams
+        //mUnityView!!.layoutParams = layoutParams
+
+    }
     /**
      * orientation ì ë°ë¼ ì ì²´íë©´ ì í
      *
@@ -1617,6 +1732,16 @@ class BrowserFragment :
     override fun onPause() {
         (activity as MainActivity?)?.callInitEndTime()
         super.onPause()
+        if( AppliactionUnity.unityView!!.visibility == View.VISIBLE) {
+            AppliactionUnity.getInstance()!!.getUnityView()?.visibility = View.INVISIBLE
+
+        }
+
+
+        AppliactionUnity.getInstance()!!.getUnityView()!!.pause()
+
+        //AppliactionUnity.unityView!!.pause()
+        //mUnityView!!.pause()
     }
 
 
@@ -1632,3 +1757,4 @@ class BrowserFragment :
         */
     }
 }
+
